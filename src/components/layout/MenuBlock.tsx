@@ -124,7 +124,15 @@ const home1MenuItems: MenuItem[] = [
 
 const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileMenu, logo = "/images/logo/logo-blue.png" , btnColor = 'bg-blue-600', btnlinkColor = "text-white", }) => {
     const [openSubMenu, setOpenSubMenu] = useState<Record<string, boolean>>({});
-    const menuItems = home1MenuItems;
+    const pathname = usePathname();
+    
+    // Dynamically modify menu items based on current page
+    const menuItems = home1MenuItems.map(item => ({
+        ...item,
+        href: item.href?.startsWith('#') && pathname !== '/home-1' 
+            ? `/${item.href}` 
+            : item.href
+    }));
 
     const toggleSubMenu = (key: string) => {
         setOpenSubMenu((prev) => ({ ...prev, [key]: !prev[key] }));
