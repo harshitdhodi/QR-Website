@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import Link from "next/link";
@@ -40,6 +41,33 @@ const cartItems = [
 ];
 
 const CartPage = () => {
+    const searchParams = useSearchParams();
+    const selectedCategory = searchParams.get('category');
+    
+    // Add state for quantities
+    const [quantities, setQuantities] = useState<Record<number, number>>(
+        cartItems.reduce((acc, item) => ({ ...acc, [item.id]: item.qty }), {} as Record<number, number>)
+    );
+
+    const filteredItems = selectedCategory 
+        ? cartItems.filter(item => item.category === selectedCategory)
+        : cartItems;
+
+    // Calculate totals dynamically
+    const subtotal = filteredItems.reduce((sum, item) => 
+        sum + (item.price * (quantities[item.id] || 1)), 0
+    );
+
+    const categoryImages: Record<string, string> = {
+        "Vehicle": "https://ik.imagekit.io/mikbqwyy0/ChatGPT%20Image%20Feb%2021,%202026,%2011_01_12%20AM.png",
+        "Pets": "https://ik.imagekit.io/mikbqwyy0/ChatGPT%20Image%20Feb%2021,%202026,%2011_13_29%20AM.png",
+        "Miscellaneous": "https://ik.imagekit.io/mikbqwyy0/ChatGPT%20Image%20Feb%2021,%202026,%2011_13_32%20AM.png"
+    };
+
+    const handleQuantityChange = (itemId: number, newQty: string) => {
+        setQuantities(prev => ({ ...prev, [itemId]: parseInt(newQty) }));
+    };
+
     return (
         <>
             {/* Page Title */}
@@ -56,6 +84,12 @@ const CartPage = () => {
                 ]}
             />
             </div>
+            {selectedCategory && (
+                <div className="text-center mb-6">
+                    <span className="text-gray-600">Showing products for: </span>
+                    <span className="font-semibold text-gray-900">{selectedCategory}</span>
+                </div>
+            )}
             <div className="cart-wrap font-dm lg:pt-24 pt-12">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:pb-24 pb-12">
                     <div className="grid lg:grid-cols-3 grid-cols-1 lg:gap-10 relative lg:space-y-0 space-y-5">
@@ -74,20 +108,26 @@ const CartPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {cartItems.map((item) => (
+                                        {filteredItems.map((item) => (
                                             <tr key={item.id} className="border-b border-gray-200">
                                                 <td className="w-32 p-3">
                                                     <Link href="/checkout" className="inline-block border border-gray-200 bg-gray-100 rounded-xl overflow-hidden">
-                                                        <Image src={item.img} alt={item.title} className="w-full rounded-lg" width={114} height={171} />
+                                                        <img
+                                                            src={categoryImages[item.category] || item.img}
+                                                            alt={item.title} 
+                                                            className="w-full rounded-lg" 
+                                                            width={114} 
+                                                            height={171} 
+                                                        />
                                                     </Link>
                                                 </td>
                                                 <td className="p-3 align-top">
                                                     <h2 className="text-gray-900 font-semibold text-xl mb-1">{item.title}</h2>
                                                     <span className="text-gray-600 text-base font-medium block">{item.category}</span>
                                                     <span className="text-gray-900 font-semibold text-bse block mt-4">
-                                                        ${item.price.toLocaleString()}
+                                                        ₹{item.price.toLocaleString()}
                                                         <span className="line-through text-gray-600 font-medium ml-1">
-                                                            ${item.oldPrice.toLocaleString()}
+                                                            ₹{item.oldPrice.toLocaleString()}
                                                         </span>
                                                     </span>
                                                     <span className="text-sm text-gray-600 mt-2 font-medium block">
@@ -95,7 +135,11 @@ const CartPage = () => {
                                                     </span>
                                                 </td>
                                                 <td className="p-3 align-top">
-                                                    <select className="border border-gray-300 rounded-md px-2 py-1 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                                    <select 
+                                                        value={quantities[item.id] || 1}
+                                                        onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                                                        className="border border-gray-300 rounded-md px-2 py-1 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                                    >
                                                         {[1, 2, 3, 4, 5].map((num) => (
                                                             <option key={num} value={num}>
                                                                 {num}
@@ -104,10 +148,10 @@ const CartPage = () => {
                                                     </select>
                                                 </td>
                                                 <td className="p-3 align-top text-sm font-medium text-gray-800">
-                                                    ${item.price.toLocaleString()}
+                                                    ₹{item.price.toLocaleString()}
                                                 </td>
                                                 <td className="p-3 align-top text-sm font-medium text-gray-800">
-                                                    ${(item.price * item.qty).toLocaleString()}
+                                                    ₹{(item.price * (quantities[item.id] || 1)).toLocaleString()}
                                                 </td>
                                                 <td className="p-3 align-top text-red-600 text-lg">
                                                     <button>
@@ -118,6 +162,12 @@ const CartPage = () => {
                                         ))}
                                     </tbody>
                                 </table>
+
+                                {filteredItems.length === 0 && (
+                                    <div className="text-center py-8">
+                                        <p className="text-gray-600">No products found in this category.</p>
+                                    </div>
+                                )}
 
                                 {/* Terms and Conditions */}
                                 <div className="form-check mt-3">
@@ -138,27 +188,27 @@ const CartPage = () => {
                                 <div>
                                     <div className="flex justify-between mt-4">
                                         <span className="font-medium text-gray-900">Subtotal</span>
-                                        <span className="font-semibold text-gray-900">$63.00</span>
+                                        <span className="font-semibold text-gray-900">₹{subtotal.toLocaleString()}</span>
                                     </div>
                                     <div className="flex justify-between mt-1">
                                         <span className="font-medium text-gray-900">Sales Tax (8%)</span>
-                                        <span className="font-semibold text-gray-900">$5.04</span>
+                                        <span className="font-semibold text-gray-900">₹{(subtotal * 0.08).toFixed(2)}</span>
                                     </div>
                                     <div className="flex justify-between mt-1">
                                         <span className="font-medium text-gray-900">Shipping</span>
-                                        <span className="font-semibold text-gray-900">$5.00</span>
+                                        <span className="font-semibold text-gray-900">₹5.00</span>
                                     </div>
                                     <div className="flex justify-between mt-1">
                                         <span className="font-medium text-gray-900">Coupon</span>
-                                        <span className="font-semibold text-gray-900">-$3.00</span>
+                                        <span className="font-semibold text-gray-900">₹3.00</span>
                                     </div>
                                     <div className="flex justify-between mt-5">
                                         <span className="font-semibold text-gray-900">Total</span>
-                                        <span className="font-semibold text-gray-900">$70.04</span>
+                                        <span className="font-semibold text-gray-900">₹{(subtotal * 1.08 + 5 - 3).toFixed(2)}</span>
                                     </div>
                                     <div className="pt-4 flex gap-2 items-center">
                                         <a
-                                            href="checkout.html"
+                                            href="/checkout"
                                             className="w-full bg-orange-600 hover:bg-orange-700 text-white text-center py-3 px-5 rounded-lg font-medium transition"
                                         >
                                             Continue

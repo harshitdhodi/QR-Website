@@ -68,7 +68,7 @@ export default function HomePage() {
                         textColor=""
                     />
                     <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center gap-6">
-                        <Link href="/cart" className="w-full block">
+                        <Link href="/cart?category=Vehicle" className="w-full block">
                             <FeatureCard
                                 icon={<Car fill="white" size={26} className="text-white" />}
                                 title="Vehicle"
@@ -78,7 +78,7 @@ export default function HomePage() {
                                 layout="centered"
                             />
                         </Link>
-                        <Link href="/cart" className="w-full block">
+                        <Link href="/cart?category=Pets" className="w-full block">
                             <FeatureCard
                                 icon={<PawPrint fill="white" size={26} className="text-white" />}
                                 title="Pets"
@@ -88,7 +88,7 @@ export default function HomePage() {
                                 layout="centered"
                             />
                         </Link>
-                        <Link href="/cart" className="w-full block">
+                        <Link href="/cart?category=Miscellaneous" className="w-full block">
                             <FeatureCard
                                 icon={<Package fill="white" size={26} className="text-white" />}
                                 title="Miscellaneous"

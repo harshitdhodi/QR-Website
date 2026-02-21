@@ -1,196 +1,245 @@
 "use client";
-
-import React from "react";
+import { useState, useEffect } from 'react';
+import { useSession, signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import PageTitle from "@/components/ui/PageTitle";
-import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import Link from "next/link";
-import Image from "next/image";
 
+export default function CheckoutPage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [orderId, setOrderId] = useState<number | null>(null);
+    const [userAddresses, setUserAddresses] = useState<any[]>([]);
 
-const checkoutItems = [
-    {
-        id: 1,
-        title: "Camisole Shoulder Straps",
-        category: "T-Shirt",
-        price: 1365,
-        oldPrice: 1999,
-        color: "Red",
-        img: "/images/product.svg",
-    },
-    {
-        id: 2,
-        title: "Printed Shoulder Straps",
-        category: "Airpods",
-        price: 1365,
-        oldPrice: 1999,
-        color: "Red",
-        img: "/images/product.svg",
-    },
-    {
-        id: 3,
-        title: "Non-Padded T-Shirt Bras",
-        category: "Bras",
-        price: 1365,
-        oldPrice: 1999,
-        color: "Red",
-        img: "/images/product.svg",
-    },
-];
+    // Address State
+    const [addressData, setAddressData] = useState({
+        street: '', city: '', state: '', pincode: '', phone: '',
+        name: '', email: ''
+    });
 
-const CheckoutPage = () => {
-    return (
-        <>
-            {/* Page Title */}
-            <PageTitle
-                title="Checkout"
-                subtitle=""
-            />
-            {/* Breadcrumb */}
-            <div className="flex justify-center text-center">
-                <Breadcrumb
-                    items={[
-                        { label: "Home", href: "/" },
-                        { label: "Checkout" },
-                    ]}
-                />
-            </div>
-            <div className="checkout-wrap font-dm lg:pt-24 pt-12">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:pb-24 pb-12">
-                    <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-10 relative lg:space-y-0 space-y-5">
-                        {/* Shipping & Payment Form */}
-                        <div className="w-full">
-                            <h2 className="text-gray-800 text-2xl font-semibold mb-5">Shipping address</h2>
+    // Mock items for checkout demonstration
+    const cartItems = [
+        { name: "Vehicle QR Tag", sku: "VQR001", quantity: 1, price: 29 },
+    ];
 
-                            <form className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label htmlFor="inputEmail4" className="block text-sm font-medium text-gray-600 mb-2">Email</label>
-                                        <input type="email" id="inputEmail4" placeholder="Email" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="inputPassword4" className="block text-sm font-medium text-gray-600 mb-2">Password</label>
-                                        <input type="password" id="inputPassword4" placeholder="Password" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                </div>
+    // Check authentication and redirect if needed
+    useEffect(() => {
+        if (status === 'loading') return; // Still loading
 
-                                <div>
-                                    <label htmlFor="inputAddress" className="block text-sm font-medium text-gray-600 mb-2">Address</label>
-                                    <input type="text" id="inputAddress" placeholder="1234 Main St" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                </div>
+        if (status === 'unauthenticated') {
+            // Store checkout intent in sessionStorage
+            sessionStorage.setItem('checkoutIntent', 'true');
+            sessionStorage.setItem('checkoutData', JSON.stringify({
+                items: cartItems,
+                timestamp: Date.now()
+            }));
 
-                                <div>
-                                    <label htmlFor="inputAddress2" className="block text-sm font-medium text-gray-600 mb-2">Address 2</label>
-                                    <input type="text" id="inputAddress2" placeholder="Apartment, studio, or floor" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                </div>
+            // Redirect to login with callback URL
+            const callbackUrl = encodeURIComponent('/checkout');
+            router.push(`/login?callbackUrl=${callbackUrl}`);
+            return;
+        }
 
-                                <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                                    <div className="md:col-span-3">
-                                        <label htmlFor="inputCity" className="block text-sm font-medium text-gray-600 mb-2">City</label>
-                                        <input type="text" id="inputCity" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                    <div className="md:col-span-2">
-                                        <label htmlFor="inputState" className="block text-sm font-medium text-gray-600 mb-2">State</label>
-                                        <select id="inputState" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                            <option>Choose</option>
-                                            <option>Option 1</option>
-                                            <option>Option 2</option>
-                                            <option>Option 3</option>
-                                        </select>
-                                    </div>
-                                    <div className="md:col-span-1">
-                                        <label htmlFor="inputZip" className="block text-sm font-medium text-gray-600 mb-2">Zip</label>
-                                        <input type="text" id="inputZip" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                </div>
-                            </form>
+        if (status === 'authenticated' && session?.user) {
+            // Auto-fill user data
+          setAddressData(prev => ({
+    ...prev,
+    name: session.user.name || '',
+    email: session.user.email || '',
+    phone: '' // Set empty string instead of accessing undefined session.user.phone
+}));
 
-                            <h2 className="text-gray-800 text-2xl font-semibold mt-8 mb-5">Payment details</h2>
+            // Fetch user addresses
+            fetchUserAddresses();
+        }
+    }, [status, session, router]);
 
-                            <form className="space-y-4">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label htmlFor="cardname" className="block text-sm font-medium text-gray-600 mb-2">Card name</label>
-                                        <input type="text" id="cardname" placeholder="Name" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="expiry" className="block text-sm font-medium text-gray-600 mb-2">Expiry</label>
-                                        <input type="number" id="expiry" placeholder="Expiry" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="cardnumber" className="block text-sm font-medium text-gray-600 mb-2">Card number</label>
-                                        <input type="number" id="cardnumber" placeholder="**** **** ****" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="cvv" className="block text-sm font-medium text-gray-600 mb-2">CVV</label>
-                                        <input type="number" id="cvv" placeholder="***" className="w-full px-3 py-3 font-medium text-sm border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+    // Restore checkout data if returning from login
+    useEffect(() => {
+        const checkoutIntent = sessionStorage.getItem('checkoutIntent');
+        if (checkoutIntent && status === 'authenticated') {
+            sessionStorage.removeItem('checkoutIntent');
+            sessionStorage.removeItem('checkoutData');
+        }
+    }, [status]);
 
-                        {/* Order Summary */}
-                        <div className="w-full bg-gray-50 border border-gray-200 rounded-xl p-8">
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Order summary</h2>
-                            <div className="overflow-x-auto scrollbar">
-                                <table className="table-auto min-w-[500px] w-full text-left border-collapse">
-                                    <tbody>
-                                        {checkoutItems.map((item) => (
-                                            <tr key={item.id} className="border-b border-gray-200">
-                                                <td className="w-32 p-3 pl-0">
-                                                    <Link href="/cart" className="inline-block border border-gray-200 bg-gray-100 rounded-xl overflow-hidden">
-                                                        <Image src={item.img} alt={item.title} className="w-full rounded-lg" width={114} height={171} />
-                                                    </Link>
-                                                </td>
-                                                <td className="p-3 align-top">
-                                                    <h2 className="text-gray-900 font-semibold text-lg mb-1">{item.title}</h2>
-                                                    <span className="text-gray-600 text-base font-medium block">{item.category}</span>
-                                                    <span className="text-gray-900 font-semibold text-base block mt-4">
-                                                        ${item.price.toLocaleString()}
-                                                        <span className="line-through text-gray-600 font-medium ml-1">${item.oldPrice.toLocaleString()}</span>
-                                                    </span>
-                                                    <span className="text-sm text-gray-600 mt-2 font-medium block">Color: <span>{item.color}</span></span>
-                                                </td>
-                                                <td className="p-3 pr-0 text-right align-top text-sm font-medium text-gray-800">${item.price.toLocaleString()}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+    const fetchUserAddresses = async () => {
+        try {
+            const res = await fetch('/api/user/address');
+            if (res.ok) {
+                const addresses = await res.json();
+                setUserAddresses(addresses);
 
-                            <div className="mt-4">
-                                <div className="flex justify-between mt-4">
-                                    <span className="font-medium text-gray-900">Subtotal</span>
-                                    <span className="font-semibold text-gray-900">$319.97</span>
-                                </div>
-                                <div className="flex justify-between mt-1">
-                                    <span className="font-medium text-gray-900">Sales Tax (8%)</span>
-                                    <span className="font-semibold text-gray-900">$25.60</span>
-                                </div>
-                                <div className="flex justify-between mt-1">
-                                    <span className="font-medium text-gray-900">Shipping</span>
-                                    <span className="font-semibold text-gray-900">$10.00</span>
-                                </div>
-                                <div className="flex justify-between mt-1">
-                                    <span className="font-medium text-gray-900">Coupon</span>
-                                    <span className="font-semibold text-gray-900">-$5.99</span>
-                                </div>
-                                <div className="flex justify-between mt-5">
-                                    <span className="font-semibold text-gray-900">Total</span>
-                                    <span className="font-semibold text-gray-900">$355.57</span>
-                                </div>
+                // Auto-fill first address if available
+                if (addresses.length > 0) {
+                    const firstAddress = addresses[0];
+                    setAddressData(prev => ({
+                        ...prev,
+                        street: firstAddress.street || '',
+                        city: firstAddress.city || '',
+                        state: firstAddress.state || '',
+                        pincode: firstAddress.pincode || '',
+                        phone: firstAddress.phone || prev.phone
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch addresses:', error);
+        }
+    };
 
-                                <div className="pt-4 flex gap-2 items-center">
-                                    <a href="checkout.html" className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-5 rounded-lg font-medium transition">
-                                        Continue
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+    const handleCheckout = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const res = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    items: cartItems,
+                    paymentMethod: 'COD',
+                    address: addressData
+                })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setOrderId(data.orderId);
+                alert(`Order placed successfully! Order ID: ${data.orderId}`);
+                window.location.href = '/orders';
+            } else {
+                alert("Checkout failed: " + data.error);
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (status === 'loading') {
+        return (
+            <div className="pt-24 pb-12 max-w-screen-xl mx-auto px-4 font-dm">
+                <div className="flex justify-center items-center min-h-[400px]">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                        <p className="mt-4 text-gray-600">Loading...</p>
                     </div>
                 </div>
             </div>
-        </>
-    );
-};
+        );
+    }
 
-export default CheckoutPage;
+    return (
+        <div className="pt-24 pb-12 max-w-screen-xl mx-auto px-4 font-dm">
+            <PageTitle title="Checkout" subtitle="Complete your purchase" />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-8">
+                {/* Left Column: Forms */}
+                <div>
+                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 className="text-xl font-semibold mb-4 text-gray-900">Delivery Information</h3>
+
+                        {/* User Info Display */}
+                        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Logged in as:</p>
+                            <p className="font-medium">{session?.user?.email}</p>
+                        </div>
+
+                        <form onSubmit={handleCheckout} className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input
+                                    className="w-full border p-3 rounded-lg"
+                                    placeholder="Full Name"
+                                    value={addressData.name}
+                                    onChange={e => setAddressData({ ...addressData, name: e.target.value })}
+                                    required
+                                />
+                                <input
+                                    className="w-full border p-3 rounded-lg"
+                                    placeholder="Email"
+                                    type="email"
+                                    value={addressData.email}
+                                    onChange={e => setAddressData({ ...addressData, email: e.target.value })}
+                                    required
+                                    disabled
+                                />
+                            </div>
+
+                            <input
+                                className="w-full border p-3 rounded-lg"
+                                placeholder="Phone"
+                                value={addressData.phone}
+                                onChange={e => setAddressData({ ...addressData, phone: e.target.value })}
+                                required
+                            />
+
+                            <input
+                                className="w-full border p-3 rounded-lg"
+                                placeholder="Street Address"
+                                value={addressData.street}
+                                onChange={e => setAddressData({ ...addressData, street: e.target.value })}
+                                required
+                            />
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <input
+                                    className="w-full border p-3 rounded-lg"
+                                    placeholder="City"
+                                    value={addressData.city}
+                                    onChange={e => setAddressData({ ...addressData, city: e.target.value })}
+                                    required
+                                />
+                                <input
+                                    className="w-full border p-3 rounded-lg"
+                                    placeholder="State"
+                                    value={addressData.state}
+                                    onChange={e => setAddressData({ ...addressData, state: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <input
+                                className="w-full border p-3 rounded-lg"
+                                placeholder="Pincode"
+                                value={addressData.pincode}
+                                // ✅ Correct
+                                onChange={e => setAddressData({ ...addressData, pincode: e.target.value })}
+                                required
+                            />
+
+                            <button
+                                disabled={loading}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition"
+                            >
+                                {loading ? 'Processing...' : 'Place Order'}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {/* Right Column: Order Summary */}
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-900">Order Summary</h3>
+                    {cartItems.map((item, idx) => (
+                        <div key={idx} className="flex justify-between py-3 border-b">
+                            <div>
+                                <p className="font-medium">{item.name}</p>
+                                <p className="text-sm text-gray-500">SKU: {item.sku}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="font-medium">${item.price}</p>
+                                <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="flex justify-between py-3 font-semibold text-lg">
+                        <span>Total</span>
+                        <span>${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
