@@ -10,7 +10,7 @@ interface GradientFeatureCardProps {
     highlight?: string;
     aosDelay?: number | string;
     aosDuration?: number | string;
-    colorTheme?: "darkblue" | "default" | "lightblue";
+    colorTheme?: "darkorange" | "default" | "lightorange";
     layout?: "default" | "modern" | "classic" | "lightgrey";
 }
 
@@ -26,12 +26,12 @@ const GradientFeatureCard: React.FC<GradientFeatureCardProps> = ({
 }) => {
     // 🎨 Background color map
     const colorMap: Record<string, string> = {
-        darkblue: "bg-gradient-to-b from-blue-800 to-blue-900",
+        darkorange: "bg-gradient-to-b from-blue-800 to-blue-900",
         default: "bg-gradient-to-b from-[#EBF3FF] to-[#F2F7FF]",
-        lightblue: "bg-gradient-to-b from-[#B3D2FF] to-[#F2F7FF]",
+        lightorange: "bg-gradient-to-b from-[#B3D2FF] to-[#F2F7FF]",
     };
 
-    const textColor = colorTheme === "darkblue" ? "text-white" : "text-gray-900";
+    const textColor = colorTheme === "darkorange" ? "text-white" : "text-gray-900";
 
     // ⚪ Modern layout
     if (layout === "modern") {

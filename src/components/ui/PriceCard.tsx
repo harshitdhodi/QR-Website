@@ -35,7 +35,7 @@ const PriceCard: React.FC<PriceCardProps> = ({
     borderWidth = 2,
     features = [],
     sections = [],
-    colorTheme = "default",
+colorTheme = "default",
 }) => {
     // 🎨 Tailwind-safe color map
     const colorMap: Record<string, string> = {

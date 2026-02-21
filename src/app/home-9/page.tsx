@@ -77,7 +77,7 @@ export default function HomePage() {
                             description="Deliver advanced monitoring for proactive performance management."
                             aosDelay={0}
                             aosDuration={400}
-                            colorTheme="darkblue"
+                            colorTheme="darkorange"
                         />
                         <GradientFeatureCard
                             image="/images/feature-2.svg"
@@ -320,7 +320,7 @@ export default function HomePage() {
                             buttonText="Start trial for 14 days"
                             buttonLink="/pricing"
                             borderWidth={1}
-                            colorTheme="lightblue"
+                            colorTheme="lightorange"
                             features={[
                                 { text: "10 GB disk space availability" },
                                 { text: "10 GB NVMe SSD for use" },
@@ -338,7 +338,7 @@ export default function HomePage() {
                             priceSuffix="/month"
                             buttonText="Start trial for 14 days"
                             buttonLink="/pricing"
-                            colorTheme="darkblue"                        
+                            colorTheme="darkorange"                        
                             borderWidth={0}
                             aosDelay="300"
                             features={[
@@ -359,7 +359,7 @@ export default function HomePage() {
                             borderColor="border-gray-200"
                             buttonText="Start trial for 14 days"
                             buttonLink="/pricing"
-                            colorTheme="lightblue"
+                            colorTheme="lightorange"
                             discountText=""
                             aosDelay="500"
                             features={[

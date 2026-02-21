@@ -55,21 +55,21 @@ export default function HomePage() {
                                 image="/images/feature-2.svg"
                                 title="Automate tasks analytics"
                                 description="Create comprehensive monitors with for proactive into more."
-                                colorTheme="darkblue"
+                                colorTheme="darkorange"
                             />
                             <GradientFeatureCard
                                 layout="classic"
                                 image="/images/feature-2.svg"
                                 title="Strong, scalable, secure"
                                 description="Deliver advanced monitoring for proactive performance management."
-                                colorTheme="darkblue"
+                                colorTheme="darkorange"
                             />
                             <GradientFeatureCard
                                 layout="classic"
                                 image="/images/feature-2.svg"
                                 title="Build dynamic systems"
                                 description="Create comprehensive monitors with for proactive into more."
-                                colorTheme="darkblue"
+                                colorTheme="darkorange"
                             />
                         </div>
 

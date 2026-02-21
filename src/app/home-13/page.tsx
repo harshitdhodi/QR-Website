@@ -76,21 +76,21 @@ export default function HomePage() {
                             title="Automate tasks analytics"
                             description="Create comprehensive monitors with proactive insights for more."
                             aosDelay={0}
-                            colorTheme="lightblue"
+                            colorTheme="lightorange"
                         />
                         <GradientFeatureCard
                             image="/images/feature-2.svg"
                             title="Strong, scalable, secure"
                             description="Deliver advanced monitoring for proactive performance management."
                             aosDelay={200}
-                            colorTheme="lightblue"
+                            colorTheme="lightorange"
                         />
                         <GradientFeatureCard
                             image="/images/feature-2.svg"
                             title="Build dynamic systems"
                             description="Craft comprehensive insights for forward-looking operations."
                             aosDelay={400}
-                            colorTheme="lightblue"
+                            colorTheme="lightorange"
                         />
                     </div>
                 </div>
