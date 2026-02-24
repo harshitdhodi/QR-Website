@@ -17,7 +17,7 @@ interface FooterProps {
 
 const HOVER_MAP: Record<string, string> = {
     "bg-blue-600": "hover:bg-blue-800",
-    "bg-orange-500": "hover:bg-orange-600",
+    "bg-blue-500": "hover:bg-blue-600",
     "bg-lime-300": "hover:bg-lime-400",
     "bg-cyan-500": "hover:bg-cyan-700",
     "bg-yellow-400": "hover:bg-yellow-500",

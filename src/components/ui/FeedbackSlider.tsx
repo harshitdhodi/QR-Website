@@ -50,7 +50,7 @@ const FeedbackSlider = () => {
                                                 size={18}
                                                 className={
                                                     i < Math.floor(item.rating)
-                                                        ? "text-orange-500 fill-orange-500"
+                                                        ? "text-blue-500 fill-blue-500"
                                                         : "text-gray-500"
                                                 }
                                             />

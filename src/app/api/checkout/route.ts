@@ -3,8 +3,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { customers, orders, orderItems, addresses } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql, desc } from 'drizzle-orm';
 import { createShiprocketOrder } from '@/lib/shiprocket';
+import { randomUUID } from 'crypto';
 
 export async function POST(req: Request) {
   try {
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
         .from(addresses)
         .where(eq(addresses.customerId, customer.id));
 
+      console.log('customerAddresses', customerAddresses);
     } else {
       // Guest checkout
       if (!guestEmail || !guestName || !guestPhone) {
@@ -53,12 +55,19 @@ export async function POST(req: Request) {
           .values({ name: guestName, email: guestEmail, phone: guestPhone })
           .$returningId();
 
-        customer = { id: newCustomer.id, name: guestName, email: guestEmail, phone: guestPhone };
+        customer = {
+          id: newCustomer.id,
+          name: guestName,
+          email: guestEmail,
+          phone: guestPhone,
+        };
       }
     }
 
     // Resolve shipping address: use provided address, or fall back to first saved address
     const shippingAddress = address ?? customerAddresses?.[0];
+    console.log('shippingAddress', shippingAddress);
+    console.log('customer', customer);
 
     if (!shippingAddress) {
       return NextResponse.json({ error: 'Shipping address is required' }, { status: 400 });
@@ -69,17 +78,34 @@ export async function POST(req: Request) {
       (acc: number, item: any) => acc + item.price * item.quantity,
       0
     );
+    console.log('totalAmount', totalAmount);
+
+    // Split customer name into first and last
+    const nameParts = customer.name.trim().split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(' ') || nameParts[0]; // fallback to first if no last name
+
+    // Format order date as "YYYY-MM-DD HH:MM" (Shiprocket requires datetime, not date-only)
+    const orderDate = new Date()
+      .toISOString()
+      .replace('T', ' ')
+      .substring(0, 16);
 
     // Create order in DB and trigger Shiprocket
     const { orderId, shiprocketResponse } = await db.transaction(async (tx) => {
-      const [orderResult] = await tx.insert(orders).values({
-        customerId: customer.id,
-        amount: totalAmount,
-        status: 'PENDING',
-        paymentMethod: paymentMethod,
-      });
+      const newOrderId = randomUUID();
 
-      const newOrderId = orderResult.insertId;
+      // ✅ Use raw SQL insert to reliably get insertId on MariaDB
+      await tx.execute(
+        sql`INSERT INTO \`Order\` (id, customer_id, amount, status, paymentMethod)
+  VALUES (${newOrderId}, ${customer.id}, ${totalAmount}, 'PENDING', ${paymentMethod})`
+      );
+
+      console.log('newOrderId', newOrderId);
+
+      if (!newOrderId) {
+        throw new Error('Order insert failed — ID is 0 or undefined');
+      }
 
       await tx.insert(orderItems).values(
         items.map((item: any) => ({
@@ -91,31 +117,59 @@ export async function POST(req: Request) {
         }))
       );
 
-      // Create Shiprocket order
+      // ─── Shiprocket Order ──────────────────────────────────────────────────
       const shiprocketResponse = await createShiprocketOrder({
+        // Order info
         order_id: String(newOrderId),
-        order_date: new Date().toISOString().split('T')[0],
-        billing_customer_name: customer.name,
+        order_date: orderDate,                                    // ✅ "YYYY-MM-DD HH:MM"
+        pickup_location: 'Primary',                               // ✅ required — match your Shiprocket dashboard
+
+        // Billing
+        billing_customer_name: firstName,
+        billing_last_name: lastName,
         billing_email: customer.email,
         billing_phone: customer.phone,
         billing_address: shippingAddress.street,
-        billing_city: shippingAddress.city,
-        billing_state: shippingAddress.state,
-        billing_pincode: shippingAddress.pincode,
+        billing_address_2: '',
+        billing_city: shippingAddress.city,                       // normalized inside createShiprocketOrder
+        billing_state: shippingAddress.state,                     // normalized inside createShiprocketOrder
+        billing_pincode: Number(shippingAddress.pincode),         // ✅ number
         billing_country: shippingAddress.country ?? 'India',
-        shipping_is_billing: true,
+
+        // Payment
         payment_method: paymentMethod === 'COD' ? 'COD' : 'Prepaid',
+
+        // Charges
+        shipping_charges: 0,
+        giftwrap_charges: 0,
+        transaction_charges: 0,
+        total_discount: 0,
         sub_total: totalAmount,
+
+        // Dimensions
+        length: 10,
+        breadth: 10,
+        height: 5,
+        weight: 0.5,
+
+        // Items
         order_items: items.map((item: any) => ({
           name: item.name,
           sku: item.sku,
           units: item.quantity,
-          selling_price: item.price,
+          selling_price: Number(item.price),                      // ✅ number
+          discount: '',
+          tax: '',
+          hsn: '',
         })),
       });
 
+      console.log('shiprocketResponse', shiprocketResponse);
+
       return { orderId: newOrderId, shiprocketResponse };
     });
+
+    console.log('orderId', orderId);
 
     return NextResponse.json({
       success: true,
@@ -129,7 +183,10 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error('Checkout Error:', error);
-    return NextResponse.json({ error: error.message || 'Checkout failed' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Checkout failed' },
+      { status: 500 }
+    );
   }
 }
 

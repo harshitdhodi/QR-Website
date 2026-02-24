@@ -74,7 +74,7 @@ export default function HomePage() {
                                         <BadgeLink label="Affordable plans " variant="color"  bgColor='bg-cyan-500'/>
                                         <BadgeLink label="Customer Relationships" variant="color"  bgColor='bg-gray-400' textColor="text-gray-100" />
                                         <BadgeLink label="Plans that fit every stage " variant="color"  bgColor='bg-green-500'/>
-                                        <BadgeLink label="Built to scale with your needs " variant="color"  bgColor='bg-orange-500'/>
+                                        <BadgeLink label="Built to scale with your needs " variant="color"  bgColor='bg-blue-500'/>
                                         <BadgeLink label="Control and Customization " variant="color"  bgColor='bg-lime-400'/>
                                     </div>
                                 </div>
@@ -197,7 +197,7 @@ export default function HomePage() {
                 </div>
             </section>
             {/* service wrap */}
-            <section className="service-wrap lg:py-24 py-12 bg-orange-900">
+            <section className="service-wrap lg:py-24 py-12 bg-blue-900">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-4 pb-0">
                     <div className="flex flex-wrap justify-between pb-16 gap-y-4">
                         <PageTitle3
@@ -273,10 +273,10 @@ export default function HomePage() {
                                         <div className="mt-auto text-end p-3 pb-0">
                                             <span className="lg:text-7xl text-5xl text-gray-900 font-medium">4.5</span>
                                             <div className="flex flex-row gap-1 justify-end">
-                                                <Star fill='orange' strokeWidth={0} size={20} />
-                                                <Star fill='orange' strokeWidth={0} size={20} />
-                                                <Star fill='orange' strokeWidth={0} size={20} />
-                                                <Star fill='orange' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
                                                 <Star fill='gray' strokeWidth={0} size={20} />
                                             </div>
                                             <p className="font-medium text-gray-900 mt-1 mb-0">(2.3k + Reviews )</p>
@@ -318,7 +318,7 @@ export default function HomePage() {
             />
 
             {/* footer */}
-            <Footer bgColor="bg-orange-900" foreColor="bg-yellow-400" foretextColor="text-gray-900" borderColor="border-orange-900" iconbgColor="bg-yellow-400" logo="/images/logo/logo-yellow-white.png" />
+            <Footer bgColor="bg-blue-900" foreColor="bg-yellow-400" foretextColor="text-gray-900" borderColor="border-blue-900" iconbgColor="bg-yellow-400" logo="/images/logo/logo-yellow-white.png" />
         </>
     );
 }

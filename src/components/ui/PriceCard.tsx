@@ -19,7 +19,7 @@ type PriceCardProps = {
     sections?: Section[];
     aosDelay?: number | string;
     borderWidth?: number;
-    colorTheme?: "lightorange" | "darkorange" | "default";
+    colorTheme?: "lightblue" | "darkblue" | "default";
 };
 
 const PriceCard: React.FC<PriceCardProps> = ({
@@ -39,16 +39,16 @@ colorTheme = "default",
 }) => {
     // 🎨 Tailwind-safe color map
     const colorMap: Record<string, string> = {
-        lightorange: "bg-gradient-to-b from-[#F2F8FF] to-[#E6F2FF]",
-        darkorange: "bg-gradient-to-b from-orange-800 to-orange-900",
+        lightblue: "bg-gradient-to-b from-[#F2F8FF] to-[#E6F2FF]",
+        darkblue: "bg-gradient-to-b from-blue-800 to-blue-900",
         default: "bg-gray-50",
     };
 
     // 🖋️ Auto text color
-    const textColor = colorTheme === "darkorange" ? "text-white" : "text-gray-900";
-    const subTextColor = colorTheme === "darkorange" ? "text-gray-100" : "text-gray-700";
-    const borderdividerColor = colorTheme === "darkorange" ? "border-transparent" : "border-gray-200";
-    const checkColor = colorTheme === "darkorange" ? "text-white" : "text-orange-800";
+    const textColor = colorTheme === "darkblue" ? "text-white" : "text-gray-900";
+    const subTextColor = colorTheme === "darkblue" ? "text-gray-100" : "text-gray-700";
+    const borderdividerColor = colorTheme === "darkblue" ? "border-transparent" : "border-gray-200";
+    const checkColor = colorTheme === "darkblue" ? "text-white" : "text-blue-800";
 
     return (
         <div
@@ -63,7 +63,7 @@ colorTheme = "default",
                 {/* Optional Badge */}
                 {discountText && (
                     <div
-                        className="absolute left-1/2 -top-4 -translate-x-1/2 px-4 py-2 shadow-sm rounded-lg text-xs font-semibold uppercase text-white bg-orange-700 flex items-center gap-2 w-auto"
+                        className="absolute left-1/2 -top-4 -translate-x-1/2 px-4 py-2 shadow-sm rounded-lg text-xs font-semibold uppercase text-white bg-blue-700 flex items-center gap-2 w-auto"
                         data-aos="zoom-in"
                     >
                         <Zap size={18} />
@@ -93,7 +93,7 @@ colorTheme = "default",
                 {/* Button */}
                 <a
                     href={buttonLink}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-orange-600 hover:bg-orange-700 rounded-lg transition duration-300"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300"
                 >
                     <span>{buttonText}</span>
                     <ArrowRight size={20} />

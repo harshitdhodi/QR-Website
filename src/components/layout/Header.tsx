@@ -22,7 +22,7 @@ interface HeaderProps {
 }
 
 const Header = ({ 
-    btnColor = 'bg-orange-600', 
+    btnColor = 'bg-blue-600', 
     bgColor = "bg-transparent", 
     headerClass = "", 
     position = "absolute", 

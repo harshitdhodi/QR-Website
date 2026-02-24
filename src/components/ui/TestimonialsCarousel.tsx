@@ -43,7 +43,7 @@ export default function TestimonialsCarousel({ testimonials }: TestimonialsCarou
                                             width="18"
                                             height="18"
                                             fill="currentColor"
-                                            className={`bi bi-star-fill ${i < Math.floor(t.rating) ? "text-orange-500" : "text-gray-500"
+                                            className={`bi bi-star-fill ${i < Math.floor(t.rating) ? "text-blue-500" : "text-gray-500"
                                                 }`}
                                             viewBox="0 0 16 16"
                                         >

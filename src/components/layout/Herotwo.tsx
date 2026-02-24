@@ -17,11 +17,11 @@ export default function Herotwo() {
                             <div className="flex flex-row mb-3 mt-auto">
                                 <div className="flex flex-row gap-2 py-1 px-5 rounded-full w-auto bg-white/20">
                                     <div className="flex flex-row gap-1 my-1">
-                                        <Star color="orange" fill="orange" size={18}/>
-                                        <Star color="orange" fill="orange" size={18}/>
-                                        <Star color="orange" fill="orange" size={18}/>
-                                        <Star color="orange" fill="orange" size={18}/>
-                                        <Star color="orange" fill="orange" size={18}/>
+                                        <Star color="blue" fill="blue" size={18}/>
+                                        <Star color="blue" fill="blue" size={18}/>
+                                        <Star color="blue" fill="blue" size={18}/>
+                                        <Star color="blue" fill="blue" size={18}/>
+                                        <Star color="blue" fill="blue" size={18}/>
                                     </div>
                                     <h5 className="text-white font-medium text-sm pt-1">4.5 ( 2.3k + Reviews )</h5>
                                 </div>
@@ -30,7 +30,7 @@ export default function Herotwo() {
                             <p className="font-medium text-white/90 max-w-xl lg:pr-10 text-lg aos-init aos-animate" data-aos="fade-up" data-aos-duration="500"> When you join our journey, you are choosing a partner who believes in a healthier, more balanced you — and works tirelessly to help you get there.</p>
                             {/* cta btn */}
                             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-8 pb-3">
-                                <Button href="/pricing" label="Start trial for 14 days" bgColor="bg-orange-500" textColor="text-white" padding="py-4 px-6" />
+                                <Button href="/pricing" label="Start trial for 14 days" bgColor="bg-blue-500" textColor="text-white" padding="py-4 px-6" />
                                 <Button href="/about" label="Explore more" bgColor="bg-gray-100" textColor="text-gray-900" padding="py-4 px-6" />
                             </div>
                             <p className="text-sm text-gray-300 font-medium mb-auto mt-0 pb-lg-5">No Card Required Cancel Anytime</p>

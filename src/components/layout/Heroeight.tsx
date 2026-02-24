@@ -13,11 +13,11 @@ export default function Heroeight() {
                         <div className="flex flex-row mb-3 mt-auto">
                             <div className="flex flex-row gap-2 py-1 px-5 rounded-full w-auto bg-white/20">
                                 <div className="flex flex-row gap-1 my-1">
-                                    <Star color="orange" fill="orange" size={18} />
-                                    <Star color="orange" fill="orange" size={18} />
-                                    <Star color="orange" fill="orange" size={18} />
-                                    <Star color="orange" fill="orange" size={18} />
-                                    <Star color="orange" fill="orange" size={18} />
+                                    <Star color="blue" fill="blue" size={18} />
+                                    <Star color="blue" fill="blue" size={18} />
+                                    <Star color="blue" fill="blue" size={18} />
+                                    <Star color="blue" fill="blue" size={18} />
+                                    <Star color="blue" fill="blue" size={18} />
                                 </div>
                                 <h5 className="text-white font-medium text-sm pt-1">4.5 ( 2.3k + Reviews )</h5>
                             </div>

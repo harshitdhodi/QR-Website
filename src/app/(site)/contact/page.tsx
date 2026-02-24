@@ -16,15 +16,15 @@ export default function ContactPage() {
 
     return (
         <>
-            <div className="absolute top-0  left-0 w-full h-96 font-dm bg-light-orange-banner lg:pt-24 pt-12"></div>
+            <div className="absolute top-0  left-0 w-full h-96 font-dm bg-light-blue-banner lg:pt-24 pt-12"></div>
             <div className="contact-wrap font-dm  z-10 lg:pt-24 pt-12 z-20 relative">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:py-24 py-20">
                     <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-6 space-y-5 lg:space-y-0">
                         {/* Left Side */}
                         <div className="w-full lg:pr-16">
                             <div className="flex">
-                                <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-orange-600 bg-white flex items-center gap-2">
-                                    <Zap size={18} className="text-orange-500" />
+                                <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-600 bg-white flex items-center gap-2">
+                                    <Zap size={18} className="text-blue-500" />
                                     Our customer feedback
                                 </div>
                             </div>
@@ -37,7 +37,7 @@ export default function ContactPage() {
                                 Use the contact form to get in touch or email us at
                                 <a
                                     href="mailto:info@uitheme.net"
-                                    className="underline text-orange-600"
+                                    className="underline text-blue-600"
                                 >
                                     info@uitheme.net
                                 </a>
@@ -174,7 +174,7 @@ export default function ContactPage() {
                                         <div>
                                             <button
                                                 type="submit"
-                                                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-orange-600 hover:bg-orange-700 rounded-lg transition duration-300"
+                                                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300"
                                             >
                                                 <span>Send message</span>
                                                 <ArrowUpRight size={20} />

@@ -43,9 +43,9 @@ export default function SingleProductPage() {
                                 </h1>
 
                                 {/* Stars */}
-                                <div className="flex items-center text-orange-400 my-1 gap-[1px]">
+                                <div className="flex items-center text-blue-400 my-1 gap-[1px]">
                                     {[...Array(5)].map((_, i) => (
-                                        <Star key={i} size={14} className="fill-current text-orange-400" />
+                                        <Star key={i} size={14} className="fill-current text-blue-400" />
                                     ))}
                                     <span className="text-gray-700 text-sm font-medium ml-2 leading-6">
                                         4.5 Reviews

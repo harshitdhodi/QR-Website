@@ -62,8 +62,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
 
                     {/* review */}
                     {product.review && (
-                        <div className="flex items-center text-orange-500 mb-3 mt-2">
-                            <Star fill="orange" size={16} strokeWidth={0} />
+                        <div className="flex items-center text-blue-500 mb-3 mt-2">
+                            <Star fill="blue" size={16} strokeWidth={0} />
                             <span className="text-sm text-gray-600 font-medium leading-6 ml-1 inline-block">
                                 {product.review} Reviews
                             </span>

@@ -80,7 +80,7 @@ export default function FeatureIcon({
                 <div className="flex flex-col">
                     {/* Icon */}
                     {icon && (
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-orange-500 to-orange-400 flex items-center justify-center text-white text-center">
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-blue-500 to-blue-400 flex items-center justify-center text-white text-center">
                             {icon}
                         </div>
                     )}

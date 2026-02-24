@@ -26,7 +26,7 @@ export default function HomePage() {
     return (
         <>
             {/* Header */}
-            <Header theme="header-light" btnColor="bg-orange-500" logo="/images/logo/logo-warning.png" />
+            <Header theme="header-light" btnColor="bg-blue-500" logo="/images/logo/logo-warning.png" />
             {/* hero wrap */}
             <Herotwo />
             {/* brand wrap */}
@@ -81,7 +81,7 @@ export default function HomePage() {
             </section>
             {/* featuer wrap */}
             <section className="feature-wrap font-dm lg:mx-10">
-                <div className="lg:py-24 py-12 bg-orange-50 rounded-xl">
+                <div className="lg:py-24 py-12 bg-blue-50 rounded-xl">
                     <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
                         <PageTitle3
                             badgeText=""
@@ -97,7 +97,7 @@ export default function HomePage() {
                                 <CounterCarousel slides={maincarsoul} />
                             </div>
                             <div className="w-full lg:w-1/3">
-                                <div className="overflow-hidden relative group bg-orange-400 rounded-xl h-[350px] p-6 flex flex-col aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
+                                <div className="overflow-hidden relative group bg-blue-400 rounded-xl h-[350px] p-6 flex flex-col aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
                                     <h3 className="text-gray-900 font-semibold text-3xl pl-2 lg:pr-16">Make your customers smile with every step.</h3>
                                     <div className="flex flex-row justify-between mt-auto">
                                         <div className="mt-auto">
@@ -130,7 +130,7 @@ export default function HomePage() {
                                     Get intent on data the accounts you want to target as well as emails, direct dials, and cell phones. Everything you need to close the deal is right at your fingertips. Do not risk losing your current customers because they are not aware of additional products.
                                 </p>
                                 <div className="aos-init aos-animate" data-aos="fade-up" data-aos-delay="200" data-aos-duration="400">
-                                    <Button href="/about" label="Who we are" bgColor="bg-orange-500" textColor="text-white" />
+                                    <Button href="/about" label="Who we are" bgColor="bg-blue-500" textColor="text-white" />
                                 </div>
                             </div>
                         </div>
@@ -170,7 +170,7 @@ export default function HomePage() {
                                         borderColor="border-gray-200 border-0"
                                         textColor="text-gray-800"
                                         btnbgColor="bg-gray-900"
-                                        checkIconcolor="text-orange-500"
+                                        checkIconcolor="text-blue-500"
                                     />
                                     {/* price 2nd */}
                                     <PriceCard2
@@ -191,8 +191,8 @@ export default function HomePage() {
                                         bgColor="bg-gray-100"
                                         borderColor="border-gray-200 border-0"
                                         textColor="text-gray-800"
-                                        btnbgColor="bg-orange-500"
-                                        checkIconcolor="text-orange-500"
+                                        btnbgColor="bg-blue-500"
+                                        checkIconcolor="text-blue-500"
                                     />
                                 </div>
                             </div>
@@ -244,7 +244,7 @@ export default function HomePage() {
                             padding="pb-0"
                         />
                         <div className="lg:text-right mt-auto">
-                            <Button href="/blog-1" label="Check out more blogs" bgColor="bg-orange-500" textColor="text-white" />
+                            <Button href="/blog-1" label="Check out more blogs" bgColor="bg-blue-500" textColor="text-white" />
                         </div>
                     </div>
                     <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-6 relative lg:space-y-0 space-y-5">
@@ -259,7 +259,7 @@ export default function HomePage() {
                 </div>
             </section>
             {/* footer */}
-            <Footer foreColor="bg-orange-500" logo="/images/logo/logo-warning-white.png" />
+            <Footer foreColor="bg-blue-500" logo="/images/logo/logo-warning-white.png" />
         </>
     );
 }

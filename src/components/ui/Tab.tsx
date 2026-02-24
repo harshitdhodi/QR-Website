@@ -48,7 +48,7 @@ export default function Tabs() {
 
                                 {/* Mobile Icon */}
                                 <span className="icon flex lg:hidden">
-                                    {Icon && <Icon className="text-orange-500" size={24} />}
+                                    {Icon && <Icon className="text-blue-500" size={24} />}
                                 </span>
                             </button>
                         );
@@ -83,7 +83,7 @@ export default function Tabs() {
                             {/* Content */}
                             <div className="lg:w-1/2 mt-3 lg:mt-0 lg:pl-4">
                                 <div className="xl:pl-12 lg:pl-6 w-full xl:max-w-[85%] flex flex-col">
-                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-orange-500">
+                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-500">
                                         {Icon && <Icon size={28} className="text-white" />}
                                     </div>
 
@@ -98,7 +98,7 @@ export default function Tabs() {
 
                                     {tab.points.map((point, idx) => (
                                         <div key={idx} className="flex items-center gap-2 mb-2 mt-1">
-                                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500">
+                                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-blue-500">
                                                 <FeatherIcons.Check size={16} className="text-white" />
                                             </div>
                                             <p className="text-gray-900 font-medium text-[17px]">

@@ -138,7 +138,7 @@ const CartPage = () => {
                                                     <select 
                                                         value={quantities[item.id] || 1}
                                                         onChange={(e) => handleQuantityChange(item.id, e.target.value)}
-                                                        className="border border-gray-300 rounded-md px-2 py-1 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                                        className="border border-gray-300 rounded-md px-2 py-1 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     >
                                                         {[1, 2, 3, 4, 5].map((num) => (
                                                             <option key={num} value={num}>
@@ -172,7 +172,7 @@ const CartPage = () => {
                                 {/* Terms and Conditions */}
                                 <div className="form-check mt-3">
                                     <label className="flex items-start gap-2 text-sm text-gray-500 mt-1 leading-relaxed font-medium cursor-pointer">
-                                        <input type="checkbox" id="customCheck11" className="mt-1 accent-orange-600" />
+                                        <input type="checkbox" id="customCheck11" className="mt-1 accent-blue-600" />
                                         By clicking all term and condition apply our
                                         <a href="#" className="text-gray-900 underline ml-1">Privacy Policy</a> and
                                         <a href="#" className="text-gray-900 underline ml-1">Terms and Conditions</a>.
@@ -209,7 +209,7 @@ const CartPage = () => {
                                     <div className="pt-4 flex gap-2 items-center">
                                         <a
                                             href="/checkout"
-                                            className="w-full bg-orange-600 hover:bg-orange-700 text-white text-center py-3 px-5 rounded-lg font-medium transition"
+                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 px-5 rounded-lg font-medium transition"
                                         >
                                             Continue
                                         </a>

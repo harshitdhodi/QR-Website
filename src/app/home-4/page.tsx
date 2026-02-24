@@ -271,7 +271,7 @@ export default function HomePage() {
             </section>
             <NewsletterCTA layout="half" />
             {/* footer */}
-            <Footer foreColor="bg-orange-500" layout="classic" logo="/images/logo/logo-darkgreen-white.png" />
+            <Footer foreColor="bg-blue-500" layout="classic" logo="/images/logo/logo-darkgreen-white.png" />
         </>
     );
 }

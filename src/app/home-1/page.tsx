@@ -74,7 +74,7 @@ export default function HomePage() {
                                 title="Vehicle"
                                 description="Secure QR tags for cars and bikes to manage parking and safety."
                                 delay={100}
-                                bgColor="bg-orange-500"
+                                bgColor="bg-blue-500"
                                 layout="centered"
                             />
                         </Link>
@@ -84,7 +84,7 @@ export default function HomePage() {
                                 title="Pets"
                                 description="Smart tags to ensure your furry friends can always be identified."
                                 delay={100}
-                                bgColor="bg-orange-500"
+                                bgColor="bg-blue-500"
                                 layout="centered"
                             />
                         </Link>
@@ -94,7 +94,7 @@ export default function HomePage() {
                                 title="Miscellaneous"
                                 description="Versatile QR stickers for keys, luggage, laptops, and more."
                                 delay={100}
-                                bgColor="bg-orange-500"
+                                bgColor="bg-blue-500"
                                 layout="centered"
                             />
                         </Link>
@@ -114,7 +114,7 @@ export default function HomePage() {
                             padding="pb-0"
                         />
                         <div className="lg:text-right mt-auto">
-                            <Button href="/about" label="Our service" bgColor="bg-orange-600" textColor="text-white" />
+                            <Button href="/about" label="Our service" bgColor="bg-blue-600" textColor="text-white" />
                         </div>
                     </div>
                     <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 mb-6">
@@ -272,7 +272,7 @@ export default function HomePage() {
                                 Whether it’s a parking issue, a lost pet, or misplaced item, our platform ensures fast communication, quick resolution, and complete privacy protection.
                             </p>
                             <div className="aos-init aos-animate" data-aos="fade-up" data-aos-delay="200" data-aos-duration="400">
-                                <Button href="/about" label="Who we are" bgColor="bg-orange-600" textColor="text-white" />
+                                <Button href="/about" label="Who we are" bgColor="bg-blue-600" textColor="text-white" />
                             </div>
                         </div>
                     </div>

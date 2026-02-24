@@ -304,7 +304,7 @@ body.dark {
 :where(.dark) .bg-green-50,
 :where(.dark) .bg-teal-900,
 :where(.dark) .bg-gray-100,
-:where(.dark) .bg-orange-50,
+:where(.dark) .bg-blue-50,
 :where(.dark) .bg-gray-200 {
     background-color: theme('colors.gray.800');
 }
@@ -374,11 +374,11 @@ body.dark {
 @layer utilities {
     .bg-home-one-gradient-banner {
         background-image: url('/images/svg/dots.svg'),
-        linear-gradient(166deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.4)),
-        linear-gradient(#fff8f0, #fff6f0);
+        linear-gradient(166deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, .4)),
+        linear-gradient(#f3f0ff, #f0f6ff);
     }
     .bg-gradient-blue-light {
-        background-image: radial-gradient(circle at 70% 30%, rgba(230, 201, 173, 0.8) 0, rgba(230, 199, 173, 0.4) 30%, transparent 60%), radial-gradient(circle at 30% 70%, rgba(237, 155, 100, 0.4) 0, transparent 60%), linear-gradient(135deg, #ffeddf, #ffd6b0 50%, #ffd1a6);
+        background-image: radial-gradient(circle at 70% 30%, rgba(173, 216, 230, .8) 0, rgba(173, 216, 230, .4) 30%, transparent 60%), radial-gradient(circle at 30% 70%, rgba(100, 149, 237, .4) 0, transparent 60%), linear-gradient(135deg, #dff1ff, #b0d0ff 50%, #a6cfff);
     }
     @keyframes wordSlider {
         0%, 27% { transform: translateY(0%); }
@@ -387,17 +387,17 @@ body.dark {
         100% { transform: translateY(-75%); }
     }
     .bg-cyan-gradient {
-        background-image: linear-gradient(to bottom, #ffb598, #ffe2d7);
+        background-image: linear-gradient(to bottom, #98fcff, #d7e0ff);
     }
     .bg-gray-gradient {
         background-image: linear-gradient(to bottom, #f8f8f8, #fff);
     }
     .bg-white-gradient {
-        background-image: linear-gradient(to bottom, #fff, #fbf9f9);
+        background-image: linear-gradient(to bottom, #fff, #f9fafb);
     }
     .bg-lime-gradient { background-image: linear-gradient(to bottom, #b8fb04,#91ffae ); }
-    .bg-orange-gradient { background-image: linear-gradient(to bottom, #ffed63,#ffcc91 ); }
-    .bg-blue-gradient { background-image: linear-gradient(to bottom, #ffb998,#d7e0ff); }
+    .bg-blue-gradient { background-image: linear-gradient(to bottom, #ffed63,#ffcc91 ); }
+    .bg-blue-gradient { background-image: linear-gradient(to bottom, #98fcff,#d7e0ff); }
 
     .bg-productcard-gradient {
         background-image: linear-gradient(to bottom, #f1f1f1, #e2e2e2);
@@ -487,9 +487,9 @@ body.dark {
         linear-gradient(50deg, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, .8) 93%),
         linear-gradient(100deg, #fff 12%, rgba(255, 255, 255, 0) 30%),
         linear-gradient(0deg, #fff, rgba(255, 255, 255, 0) 85%),
-        radial-gradient(circle at -20% -40%, rgba(255, 255, 255, 0) 8%, rgba(224, 185, 173, 0.4) 33%, rgba(255, 255, 255, 0) 68%),
-        repeating-linear-gradient(210deg, rgba(255, 255, 255, 0), rgba(255, 238, 230, 0.302) 18%, rgba(255, 255, 255, 0) 50%),
-        repeating-linear-gradient(195deg, rgba(255, 255, 255, 0) 55%, rgba(255, 127, 77, 0.302) 66%, rgba(255, 255, 255, 0) 85%);
+        radial-gradient(circle at -20% -40%, rgba(255, 255, 255, 0) 8%, rgba(173, 216, 224, .4) 33%, rgba(255, 255, 255, 0) 68%),
+        repeating-linear-gradient(210deg, rgba(255, 255, 255, 0), rgba(230, 247, 255, .3019607843) 18%, rgba(255, 255, 255, 0) 50%),
+        repeating-linear-gradient(195deg, rgba(255, 255, 255, 0) 55%, rgba(77, 166, 255, .3019607843) 66%, rgba(255, 255, 255, 0) 85%);
     }
     
     .scroll-header {

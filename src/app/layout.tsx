@@ -2,6 +2,7 @@
 import './globals.css';
 import { Sora, DM_Sans } from 'next/font/google';
 import AOSWrapper from "@/components/layout/AOSWrapper";
+import SessionProviderWrapper from '@/components/providers/SessionProviderWrapper';
 
 // Define a secondary font for headings
 const sora = Sora({
@@ -15,19 +16,19 @@ const dmSans = DM_Sans({
   variable: '--font-dm-sans',
 });
 
-
 export const metadata = {
   title: 'Exsit Next',
   description: 'Modern Next.js app with Tailwind + TypeScript + SCSS',
 };
 
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sora.variable} ${dmSans.variable}`}>
       <body>
-        <AOSWrapper />
-        {children} {/* no global Header/Footer */}
+        <SessionProviderWrapper>
+          <AOSWrapper />
+          {children}
+        </SessionProviderWrapper>
       </body>
     </html>
   );

@@ -1,9 +1,7 @@
-// app/layout.tsx
-
+// app/(site)/layout.tsx
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CtaSection from '@/components/layout/CtaSection';
-import SessionProviderWrapper from '@/components/providers/SessionProviderWrapper';
 
 export const metadata = {
     title: 'Exsit Next',
@@ -12,16 +10,13 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <SessionProviderWrapper>
-            <div className='font-dm-sans'>
-                <Header />
-                {children}
-                <div className='lg:py-24 py-12'>
-
-                </div>
-                {/* <CtaSection /> */}
-                <Footer />
+        <div className='font-dm-sans'>
+            <Header />
+            {children}
+            <div className='lg:py-24 py-12'>
             </div>
-        </SessionProviderWrapper>
+            {/* <CtaSection /> */}
+            <Footer />
+        </div>
     );
 }

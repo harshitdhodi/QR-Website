@@ -20,7 +20,7 @@ export default function HeroEleven() {
                                 data-aos="fade-up"
                                 data-aos-duration="200"
                             >
-                                <span className="inline-block px-3 rounded-full bg-orange-500 text-white font-medium mr-2 leading-7">
+                                <span className="inline-block px-3 rounded-full bg-blue-500 text-white font-medium mr-2 leading-7">
                                     UPDATE VERSION
                                 </span>
                                 Online start now.
@@ -48,7 +48,7 @@ export default function HeroEleven() {
                         <div className="flex flex-col sm:flex-row gap-3 mt-8 justify-center mx-auto">
                             <Button
                                 label="Start trial for 14 days"
-                                bgColor="bg-orange-500"
+                                bgColor="bg-blue-500"
                                 textColor="text-white"
                                 icon={<ArrowUpRight size={20} />}
                                 padding="py-4 px-6"
@@ -112,7 +112,7 @@ export default function HeroEleven() {
                                 <Link
                                     href="about-2.html"
                                     aria-label="play"
-                                    className="w-14 h-14 flex justify-center items-center bg-orange-500 rounded-full group-hover:rotate-45 transition duration-300"
+                                    className="w-14 h-14 flex justify-center items-center bg-blue-500 rounded-full group-hover:rotate-45 transition duration-300"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

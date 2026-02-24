@@ -119,7 +119,7 @@ export default function HomePage() {
                                                 title="SEO Performance"
                                                 description="Our design services start and end with a best-in-class experience."
                                                 delay={100}
-                                                bgColor="bg-orange-500"
+                                                bgColor="bg-blue-500"
                                             />
                                         </div>
                                         <div className="w-full">
@@ -389,7 +389,7 @@ export default function HomePage() {
                 </div>
             </section>
             {/* footer */}
-            <Footer foreColor="bg-orange-500" layout="classic" logo="/images/logo/logo-cyan-white.png" />
+            <Footer foreColor="bg-blue-500" layout="classic" logo="/images/logo/logo-cyan-white.png" />
         </>
     );
 }

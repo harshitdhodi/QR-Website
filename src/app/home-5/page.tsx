@@ -293,7 +293,7 @@ export default function HomePage() {
             <NewsletterCTA />
             {/* footer */}
             <Footer layout="modern" bgColor="bg-white" borderColor="border-gray-200" logo="/images/logo/logo-green.png" />
-            {/* <Footer bgColor="bg-orange-900" foreColor="bg-yellow-400" foretextColor="text-gray-900" borderColor="border-orange-900" iconbgColor="bg-yellow-400"/> */}
+            {/* <Footer bgColor="bg-blue-900" foreColor="bg-yellow-400" foretextColor="text-gray-900" borderColor="border-blue-900" iconbgColor="bg-yellow-400"/> */}
         </>
     );
 }

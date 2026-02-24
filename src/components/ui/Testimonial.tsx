@@ -29,9 +29,9 @@ function renderStars(rating: number) {
     return (
         <div className="flex flex-row gap-0 items-center" aria-hidden>
             {Array.from({ length: full }).map((_, i) => (
-                <Star size={20} strokeWidth={0} fill="orange" key={`full-${i}`} />
+                <Star size={20} strokeWidth={0} fill="blue" key={`full-${i}`} />
             ))}
-            {half === 1 ? <StarHalf size={20} strokeWidth={0} fill="orange" /> : null}
+            {half === 1 ? <StarHalf size={20} strokeWidth={0} fill="blue" /> : null}
             {Array.from({ length: empty }).map((_, i) => (
                 <Star size={20} strokeWidth={0} fill="gray" key={`empty-${i}`} />
             ))}

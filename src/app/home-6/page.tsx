@@ -267,7 +267,7 @@ export default function HomePage() {
             <CtaSection iconBG={false} sectionBg='bg-home-five-cta' subtitle='Whether you are building a startup landing page, a dashboard interface, or a modern web app gives you full control.' titleColor='text-white' subtitleColor='text-white/90' firstButtonBg='bg-lime-400' firstButtonText='text-gray-900' secondButtonBg='bg-gray-100' secondButtonText='text-gray-900' />
             {/* footer */}
             <Footer bgColor="bg-teal-950" borderColor="border-teal-950" foreColor="bg-lime-400" foretextColor="text-gray-900" logo="/images/logo/logo-darkgreen-white.png" />
-            {/* <Footer bgColor="bg-orange-900" foreColor="bg-yellow-400" foretextColor="text-gray-900" borderColor="border-orange-900" iconbgColor="bg-yellow-400"/> */}
+            {/* <Footer bgColor="bg-blue-900" foreColor="bg-yellow-400" foretextColor="text-gray-900" borderColor="border-blue-900" iconbgColor="bg-yellow-400"/> */}
         </>
     );
 }

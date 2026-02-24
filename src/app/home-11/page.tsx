@@ -29,7 +29,7 @@ export default function HomePage() {
         <>
 
             {/* Header */}
-            <Header theme="header-dark" logo="/images/logo/logo-warning.png" btnColor="bg-orange-500" btnlinkColor="text-white" />
+            <Header theme="header-dark" logo="/images/logo/logo-warning.png" btnColor="bg-blue-500" btnlinkColor="text-white" />
             {/* Hero */}
             <HeroEleven />
             {/* service wrap */}
@@ -55,21 +55,21 @@ export default function HomePage() {
                                 image="/images/feature-2.svg"
                                 title="Automate tasks analytics"
                                 description="Create comprehensive monitors with for proactive into more."
-                                colorTheme="darkorange"
+                                colorTheme="darkblue"
                             />
                             <GradientFeatureCard
                                 layout="classic"
                                 image="/images/feature-2.svg"
                                 title="Strong, scalable, secure"
                                 description="Deliver advanced monitoring for proactive performance management."
-                                colorTheme="darkorange"
+                                colorTheme="darkblue"
                             />
                             <GradientFeatureCard
                                 layout="classic"
                                 image="/images/feature-2.svg"
                                 title="Build dynamic systems"
                                 description="Create comprehensive monitors with for proactive into more."
-                                colorTheme="darkorange"
+                                colorTheme="darkblue"
                             />
                         </div>
 
@@ -359,7 +359,7 @@ export default function HomePage() {
                             padding="pb-0"
                         />
                         <div className="lg:text-right mt-auto">
-                            <Button href="/blog-1" label="Check out for more blog" bgColor="bg-orange-500" textColor="text-white" />
+                            <Button href="/blog-1" label="Check out for more blog" bgColor="bg-blue-500" textColor="text-white" />
                         </div>
                     </div>
                     <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1">
@@ -368,11 +368,11 @@ export default function HomePage() {
                 </div>
             </section>
             {/* CTA wrap */}
-            <CtaSection iconBG={false} firstButtonBg="bg-orange-500" sectionBg="bg-home-eleven-cta" titleColor="text-white" subtitleColor="text-gray-100" secondButtonBg="bg-gray-100" secondButtonText="text-gray-900" />
+            <CtaSection iconBG={false} firstButtonBg="bg-blue-500" sectionBg="bg-home-eleven-cta" titleColor="text-white" subtitleColor="text-gray-100" secondButtonBg="bg-gray-100" secondButtonText="text-gray-900" />
 
             {/* footer */}
             <div className="overflow-hidden">
-                <Footer layout="elegant" bgColor="bg-white" foreColor="bg-orange-500" borderColor="border-gray-100" logo="/images/logo/logo-warning.png" />
+                <Footer layout="elegant" bgColor="bg-white" foreColor="bg-blue-500" borderColor="border-gray-100" logo="/images/logo/logo-warning.png" />
             </div>
 
         </>

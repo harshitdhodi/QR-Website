@@ -281,7 +281,7 @@ export default function HomePage() {
                             description="Deliver advanced monitoring for proactive performance management."
                             aosDelay={200}
                             aosDuration={400}
-                            colorTheme="darkorange"
+                            colorTheme="darkblue"
                         />
                         <GradientFeatureCard
                             image="/images/feature-2.svg"

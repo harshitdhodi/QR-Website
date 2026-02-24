@@ -206,7 +206,7 @@ export default function Home8Page() {
                         <div className="w-full">
                             <FeatureIcon
                                 icon={<Package size={35} strokeWidth={1.5} className="text-gray-900 text-dark-black" />}
-                                iconBgcolor="bg-orange-gradient"
+                                iconBgcolor="bg-blue-gradient"
                                 value="22.4"
                                 suffix="h"
                                 title="Awards from <br />Digital Media"

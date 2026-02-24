@@ -76,21 +76,21 @@ export default function HomePage() {
                             title="Automate tasks analytics"
                             description="Create comprehensive monitors with proactive insights for more."
                             aosDelay={0}
-                            colorTheme="lightorange"
+                            colorTheme="lightblue"
                         />
                         <GradientFeatureCard
                             image="/images/feature-2.svg"
                             title="Strong, scalable, secure"
                             description="Deliver advanced monitoring for proactive performance management."
                             aosDelay={200}
-                            colorTheme="lightorange"
+                            colorTheme="lightblue"
                         />
                         <GradientFeatureCard
                             image="/images/feature-2.svg"
                             title="Build dynamic systems"
                             description="Craft comprehensive insights for forward-looking operations."
                             aosDelay={400}
-                            colorTheme="lightorange"
+                            colorTheme="lightblue"
                         />
                     </div>
                 </div>
@@ -299,10 +299,10 @@ export default function HomePage() {
                                         <div className="mt-auto text-end p-3 pb-0">
                                             <span className="lg:text-7xl text-5xl text-gray-900 font-medium">4.5</span>
                                             <div className="flex flex-row gap-1 justify-end">
-                                                <Star fill='orange' strokeWidth={0} size={20} />
-                                                <Star fill='orange' strokeWidth={0} size={20} />
-                                                <Star fill='orange' strokeWidth={0} size={20} />
-                                                <Star fill='orange' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
+                                                <Star fill='blue' strokeWidth={0} size={20} />
                                                 <Star fill='gray' strokeWidth={0} size={20} />
                                             </div>
                                             <p className="font-medium text-gray-900 mt-1 mb-0">(2.3k + Reviews )</p>

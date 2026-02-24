@@ -129,7 +129,7 @@ const SignupPage: React.FC = () => {
                                 <div className="mt-3">
                                     <button
                                         type="submit"
-                                        className="w-full py-3 px-4 text-white text-base font-semibold rounded-md bg-orange-600 hover:bg-orange-700 transition"
+                                        className="w-full py-3 px-4 text-white text-base font-semibold rounded-md bg-blue-600 hover:bg-blue-700 transition"
                                     >
                                         Register
                                     </button>

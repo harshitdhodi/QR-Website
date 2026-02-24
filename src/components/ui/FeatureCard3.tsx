@@ -105,7 +105,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 
     // -------- Detailed Layout --------
     return (
-        <div className="flex flex-col group p-4 bg-orange-50 rounded-xl">
+        <div className="flex flex-col group p-4 bg-blue-50 rounded-xl">
             {/* Image */}
             <div className="relative overflow-hidden rounded-xl w-full h-[225px] group">
                 <Image
