@@ -20,11 +20,13 @@ export default function ShopPage() {
 
     return (
         <>
+        <div className="pt-24 pb-12 max-w-screen mx-auto font-dm">
             {/* Page Title */}
             <PageTitle
                 title="Shop"
                 subtitle=""
             />
+        </div>
             {/* Breadcrumb */}
             <div className="flex justify-center text-center">
                 <Breadcrumb

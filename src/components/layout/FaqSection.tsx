@@ -32,7 +32,7 @@ const faqData = [
 
 const FaqSection = () => {
     return (
-        <div className="faq-wrap font-dm lg:py-24 py-12 bg-gray-gradient dark:bg-gray-800">
+        <div className="faq-wrap font-dm bg-home-one-gradient-banner lg:py-20 py-16">
             <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
                 <div className="grid lg:grid-cols-12 xl:gap-24 gap-8">
                     {/* Left Side */}

@@ -12,6 +12,7 @@ import Link from "next/link";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import BlogCardThree from "@/components/ui/BlogCardThree";
 import Button from "@/components/ui/Button";
+import WhyChooseUs2 from "@/components/WhyChooseUs2";
 // Helper to get video ID from YouTube URL
 const getYouTubeVideoId = (url: string) => {
     let videoId = '';
@@ -44,11 +45,11 @@ export default function HomePage() {
             <section id="home">
                 <HeroOne />
             </section>
-            
+            <WhyChooseUs2/>
             {/* why choose us */}
              <WhyChooseUs />    
             {/* category cards */}
-            <div id="features" className="counter-wrap lg:pb-24 pb-12 font-dm bg-home-one-gradient-banner relative lg:py-24 py-20">
+            <div id="features" className="counter-wrap lg:pb-24 pb-12 font-dm bg-home-one-gradient-banner relative lg:py-20 py-16">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-4">
                     <PageTitle3
                         badgeText=""
@@ -68,7 +69,7 @@ export default function HomePage() {
                                 delay={100}
                                 bgColor="bg-blue-500"           // fallback if image fails
                                 layout="centered"
-                                imageUrl="https://ik.imagekit.io/mikbqwyy0/ChatGPT%20Image%20Feb%2021,%202026,%2011_01_12%20AM.png"
+                                imageUrl="https://ik.imagekit.io/mikbqwyy0/ChatGPT_Image_Feb_26__2026__03_19_12_PM-removebg-preview.png"
                             />
                         </Link>
 
@@ -79,7 +80,7 @@ export default function HomePage() {
                                 delay={200}
                                 bgColor="bg-cyan-500"
                                 layout="centered"
-                                imageUrl="https://ik.imagekit.io/mikbqwyy0/ChatGPT%20Image%20Feb%2021,%202026,%2011_13_29%20AM.png"
+                                imageUrl="https://ik.imagekit.io/mikbqwyy0/ChatGPT_Image_Feb_26__2026__03_17_14_PM-removebg-preview.png"
                             />
                         </Link>
 
@@ -90,21 +91,18 @@ export default function HomePage() {
                                 delay={300}
                                 bgColor="bg-indigo-500"
                                 layout="centered"
-                                imageUrl="https://ik.imagekit.io/mikbqwyy0/ChatGPT%20Image%20Feb%2021,%202026,%2011_13_32%20AM.png"
+                                imageUrl="https://ik.imagekit.io/mikbqwyy0/ChatGPT_Image_Feb_26__2026__03_13_12_PM-removebg-preview.png"
                             />
                         </Link>
                     </div>
                 </div>
             </div>
 
-           
-
-
             {/* cta wrap */}
             <section id="contact">
                 <ContactPage />
             </section>
-            <section className="blog-wrap lg:py-24 py-12">
+            <section className="blog-wrap lg:py-20 py-16">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0 lg:py-4 py-0">
                     <div className="flex flex-wrap justify-between pb-16 gap-y-4">
                         <PageTitle3
@@ -116,7 +114,7 @@ export default function HomePage() {
                             padding="pb-0"
                         />
                         <div className="lg:text-right mt-auto">
-                            <Button href="/blog-1" label="Check out for more blog" bgColor="bg-blue-600" textColor="text-white" />
+                            <Button href="/blog-1" label="Check out for more blog" bgColor="bg-blue-900" textColor="text-white" />
                         </div>
                     </div>
                     <div className="grid lg:grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1">

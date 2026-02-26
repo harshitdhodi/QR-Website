@@ -25,7 +25,7 @@ export default function FeatureCard({
     return (
       <div
         className={`
-          flex flex-col items-center gap-5 lg:p-8 p-6 bg-white 
+          flex flex-col items-center gap-5 lg:p-3 p-3 bg-white 
           hover:shadow-xl shadow-xl shadow-blue-500/30 rounded-2xl border border-gray-200 
           transition-all duration-300 hover:-translate-y-1
           min-h-[360px] justify-between
@@ -35,13 +35,13 @@ export default function FeatureCard({
         data-aos-duration="500"
       >
         {/* Main Icon – using your image if provided, else fallback SVG */}
-        <div className="relative w-20 h-20 rounded-full shadow-md mx-auto mt-2 ">
+        <div className="relative w-24 h-24 rounded-full shadow-md mx-auto mt-2 ">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={`${title} icon`}
               fill
-              className="object-contain rounded-full "
+              className="object-contain "
               priority={false}
               // sizes="(max-width: 768px) 120px, 128px"
             />
@@ -66,10 +66,10 @@ export default function FeatureCard({
         <div className=" w-fit pb-2">
           <button
             className={`
-              w-full   py-2 px-4 border border-[#174dd4] 
-              hover:from-blue-600 hover:to-blue-700 text-gray-700 
-              font-semibold text-lg rounded-xl shadow-md
-              transition-all duration-300 hover:shadow-lg active:scale-98
+              w-full   py-1 px-4 
+              hover:bg-white hover:border-2 hover:border-blue-900 text-gray-50 
+              font-semibold text-md bg-blue-900 text-white rounded-md shadow-md
+              transition-all duration-300 hover:shadow-lg cursor-pointer hover:text-blue-900 hover:bg-blue-800 active:scale-98
             `}
           >
             Buy Now →

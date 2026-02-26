@@ -24,6 +24,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-feather": "^2.0.10",
+    "react-razorpay": "^3.0.1",
     "sass": "^1.91.0"
   },
   "devDependencies": {

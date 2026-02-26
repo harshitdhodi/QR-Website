@@ -71,10 +71,12 @@ const CartPage = () => {
     return (
         <>
             {/* Page Title */}
-            <PageTitle
-                title="My Cart"
-                subtitle=""
-            />
+             <div className="pt-24 pb-12 max-w-screen mx-auto  font-dm">
+                <PageTitle
+                    title="My Cart"
+                    subtitle=""
+                />
+             </div>
             {/* Breadcrumb */}
             <div className="flex justify-center text-center">
             <Breadcrumb

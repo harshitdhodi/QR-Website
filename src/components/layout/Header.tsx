@@ -10,6 +10,7 @@ import SearchBox from '../ui/Search';
 import Image from 'next/image';
 import Button from '../ui/Button';
 import UserProfile from './UserProfile';
+import CartDropdown from './CartDropdown';
 
 interface HeaderProps {
     btnColor?: string;
@@ -21,14 +22,14 @@ interface HeaderProps {
     theme?: 'header-dark' | 'header-light';
 }
 
-const Header = ({ 
-    btnColor = 'bg-blue-600', 
-    bgColor = "bg-transparent", 
-    headerClass = "", 
-    position = "absolute", 
-    btnlinkColor = "text-white", 
-    theme = "header-dark", 
-    logo = "/images/logo/logo.png" 
+const Header = ({
+    btnColor = 'bg-blue-600',
+    bgColor = "bg-transparent",
+    headerClass = "",
+    position = "absolute",
+    btnlinkColor = "text-white",
+    theme = "header-dark",
+    logo = "/images/logo/logo.png"
 }: HeaderProps) => {
     const { data: session } = useSession();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -104,6 +105,9 @@ const Header = ({
                             {/* Dark Mode Toggle */}
                             <DarkToggle />
 
+                            {/* Cart Dropdown */}
+                            <CartDropdown />
+
                             {/* User Profile or Login/Register */}
                             {session?.user ? (
                                 <UserProfile />
@@ -111,7 +115,7 @@ const Header = ({
                                 <>
                                     {/* Register Button */}
                                     <Button href='/register' label='Register' icon="" className="text-sm register-btn" bgColor={` ${btnColor} `} textColor={` ${btnlinkColor} `} />
-                                    
+
                                     {/* Login Button */}
                                     <Button href='/login' label='Login' icon="" className="text-sm register-btn" bgColor="transparent" textColor="text-gray-700 border border-gray-300" />
                                 </>

@@ -23,7 +23,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                             {product.discount}
                         </div>
                     )}
-                    <a href={`/shop/product/${product.id}`} className="group block relative">
+                    <a href={`/shop/${product.title.toLowerCase().replace(/\s+/g, '-')}`} className="group block relative">
                         <div className="img-one max-h-80 text-center justify-center object-center">
                             <Image
                                 src={product.imgOne}
@@ -77,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
 
                     {/* action buttons */}
                     <div className="flex flex-row gap-2 mt-5">
-                        <Button label="Add to Cart" icon="" bgColor="bg-gray-500" href={`/shop/product/${product.id}`} />
+                        <Button label="Add to Cart" icon="" bgColor="bg-gray-500" href={`/shop/${product.title.toLowerCase().replace(/\s+/g, '-')}`} />
                         <Button label="Save" icon="" bgColor="bg-red-600" />
                     </div>
                 </div>
@@ -100,7 +100,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                         {product.badge}
                     </div>
                 )}
-                <a href={`/shop/product/${product.id}`} className="group block relative">
+                <a href={`/shop/${product.title.toLowerCase().replace(/\s+/g, '-')}`} className="group block relative">
                     <div className="img-one">
                         <Image
                             src={product.imgOne}

@@ -32,16 +32,16 @@ const PageTitle3: React.FC<PageTitle3Props> = ({
     textColor = "text-gray-900",
     subtitleColor = "text-gray-800",
     subtitleClass = "",
-    textWeigth= "font-semibold",
+    textWeigth = "font-semibold",
     fontFamily = "",
     badgeTextBG = "bg-white",
     badgeTextColor = "text-gray-900",
-    
+
 }) => {
     // map alignment to classes
     const alignmentClasses = alignment === "center" ? "items-center text-center" : "items-start text-start";
     const badgeBorder = badgeTextBG === "bg-white" ? "border border-gray-200" : "";
-    
+
     return (
         <div
             className={`flex flex-col ${alignmentClasses} ${widthClass} justify-between ${padding}`}
@@ -50,7 +50,7 @@ const PageTitle3: React.FC<PageTitle3Props> = ({
             {badgeText && (
                 <div className="flex flex-row lg:mb-6 mb-4">
                     <div
-                        className={`px-3 py-1  shadow-sm rounded-lg text-[14px] font-medium uppercase  items-center gap-2 flex w-auto ${badgeBorder} ${badgeTextColor} ${badgeTextBG}`}
+                        className={`px-3 py-1  shadow-sm rounded-lg text-[14px] text-blue-900 font-medium uppercase  items-center gap-2 flex w-auto ${badgeBorder} `}
                         data-aos="zoom-in"
                         data-aos-delay="0"
                         data-aos-duration="400"
@@ -62,12 +62,22 @@ const PageTitle3: React.FC<PageTitle3Props> = ({
             )}
 
             {/* Title */}
+            {/* Title */}
             <h2
                 className={`2xl:text-5xl md:text-4xl text-3xl ${textWeigth} mb-4 ${textColor} ${fontFamily}`}
                 data-aos="fade-up"
                 data-aos-duration="200"
             >
-                {title}
+                {(() => {
+                    const words = title.trim().split(" ");
+                    const lastWord = words.pop();
+                    return (
+                        <>
+                            {words.join(" ")}{" "}
+                            <span className="text-blue-900  ">{lastWord}</span>
+                        </>
+                    );
+                })()}
             </h2>
 
             {/* Subtitle */}

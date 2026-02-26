@@ -21,15 +21,25 @@ export async function POST(request: Request) {
       where: eq(customers.email, email),
     });
     
-    if (!customer) {
-      // Create new customer with email
-      const [newCustomer] = await db.insert(customers).values({
-        email,
-        otp,
-        otpExpires: expires,
-      }).returning();
-      customer = newCustomer;
-    } else {
+  // Replace lines 24-31 with:
+if (!customer) {
+  // Generate a unique ID for the customer
+  const customerId = `cust_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  
+  // Create new customer with email and a temporary phone
+  await db.insert(customers).values({
+    id: customerId,
+    email,
+    phone: `temp_${Date.now()}`, // Temporary phone since it's required
+    otp,
+    otpExpires: expires,
+  });
+  
+  // Fetch the newly created customer
+  customer = await db.query.customers.findFirst({
+    where: eq(customers.email, email),
+  });
+}else {
       // Update existing customer with new OTP
       await db.update(customers)
         .set({ otp, otpExpires: expires })

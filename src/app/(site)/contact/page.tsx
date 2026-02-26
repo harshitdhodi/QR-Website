@@ -16,20 +16,20 @@ export default function ContactPage() {
 
     return (
         <>
-            <div className="absolute top-0  left-0 w-full h-96 font-dm bg-light-blue-banner lg:pt-24 pt-12"></div>
-            <div className="contact-wrap font-dm  z-10 lg:pt-24 pt-12 z-20 relative">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:py-24 py-20">
+            <div className="absolute top-0  left-0 w-full h-96 font-dm bg-light-blue-banner "></div>
+            <div className="contact-wrap font-dm  z-10 z-20 relative">
+                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:py-20 py-16">
                     <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-6 space-y-5 lg:space-y-0">
                         {/* Left Side */}
                         <div className="w-full lg:pr-16">
                             <div className="flex">
-                                <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-600 bg-white flex items-center gap-2">
-                                    <Zap size={18} className="text-blue-500" />
+                                <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-900 bg-white flex items-center gap-2">
+                                    <Zap size={18} className="text-blue-900" />
                                     Our customer feedback
                                 </div>
                             </div>
 
-                            <h2 className="xl:text-[80px] lg:text-5xl text-4xl lg:leading-[1] tracking-tight text-gray-900 font-bold mb-4 mt-3">
+                            <h2 className="xl:text-[80px] lg:text-5xl text-4xl lg:leading-[1] tracking-tight text-gray-900 font-semibold mb-4 mt-3">
                                 Get in touch, let us know how we help
                             </h2>
 
@@ -37,7 +37,7 @@ export default function ContactPage() {
                                 Use the contact form to get in touch or email us at
                                 <a
                                     href="mailto:info@uitheme.net"
-                                    className="underline text-blue-600"
+                                    className="underline text-blue-900"
                                 >
                                     info@uitheme.net
                                 </a>
@@ -74,8 +74,9 @@ export default function ContactPage() {
                         </div>
 
                         {/* Right Side (Form) */}
-                        <div className="w-full">
-                            <div className="bg-white shadow-md border border-gray-200 rounded-2xl p-8 lg:p-10">
+                     <div className="w-full">
+    <div className="bg-white shadow-md border border-gray-200 shadow-lg
+    shadow-blue-900 rounded-2xl p-6 lg:p-8 min-h-[80vh] flex flex-col justify-between">
                                 <h4 className="text-gray-900 font-semibold lg:text-4xl text-3xl">
                                     Connect with us
                                 </h4>
@@ -84,7 +85,7 @@ export default function ContactPage() {
                                     Facilitate manage employee data.
                                 </p>
 
-                                <div className="mt-4 pt-6">
+                                <div className="mt-2 pt-2">
                                     <form onSubmit={handleSubmit} id="contactForm">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                             <div>
@@ -100,7 +101,7 @@ export default function ContactPage() {
                                                     name="firstName"
                                                     placeholder="Sophia etc."
                                                     required
-                                                    className="w-full px-4 py-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                    className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                                                 />
                                             </div>
                                             <div>
@@ -116,7 +117,7 @@ export default function ContactPage() {
                                                     name="lastName"
                                                     placeholder="Carter etc."
                                                     required
-                                                    className="w-full px-4 py-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                    className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                                                 />
                                             </div>
                                         </div>
@@ -134,7 +135,7 @@ export default function ContactPage() {
                                                 name="email"
                                                 placeholder="support@gmail.com"
                                                 required
-                                                className="w-full px-4 py-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                                             />
                                         </div>
 
@@ -150,7 +151,7 @@ export default function ContactPage() {
                                                 id="phone"
                                                 name="phone"
                                                 placeholder="+91 0000 12345"
-                                                className="w-full px-4 py-4 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                                             />
                                         </div>
 
@@ -164,17 +165,17 @@ export default function ContactPage() {
                                             <textarea
                                                 id="message"
                                                 name="message"
-                                                rows={5}
+                                                rows={3}
                                                 placeholder="Provide any details regarding your query …"
                                                 required
-                                                className="w-full px-4 py-4 text-sm border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                                                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
                                             ></textarea>
                                         </div>
 
                                         <div>
                                             <button
                                                 type="submit"
-                                                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-blue-600 hover:bg-blue-700 rounded-lg transition duration-300"
+                                                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-blue-900 hover:bg-blue-900 rounded-lg transition duration-300"
                                             >
                                                 <span>Send message</span>
                                                 <ArrowUpRight size={20} />

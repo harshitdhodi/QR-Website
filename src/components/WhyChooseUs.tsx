@@ -28,13 +28,13 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <GradientDefs />
 
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
+      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
 
           {/* Header – made more compact */}
           <div className="text-center mb-10 md:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-3">
-             Why <span className='text-blue-700'>Choose Us</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mb-3">
+             Why <span className='text-blue-900'>Choose Us</span>
             </h1>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Everything you need for secure, privacy-first QR code communication.

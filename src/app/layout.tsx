@@ -4,6 +4,8 @@ import { Sora, DM_Sans } from 'next/font/google';
 import AOSWrapper from "@/components/layout/AOSWrapper";
 import SessionProviderWrapper from '@/components/providers/SessionProviderWrapper';
 
+import { CartProvider } from '@/components/providers/CartProvider';
+
 // Define a secondary font for headings
 const sora = Sora({
   subsets: ['latin'],
@@ -26,8 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${sora.variable} ${dmSans.variable}`}>
       <body>
         <SessionProviderWrapper>
-          <AOSWrapper />
-          {children}
+          <CartProvider>
+            <AOSWrapper />
+            {children}
+          </CartProvider>
         </SessionProviderWrapper>
       </body>
     </html>
