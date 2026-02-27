@@ -14,13 +14,22 @@ const GradientDefs = () => (
   </svg>
 );
 
-const features = [
-  { icon: QrCode,  title: 'Smart QR Codes',       description: 'Category-wise QR designs for vehicles, pets & miscellaneous assets with unique 6-digit codes.', delay: 0 },
-  { icon: Shield,  title: 'Masked Calling',       description: 'Privacy-first communication — real phone numbers are never exposed to scanners.', delay: 100 },
-  { icon: Bell,    title: 'DND Controls',         description: 'Time-based Do Not Disturb per asset. Hide calling options while keeping WhatsApp/SMS available.', delay: 200 },
-  { icon: Phone,   title: 'Emergency Alerts',     description: 'OTP-verified emergency flow with instant SMS to all emergency contacts with location.', delay: 300 },
-  { icon: Clock,   title: 'Lifetime Validity',    description: 'QR codes remain valid forever with unlimited scans. No expiration dates or renewal needed.', delay: 400 },
-  { icon: Users,   title: 'Multi-Asset Profiles', description: 'One profile, unlimited assets. Manage all your vehicles, pets & items from a single dashboard.', delay: 500 },
+interface Feature {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  icon: any;
+  title: string;
+  description: string;
+  delay: number;
+  imageUrl?: string;
+}
+
+const features: Feature[] = [
+  { icon: QrCode, title: 'Smart QR Codes', description: 'Category-wise QR designs for vehicles, pets & miscellaneous assets with unique 6-digit codes.', delay: 0 },
+  { icon: Shield, title: 'Masked Calling', description: 'Privacy-first communication — real phone numbers are never exposed to scanners.', delay: 100 },
+  { icon: Bell, title: 'DND Controls', description: 'Time-based Do Not Disturb per asset. Hide calling options while keeping WhatsApp/SMS available.', delay: 200 },
+  { icon: Phone, title: 'Emergency Alerts', description: 'OTP-verified emergency flow with instant SMS to all emergency contacts with location.', delay: 300 },
+  { icon: Clock, title: 'Lifetime Validity', description: 'QR codes remain valid forever with unlimited scans. No expiration dates or renewal needed.', delay: 400 },
+  { icon: Users, title: 'Multi-Asset Profiles', description: 'One profile, unlimited assets. Manage all your vehicles, pets & items from a single dashboard.', delay: 500 },
 ];
 
 export default function Home() {
@@ -34,7 +43,7 @@ export default function Home() {
           {/* Header – made more compact */}
           <div className="text-center mb-10 md:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mb-3">
-             Why <span className='text-blue-900'>Choose Us</span>
+              Why <span className='text-blue-900'>Choose Us</span>
             </h1>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
               Everything you need for secure, privacy-first QR code communication.

@@ -13,6 +13,7 @@ import PageTitle from "@/components/ui/PageTitle";
 export default function SingleProductPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const { addToCart } = useCart();
+    const [quantity, setQuantity] = useState(1);
 
     // Convert title to slug for matching
     const product = products.find((p) => p.title.toLowerCase().replace(/\s+/g, "-") === slug) || products[0];
@@ -20,8 +21,6 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     if (!product) {
         return notFound();
     }
-
-    const [quantity, setQuantity] = useState(1);
 
     const handleAddToCart = () => {
         addToCart(product, quantity);
@@ -31,7 +30,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     return (
         <>
             <div className="pt-24 pb-12 max-w-screen mx-auto font-dm">
-              <PageTitle title={product.title} subtitle="Complete your purchase" />
+                <PageTitle title={product.title} subtitle="Complete your purchase" />
             </div>
             <div className="shop-wrap pt-4 sm:pt-8 font-dm">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:py-20 py-12">

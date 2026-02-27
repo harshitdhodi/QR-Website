@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -40,21 +40,21 @@ const cartItems = [
     },
 ];
 
-const CartPage = () => {
+const CartContent = () => {
     const searchParams = useSearchParams();
     const selectedCategory = searchParams.get('category');
-    
+
     // Add state for quantities
     const [quantities, setQuantities] = useState<Record<number, number>>(
         cartItems.reduce((acc, item) => ({ ...acc, [item.id]: item.qty }), {} as Record<number, number>)
     );
 
-    const filteredItems = selectedCategory 
+    const filteredItems = selectedCategory
         ? cartItems.filter(item => item.category === selectedCategory)
         : cartItems;
 
     // Calculate totals dynamically
-    const subtotal = filteredItems.reduce((sum, item) => 
+    const subtotal = filteredItems.reduce((sum, item) =>
         sum + (item.price * (quantities[item.id] || 1)), 0
     );
 
@@ -71,20 +71,20 @@ const CartPage = () => {
     return (
         <>
             {/* Page Title */}
-             <div className="pt-24 pb-12 max-w-screen mx-auto  font-dm">
+            <div className="pt-24 pb-12 max-w-screen mx-auto  font-dm">
                 <PageTitle
                     title="My Cart"
                     subtitle=""
                 />
-             </div>
+            </div>
             {/* Breadcrumb */}
             <div className="flex justify-center text-center">
-            <Breadcrumb
-                items={[
-                    { label: "Home", href: "/" },
-                    { label: "Cart" },
-                ]}
-            />
+                <Breadcrumb
+                    items={[
+                        { label: "Home", href: "/" },
+                        { label: "Cart" },
+                    ]}
+                />
             </div>
             {selectedCategory && (
                 <div className="text-center mb-6">
@@ -116,10 +116,10 @@ const CartPage = () => {
                                                     <Link href="/checkout" className="inline-block border border-gray-200 bg-gray-100 rounded-xl overflow-hidden">
                                                         <img
                                                             src={categoryImages[item.category] || item.img}
-                                                            alt={item.title} 
-                                                            className="w-full rounded-lg" 
-                                                            width={114} 
-                                                            height={171} 
+                                                            alt={item.title}
+                                                            className="w-full rounded-lg"
+                                                            width={114}
+                                                            height={171}
                                                         />
                                                     </Link>
                                                 </td>
@@ -137,7 +137,7 @@ const CartPage = () => {
                                                     </span>
                                                 </td>
                                                 <td className="p-3 align-top">
-                                                    <select 
+                                                    <select
                                                         value={quantities[item.id] || 1}
                                                         onChange={(e) => handleQuantityChange(item.id, e.target.value)}
                                                         className="border border-gray-300 rounded-md px-2 py-1 w-20 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -226,5 +226,13 @@ const CartPage = () => {
 
     );
 };
+
+const CartPage = () => {
+    return (
+        <Suspense>
+            <CartContent />
+        </Suspense>
+    )
+}
 
 export default CartPage;

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ShiprocketOrderData } from '@/types';
 
 const API_URL = process.env.SHIPROCKET_API_URL;
 const EMAIL = process.env.SHIPROCKET_EMAIL ?? 'harshit@rndtechnosoft.com';
@@ -85,8 +86,12 @@ export const getShiprocketToken = async (): Promise<string> => {
     });
     token = response.data.token;
     return token as string;
-  } catch (error: any) {
-    console.error('Shiprocket Login Error:', error.response?.data);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error('Shiprocket Login Error:', error.response?.data);
+    } else {
+      console.error('Shiprocket Login Error:', error);
+    }
     console.error('Credentials used:', {
       email: EMAIL,
       password: PASSWORD ? '***set***' : 'MISSING',
@@ -95,7 +100,7 @@ export const getShiprocketToken = async (): Promise<string> => {
   }
 };
 
-export const createShiprocketOrder = async (orderData: any) => {
+export const createShiprocketOrder = async (orderData: ShiprocketOrderData) => {
   const authToken = await getShiprocketToken();
 
   const normalizedCity = normalizeCity(orderData.billing_city);
@@ -152,7 +157,7 @@ export const createShiprocketOrder = async (orderData: any) => {
     weight: orderData.weight ?? 0.5,
 
     // ─── Items ────────────────────────────────────────────────────────────────
-    order_items: orderData.order_items.map((item: any) => ({
+    order_items: orderData.order_items.map((item) => ({
       name: item.name,
       sku: item.sku,
       units: item.units,
@@ -176,21 +181,25 @@ export const createShiprocketOrder = async (orderData: any) => {
   try {
     const response = await sendRequest(authToken);
     return response.data;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Retry once on token expiry
-    if (error.response?.status === 401) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
       token = null;
       const newToken = await getShiprocketToken();
       const response = await sendRequest(newToken);
       return response.data;
     }
 
-    console.error(
-      'Shiprocket Create Order Error:',
-      JSON.stringify(error.response?.data, null, 2) ?? error.message
-    );
-    throw new Error(
-      error.response?.data?.message || 'Failed to create order in Shiprocket'
-    );
+    if (axios.isAxiosError(error)) {
+      console.error(
+        'Shiprocket Create Order Error:',
+        JSON.stringify(error.response?.data, null, 2) ?? error.message
+      );
+      throw new Error(
+        error.response?.data?.message || 'Failed to create order in Shiprocket'
+      );
+    }
+
+    throw error;
   }
 };

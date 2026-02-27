@@ -58,10 +58,11 @@ export async function POST(req: Request) {
       userId: customer.id,
     });
 
-  } catch (error: any) {
-    console.error('Registration error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Registration error:', err);
     return NextResponse.json({
-      message: error.message || 'Registration failed'
+      message: err.message || 'Registration failed'
     }, { status: 500 });
   }
 }

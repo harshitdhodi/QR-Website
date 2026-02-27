@@ -1,19 +1,19 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function RegisterPage() {
+function RegisterContent() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(false);
     const [showOtpInput, setShowOtpInput] = useState(false);
-    const [formData, setFormData] = useState({ 
-        name: '', 
-        email: '', 
-        phone: '', 
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
         otp: ''
     });
 
@@ -28,7 +28,7 @@ export default function RegisterPage() {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        
+
         try {
             const res = await fetch('/api/auth/register', {
                 method: 'POST',
@@ -41,7 +41,7 @@ export default function RegisterPage() {
             });
 
             const data = await res.json();
-            
+
             if (res.ok) {
                 setShowOtpInput(true);
                 alert(data.message);
@@ -59,7 +59,7 @@ export default function RegisterPage() {
     const handleOtpVerification = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        
+
         try {
             const result = await signIn('credentials', {
                 redirect: false,
@@ -82,7 +82,7 @@ export default function RegisterPage() {
 
     const handleResendOtp = async () => {
         setLoading(true);
-        
+
         try {
             const res = await fetch('/api/auth/send-otp', {
                 method: 'POST',
@@ -91,7 +91,7 @@ export default function RegisterPage() {
             });
 
             const data = await res.json();
-            
+
             if (res.ok) {
                 alert('OTP resent successfully');
             } else {
@@ -151,7 +151,7 @@ export default function RegisterPage() {
                                             id="name"
                                             placeholder="John Doe"
                                             value={formData.name}
-                                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                             className="w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
                                             required
                                         />
@@ -170,7 +170,7 @@ export default function RegisterPage() {
                                             id="email"
                                             placeholder="name@example.com"
                                             value={formData.email}
-                                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             className="w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
                                             required
                                         />
@@ -189,7 +189,7 @@ export default function RegisterPage() {
                                             id="phone"
                                             placeholder="+1234567890"
                                             value={formData.phone}
-                                            onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                             className="w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
                                             required
                                         />
@@ -249,7 +249,7 @@ export default function RegisterPage() {
                                 <form onSubmit={handleOtpVerification} className="mt-5">
                                     <div className="mb-4 p-4 bg-blue-50 rounded-lg">
                                         <p className="text-sm text-blue-800">
-                                            We've sent a 6-digit OTP to <strong>{formData.email}</strong>
+                                            We&apos;ve sent a 6-digit OTP to <strong>{formData.email}</strong>
                                         </p>
                                     </div>
 
@@ -266,7 +266,7 @@ export default function RegisterPage() {
                                             id="otp"
                                             placeholder="Enter 6-digit OTP"
                                             value={formData.otp}
-                                            onChange={(e) => setFormData({...formData, otp: e.target.value})}
+                                            onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
                                             className="w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary text-center text-lg font-mono"
                                             maxLength={6}
                                             required
@@ -313,5 +313,13 @@ export default function RegisterPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense>
+            <RegisterContent />
+        </Suspense>
     );
 }

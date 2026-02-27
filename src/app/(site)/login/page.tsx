@@ -1,18 +1,18 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function LoginPage() {
+function LoginContent() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(false);
     const [showOtpInput, setShowOtpInput] = useState(false);
-    const [formData, setFormData] = useState({ 
-        email: '', 
-        otp: '' 
+    const [formData, setFormData] = useState({
+        email: '',
+        otp: ''
     });
 
     // Handle redirect after successful login
@@ -26,7 +26,7 @@ export default function LoginPage() {
     const handleSendOtp = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        
+
         try {
             const res = await fetch('/api/auth/send-otp', {
                 method: 'POST',
@@ -35,7 +35,7 @@ export default function LoginPage() {
             });
 
             const data = await res.json();
-            
+
             if (res.ok) {
                 setShowOtpInput(true);
                 alert('OTP sent to your email');
@@ -53,7 +53,7 @@ export default function LoginPage() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        
+
         try {
             const result = await signIn('credentials', {
                 redirect: false,
@@ -76,7 +76,7 @@ export default function LoginPage() {
 
     const handleResendOtp = async () => {
         setLoading(true);
-        
+
         try {
             const res = await fetch('/api/auth/send-otp', {
                 method: 'POST',
@@ -85,7 +85,7 @@ export default function LoginPage() {
             });
 
             const data = await res.json();
-            
+
             if (res.ok) {
                 alert('OTP resent successfully');
             } else {
@@ -144,7 +144,7 @@ export default function LoginPage() {
                                             id="email"
                                             placeholder="name@example.com"
                                             value={formData.email}
-                                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             className="w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
                                             required
                                         />
@@ -164,7 +164,7 @@ export default function LoginPage() {
                                     {/* Register link */}
                                     <div className="mt-3 text-center">
                                         <span className="text-gray-700 font-medium">
-                                            Don't have an account yet?
+                                            Don&apos;t have an account yet?
                                         </span>
                                         <Link href={`/register?callbackUrl=${searchParams.get('callbackUrl') || '/dashboard'}`} className="text-primary font-medium ml-1">
                                             Register
@@ -175,7 +175,7 @@ export default function LoginPage() {
                                 <form onSubmit={handleLogin} className="mt-5">
                                     <div className="mb-4 p-4 bg-blue-50 rounded-lg">
                                         <p className="text-sm text-blue-800">
-                                            We've sent a 6-digit OTP to <strong>{formData.email}</strong>
+                                            We&apos;ve sent a 6-digit OTP to <strong>{formData.email}</strong>
                                         </p>
                                     </div>
 
@@ -192,7 +192,7 @@ export default function LoginPage() {
                                             id="otp"
                                             placeholder="Enter 6-digit OTP"
                                             value={formData.otp}
-                                            onChange={(e) => setFormData({...formData, otp: e.target.value})}
+                                            onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
                                             className="w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary text-center text-lg font-mono"
                                             maxLength={6}
                                             required
@@ -239,5 +239,13 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense>
+            <LoginContent />
+        </Suspense>
     );
 }

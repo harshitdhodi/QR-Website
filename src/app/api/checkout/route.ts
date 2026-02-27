@@ -6,6 +6,7 @@ import { customers, orders, orderItems, addresses } from '@/db/schema';
 import { eq, sql, desc } from 'drizzle-orm';
 import { createShiprocketOrder } from '@/lib/shiprocket';
 import { randomUUID } from 'crypto';
+import { OrderItem } from '@/types';
 
 export async function POST(req: Request) {
   try {
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
 
     let customer;
-    let customerAddresses: any[] = [];
+    let customerAddresses: (typeof addresses.$inferSelect)[] = [];
 
     if (session?.user?.email) {
       // Authenticated user — avoid LATERAL join by querying separately
@@ -50,13 +51,18 @@ export async function POST(req: Request) {
         .then((rows) => rows[0]);
 
       if (!customer) {
-        const [newCustomer] = await db
+        const newUserId = randomUUID();
+        await db
           .insert(customers)
-          .values({ name: guestName, email: guestEmail, phone: guestPhone })
-          .$returningId();
+          .values({
+            id: newUserId,
+            name: guestName,
+            email: guestEmail,
+            phone: guestPhone
+          });
 
         customer = {
-          id: newCustomer.id,
+          id: newUserId,
           name: guestName,
           email: guestEmail,
           phone: guestPhone,
@@ -75,7 +81,7 @@ export async function POST(req: Request) {
 
     // Calculate total
     const totalAmount = items.reduce(
-      (acc: number, item: any) => acc + item.price * item.quantity,
+      (acc: number, item: OrderItem) => acc + item.price * item.quantity,
       0
     );
     console.log('totalAmount', totalAmount);
@@ -108,7 +114,7 @@ export async function POST(req: Request) {
       }
 
       await tx.insert(orderItems).values(
-        items.map((item: any) => ({
+        items.map((item: OrderItem) => ({
           orderId: newOrderId,
           name: item.name,
           sku: item.sku,
@@ -153,7 +159,7 @@ export async function POST(req: Request) {
         weight: 0.5,
 
         // Items
-        order_items: items.map((item: any) => ({
+        order_items: items.map((item: OrderItem) => ({
           name: item.name,
           sku: item.sku,
           units: item.quantity,
@@ -181,10 +187,11 @@ export async function POST(req: Request) {
         : 'Please register to complete your order',
     });
 
-  } catch (error: any) {
-    console.error('Checkout Error:', error);
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error('Checkout Error:', err);
     return NextResponse.json(
-      { error: error.message || 'Checkout failed' },
+      { error: err.message || 'Checkout failed' },
       { status: 500 }
     );
   }
