@@ -1,42 +1,81 @@
-// components/FaqSection.tsx
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { HelpCircle } from "react-feather";
-import Button from "../ui/Button";
 import Accordion from "../ui/Accordion";
 import PageTitle3 from "../ui/PageTitle3";
 
-const faqData = [
-    {
-        question: "Q1. What is the design process for branding?",
-        answer:
-            "Our design services start and end with a best-in-class experience strategy that builds brands. When you join our journey, you are choosing a partner who believes in a healthier, more balanced you.",
-    },
-    {
-        question: "Q2. How much does logo design service cost?",
-        answer:
-            "We do not take a cut of your revenue. Every design begins and ends with strategy — because great brands are not built by accident.",
-    },
-    {
-        question: "Q3. How long will it take to complete my project?",
-        answer:
-            "You can cancel your subscription anytime — no questions asked. We start and finish every design project with a world-class experience strategy that builds lasting brands.",
-    },
-    {
-        question: "Q4. What is included in a round of revisions?",
-        answer:
-            "Each revision round allows for meaningful refinements to your project. We work closely with you to ensure every detail aligns with your vision.",
-    },
-];
+interface FaqItem {
+    id: string;
+    question: string;
+    answer: string;
+    is_active: boolean;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+}
 
 const FaqSection = () => {
+    const [faqs, setFaqs] = useState<FaqItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchFaqs = async () => {
+            try {
+                const response = await fetch('/api/faqs');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                // Filter active and sort
+                const activeFaqs = Array.isArray(data)
+                    ? data.filter((faq: FaqItem) => faq.is_active)
+                        .sort((a: FaqItem, b: FaqItem) => a.sort_order - b.sort_order)
+                    : [];
+
+                setFaqs(activeFaqs);
+            } catch (err) {
+                console.error('Error fetching FAQs:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFaqs();
+    }, []);
+
+    const fallbackFaqs = [
+        {
+            question: "What12 is the design process for branding?",
+            answer: "Our design services start and end with a best-in-class experience strategy that builds brands.",
+        },
+        {
+            question: "How long will it take to complete my project?",
+            answer: "You can cancel your subscription anytime — no questions asked. We start and finish every design project with a world-class experience strategy.",
+        },
+    ];
+
+    const displayData = faqs.length > 0
+        ? faqs.map(f => ({ question: f.question, answer: f.answer }))
+        : fallbackFaqs;
+
+    if (loading) {
+        return (
+            <div className="faq-wrap font-dm bg-home-one-gradient-banner lg:py-20 py-16">
+                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 text-center">
+                    Loading FAQs...
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="faq-wrap font-dm bg-home-one-gradient-banner lg:py-20 py-16">
             <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
                 <div className="grid lg:grid-cols-12 xl:gap-24 gap-8">
                     {/* Left Side */}
-                    <div className="xl:col-span-6 col-span-6 flex flex-col">
+                    <div className="xl:col-span-6 col-span-12 lg:col-span-6 flex flex-col">
                         <PageTitle3
                             icon={<HelpCircle size={18} />}
                             badgeText="Frequently Asked Question"
@@ -45,16 +84,12 @@ const FaqSection = () => {
                             widthClass="xl:w-10/12 lg:w-2/3 w-full"
                             alignment="start"
                             padding="pb-16"
-                            
                         />
-                        {/* <div className="mt-auto">
-                            <Button href="/about" label="Check out more" bgColor="bg-cyan-600" textColor="text-white" />
-                        </div> */}
                     </div>
 
                     {/* Right Side (Accordion) */}
-                    <div className="lg:col-span-6 xl:pl-16">
-                        <Accordion items={faqData} defaultOpenIndex={0} />
+                    <div className="lg:col-span-6 col-span-12 xl:pl-16">
+                        <Accordion items={displayData} defaultOpenIndex={0} />
                     </div>
                 </div>
             </div>

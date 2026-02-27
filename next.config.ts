@@ -9,7 +9,27 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.qradmin.rndtd.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://www.qradmin.rndtd.com/api/:path*',
+      },
+    ]
   },
 };
 

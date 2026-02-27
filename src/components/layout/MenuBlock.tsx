@@ -115,10 +115,10 @@ const defaultMenuItems: MenuItem[] = [
 
 const home1MenuItems: MenuItem[] = [
     { title: 'Home', href: '#home' },
+    { title: 'Shop', href: '/shop' },
     { title: 'Features', href: '#features' },
     { title: 'Services', href: '#services' },
     { title: 'About', href: '#about' },
-    { title: 'Pricing', href: '#pricing' },
     { title: 'Contact', href: '#contact' },
 ];
 
