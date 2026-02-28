@@ -19,7 +19,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
                 pagination: false,
                 arrows: false,
                 rewind: true,
-                accessibility: false, 
+                accessibility: false,
             });
 
             const thumbs = new SplideCore("#thumbnail-carousel", {
@@ -32,7 +32,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
                 direction: layout === "vertical" ? "ttb" : "ltr",
                 height: layout === "vertical" ? "480px" : undefined,
                 arrows: false,
-                accessibility: false, 
+                accessibility: false,
             });
 
             main.sync(thumbs);
@@ -45,6 +45,18 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
 
     return (
         <>
+            <style>{`
+                /* Override Splide's default black border for active thumbnails */
+                #thumbnail-carousel .splide__slide.is-active {
+                    border: 2px solid #1d398f !important; /* blue-600 */
+                    border-radius: 0.5rem;
+                }
+                #thumbnail-carousel .splide__slide {
+                    border: 2px solid transparent !important;
+                    border-radius: 0.5rem;
+                    transition: border-color 0.2s ease;
+                }
+            `}</style>
             {layout === "vertical" ? (
                 // ----------------- VERTICAL LAYOUT -----------------
                 <div className="flex w-full verticle-slider space-x-3">

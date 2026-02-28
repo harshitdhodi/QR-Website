@@ -13,11 +13,12 @@ interface ButtonProps {
     hoverBgColor?: string;  // optional override e.g. "hover:bg-blue-700"
     textColor?: string;
     className?: string;
+    onClick?: (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void;
 }
 
 // ✅ Static Tailwind-safe hover map
 const HOVER_MAP: Record<string, string> = {
-    "bg-blue-600": "hover:bg-blue-800",
+    "bg-blue-900": "hover:bg-blue-800",
     "bg-blue-500": "hover:bg-blue-600",
     "bg-lime-300": "hover:bg-lime-400",
     "bg-cyan-500": "hover:bg-cyan-700",
@@ -32,21 +33,38 @@ const HOVER_MAP: Record<string, string> = {
 };
 
 const Button: FC<ButtonProps> = ({
-    href = "#",
+    href,
     label,
     icon = <ArrowUpRight size={20} className="group-hover:translate-x-1 transition duration-300" />,
-    padding = "px-6 py-3",
-    bgColor = "bg-blue-600",
+    padding = "px-6 py-2",
+    bgColor = "bg-red-600",
     hoverBgColor,
     textColor = "text-white",
     className = "",
+    onClick,
 }) => {
     const safeHoverClass = hoverBgColor || HOVER_MAP[bgColor] || "hover:opacity-90";
+    const baseClasses = `inline-flex justify-between items-center group gap-2 ${padding} ${textColor} text-base font-medium rounded-lg ${bgColor} ${safeHoverClass} transition btn-transition duration-300 ${className}`;
+
+    if (onClick && (!href || href === "#")) {
+        return (
+            <button
+                onClick={onClick}
+                className={baseClasses}
+                data-aos="zoom-in"
+                type="button"
+            >
+                <span>{label}</span>
+                {icon}
+            </button>
+        );
+    }
 
     return (
         <Link
-            href={href}
-            className={`inline-flex justify-between items-center group gap-2 ${padding} ${textColor} text-base font-medium rounded-lg ${bgColor} ${safeHoverClass} transition btn-transition duration-300 ${className}`}
+            href={href || "#"}
+            className={baseClasses}
+            onClick={onClick as any}
             data-aos="zoom-in"
         >
             <span>{label}</span>

@@ -1,9 +1,12 @@
 "use client";
 
-import React from "react";
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from "react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import Link from "next/link";
 import Image from "next/image";
+import React from "react";
 
 
 const checkoutItems = [
@@ -37,6 +40,29 @@ const checkoutItems = [
 ];
 
 const CheckoutPage = () => {
+    const { status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.push(`/login?callbackUrl=${encodeURIComponent('/checkout-2')}`);
+        }
+    }, [status, router]);
+
+    if (status === 'loading') {
+        return (
+            <div className="pt-24 pb-12 overflow-hidden bg-white">
+                <div className="max-w-screen-xl mx-auto px-3 text-center py-20">
+                    <p className="text-gray-500">Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (status === 'unauthenticated') {
+        return null; // Will redirect via useEffect
+    }
+
     return (
         <>
             <div className="checkout-wrap lg:pt-24 pt-16 font-dm">

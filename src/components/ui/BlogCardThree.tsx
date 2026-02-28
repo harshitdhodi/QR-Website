@@ -23,16 +23,16 @@ export default function BlogCardThree({ post }: BlogCardThreeProps) {
     return (
         <Link
             href={`/${post.slug}`}
-            className="border border-gray-200 rounded-xl overflow-hidden flex flex-col hover:shadow-xs transition-shadow duration-300"
+            className="border border-gray-200 shadow-md shadow-blue-900 rounded-xl overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300"
             data-aos="zoom-in"
         >
             <div className="overflow-hidden">
                 <Image
                     src={post.image}
                     alt={post.title}
-                    width={500}
-                    height={300}
-                    className="w-full transition-transform duration-500 hover:scale-105"
+                    width={350}
+                    height={250}
+                    className="w-full h-[300px] object-cover transition-transform duration-500 hover:scale-105"
                 />
             </div>
             <div className="flex flex-col p-4 bg-white">

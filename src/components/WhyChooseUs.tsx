@@ -61,7 +61,7 @@ export default function Home() {
   const fallbackData = [
     {
       id: "1",
-      image: "/images/qr-placeholder.png",
+      image: "/images/feature-1.svg",
       title: "Smart QR Codes",
       subtitle: "Category-wise QR designs for vehicles, pets & miscellaneous assets with unique 6-digit codes.",
       is_active: true,
@@ -71,7 +71,7 @@ export default function Home() {
     },
     {
       id: "2",
-      image: "/images/shield-placeholder.png",
+      image: "/images/feature-2.svg",
       title: "Masked Calling",
       subtitle: "Privacy-first communication — real phone numbers are never exposed to scanners.",
       is_active: true,
@@ -81,7 +81,7 @@ export default function Home() {
     },
     {
       id: "3",
-      image: "/images/bell-placeholder.png",
+      image: "/images/feature-3.svg",
       title: "DND Controls",
       subtitle: "Time-based Do Not Disturb per asset. Hide calling options while keeping WhatsApp/SMS available.",
       is_active: true,
@@ -91,7 +91,7 @@ export default function Home() {
     },
     {
       id: "4",
-      image: "/images/phone-placeholder.png",
+      image: "/images/feature-4.svg",
       title: "Emergency Alerts",
       subtitle: "OTP-verified emergency flow with instant SMS to all emergency contacts with location.",
       is_active: true,
@@ -101,7 +101,7 @@ export default function Home() {
     },
     {
       id: "5",
-      image: "/images/clock-placeholder.png",
+      image: "/images/icon-1.png",
       title: "Lifetime Validity",
       subtitle: "QR codes remain valid forever with unlimited scans. No expiration dates or renewal needed.",
       is_active: true,
@@ -111,7 +111,7 @@ export default function Home() {
     },
     {
       id: "6",
-      image: "/images/users-placeholder.png",
+      image: "/images/icon-2.png",
       title: "Multi-Asset Profiles",
       subtitle: "One profile, unlimited assets. Manage all your vehicles, pets & items from a single dashboard.",
       is_active: true,

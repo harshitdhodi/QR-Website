@@ -1,4 +1,3 @@
-// app/shop/const/productData.ts
 import productsJson from "@/data/products.json";
 
 export interface Product {
@@ -17,6 +16,7 @@ export interface Product {
     colors: string[]; // tailwind bg-color classes
     review?: number; // e.g., 4.5
     shortDesc?: string;
+    slug?: string;
 }
 
 

@@ -4,11 +4,11 @@ import { Boxes } from "lucide-react";
 import Button from "../ui/Button";
 import Image from "next/image";
 import TopCarousel from "../ui/TopCarousel";
-import img from "/public/images/right-banner-bg.webp";
-import a1 from "/public/images/avater-11.webp";
-import a2 from "/public/images/avater-12.webp";
-import a3 from "/public/images/avater-13.webp";
-import shap from "/public/images/shap1.webp";
+import img from "../../../public/images/right-banner-bg.webp";
+import a1 from "../../../public/images/avater-11.webp";
+import a2 from "../../../public/images/avater-12.webp";
+import a3 from "../../../public/images/avater-13.webp";
+import shap from "../../../public/images/shap1.webp";
 
 interface HeroContent {
   badge?: string;
@@ -70,10 +70,10 @@ export default function HeroOne() {
     stats_text: "7.65m+",
     stats_subtext: "Content Creators and Teams",
     carousel_items: '["Affordable2 & scalable plans", "Plans that fit every stage", "Built to scale with your needs"]',
-    avatar1_url: "/public/images/avater-11.webp",
-    avatar2_url: "/public/images/avater-12.webp", 
-    avatar3_url: "/public/images/avater-13.webp",
-    main_image_url: "/public/images/right-banner-bg.webp",
+    avatar1_url: "/images/avater-11.webp",
+    avatar2_url: "/images/avater-12.webp",
+    avatar3_url: "/images/avater-13.webp",
+    main_image_url: "/images/right-banner-bg.webp",
     decorative_image_url: "/images/text-icon.png",
     floating_icon_type: "boxes"
   };
@@ -81,7 +81,7 @@ export default function HeroOne() {
   const content = heroData || fallbackContent;
 
   // Parse carousel items from string to array
-  const carouselItems = content.carousel_items 
+  const carouselItems = content.carousel_items
     ? JSON.parse(content.carousel_items)
     : ["Affordable & scalable plans", "Plans that fit every stage", "Built to scale with your needs"];
 
@@ -118,9 +118,9 @@ export default function HeroOne() {
               </div>
 
               {/* Heading */}
-              <h1 
-                className="text-gray-900 font-semibold xl:text-[80px] lg:text-6xl text-5xl mt-2 mb-3 tracking-tighter aos-init aos-animate" 
-                data-aos="fade-up" 
+              <h1
+                className="text-gray-900 font-semibold xl:text-[80px] lg:text-6xl text-5xl mt-2 mb-3 tracking-tighter aos-init aos-animate"
+                data-aos="fade-up"
                 data-aos-duration="400"
                 dangerouslySetInnerHTML={{ __html: content.title || fallbackContent.title }}
               />
@@ -130,34 +130,34 @@ export default function HeroOne() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-8 pb-3">
-                <Button 
-                 href={content.primary_button_href?.startsWith('/') 
-  ? content.primary_button_href 
-  : `/${content.primary_button_href}` || fallbackContent.primary_button_href}
- 
-                  label={content.primary_button_text || fallbackContent.primary_button_text} 
-                  bgColor="bg-blue-900" 
-                  textColor="text-white" 
-                  padding="py-4 px-6" 
+                <Button
+                  href={content.primary_button_href?.startsWith('/')
+                    ? content.primary_button_href
+                    : `/${content.primary_button_href}` || fallbackContent.primary_button_href}
+
+                  label={content.primary_button_text || fallbackContent.primary_button_text}
+                  bgColor="bg-blue-900"
+                  textColor="text-white"
+                  padding="py-4 px-6"
                 />
-                <Button 
-                  href={content.secondary_button_href || fallbackContent.secondary_button_href} 
-                  label={content.secondary_button_text || fallbackContent.secondary_button_text} 
-                  bgColor="bg-gray-900" 
-                  textColor="text-gray-100" 
-                  padding="py-4 px-6" 
+                <Button
+                  href={content.secondary_button_href || fallbackContent.secondary_button_href}
+                  label={content.secondary_button_text || fallbackContent.secondary_button_text}
+                  bgColor="bg-gray-900"
+                  textColor="text-gray-100"
+                  padding="py-4 px-6"
                 />
               </div>
 
               {/* Decorative Image */}
               <div data-aos="zoom-in" data-aos-duration="300" className="aos-init aos-animate">
-                <Image 
-                  src={content.decorative_image_url || fallbackContent.decorative_image_url} 
-                  alt="text" 
-                  className="relative left-5" 
-                  width={299} 
-                  height={70} 
-                  loading="eager" 
+                <Image
+                  src={content.decorative_image_url || fallbackContent.decorative_image_url}
+                  alt="text"
+                  className="relative left-5"
+                  width={299}
+                  height={70}
+                  loading="eager"
                 />
               </div>
             </div>
@@ -167,15 +167,15 @@ export default function HeroOne() {
           <div className="w-full">
             <div className="relative rounded-xl lg:overflow-visible overflow-hidden aos-init aos-animate" data-aos="fade-up" data-aos-duration="600">
               {/* Main Image */}
-              <Image 
-                src={content.main_image_url || img} 
-                alt="banner" 
-                decoding="async" 
-                loading="eager" 
-                width={637} 
-                height={721} 
-                className="w-full rounded-xl" 
-                priority 
+              <Image
+                src={content.main_image_url || img}
+                alt="banner"
+                decoding="async"
+                loading="eager"
+                width={637}
+                height={721}
+                className="w-full rounded-xl"
+                priority
               />
 
               {/* Floating Icon */}
@@ -214,7 +214,7 @@ export default function HeroOne() {
                   />
                 </div>
                 <div className="flex flex-col leading-tight text-gray-900 font-semibold text-2xl">
-                  {content.stats_text || fallbackContent.stats_text} 
+                  {content.stats_text || fallbackContent.stats_text}
                   <span className="block text-base font-medium text-gray-800">
                     {content.stats_subtext || fallbackContent.stats_subtext}
                   </span>

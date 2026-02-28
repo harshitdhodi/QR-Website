@@ -1,11 +1,13 @@
 // app/shop/components/ProductCard.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Product } from "@/const/productData";
 import { Star } from "lucide-react";
 import Button from "./Button";
 import Image from "next/image";
+import { useCart } from "@/components/providers/CartProvider";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
     product: Product;
@@ -13,24 +15,47 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" }) => {
+    const { addToCart } = useCart();
+    const [quantity, setQuantity] = useState(1);
+    const router = useRouter();
+
+    // Use the actual backend slug if available, else fallback to formatted title
+    const productSlug = product.slug || product.title.toLowerCase().replace(/\s+/g, '-');
+
+    const handleAddToCart = (e?: React.MouseEvent) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        addToCart(product, quantity);
+        alert(`Added ${quantity} x ${product.title} to cart!`);
+    };
+
+    const handleCardClick = () => {
+        router.push(`/shop/${productSlug}`);
+    };
+
     if (variant === "extended") {
         return (
-            <div className="flex sm:flex-row flex-col md:space-x-7 md:gap-0 gap-3">
+            <div
+                className="flex sm:flex-row flex-col md:space-x-7 md:gap-0 gap-3 cursor-pointer transition-all duration-300 hover:bg-gray-50 p-3 -m-3 rounded-xl"
+                onClick={handleCardClick}
+            >
                 {/* product image */}
-                <div className="relative w-72 overflow-hidden rounded-xl bg-productcard-gradient">
+                <div className="relative w-72 overflow-hidden rounded-xl bg-productcard-gradient shrink-0">
                     {product.discount && (
                         <div className="absolute top-3 left-3 z-10 bg-green-600 text-white text-xs font-medium py-1 px-2 rounded-md">
                             {product.discount}
                         </div>
                     )}
-                    <a href={`/shop/${product.title.toLowerCase().replace(/\s+/g, '-')}`} className="group block relative">
+                    <div className="group block relative">
                         <div className="img-one max-h-80 text-center justify-center object-center">
                             <Image
                                 src={product.imgOne}
                                 alt={product.title}
-                                className="rounded-xl overflow-hidden transition-opacity duration-300 group-hover:opacity-0"
+                                className="rounded-xl overflow-hidden object-contain transition-opacity duration-300 group-hover:opacity-0"
                                 width={290}
-                                height={435}
+                                height={335}
                             />
                         </div>
                         <div className="img-two max-h-80 text-center object-center justify-center absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -42,20 +67,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                                 height={435}
                             />
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 {/* product content */}
                 <div className="mb-2 flex-1">
-                    <span className="block text-2xl font-semibold text-gray-900 mb-0 pt-2">
+                    <span className="block text-2xl font-semibold text-gray-900 mb-0 pt-2 group-hover:text-blue-600 transition-colors duration-300">
                         {product.title}
                     </span>
                     <p className="text-sm font-medium text-gray-500 mt-[2px] mb-2">{product.subtitle}</p>
                     <p className="text-lg font-semibold text-gray-800 pt-1">
-                        ${product.price.toLocaleString()}
+                        ₹{product.price.toLocaleString()}
                         {product.oldPrice && (
                             <span className="line-through text-sm text-gray-500 font-medium ml-2">
-                                ${product.oldPrice.toLocaleString()}
+                                ₹{product.oldPrice.toLocaleString()}
                             </span>
                         )}
                     </p>
@@ -77,8 +102,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
 
                     {/* action buttons */}
                     <div className="flex flex-row gap-2 mt-5">
-                        <Button label="Add to Cart" icon="" bgColor="bg-gray-500" href={`/shop/${product.title.toLowerCase().replace(/\s+/g, '-')}`} />
-                        <Button label="Save" icon="" bgColor="bg-red-600" />
+                        <Button
+                            label="Add to Cart"
+                            icon=""
+                            className="cursor-pointer"
+                            bgColor="bg-blue-900"
+                            textColor="text-white"
+                            onClick={handleAddToCart}
+                        />
+                        <Button
+                            label="Read More"
+                            icon=""
+                            bgColor="bg-gray-100"
+                            className="border border-blue-900"
+                            textColor="text-gray-900"
+                            href={`/shop/${productSlug}`}
+                            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                        />
                     </div>
                 </div>
             </div>
@@ -87,7 +127,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
 
     // --- Compact layout (default) ---
     return (
-        <div className="flex flex-col gap-2">
+        <div
+            className="flex flex-col gap-2 cursor-pointer transition-all duration-300 hover:-translate-y-1"
+            onClick={handleCardClick}
+        >
             {/* product image */}
             <div className="relative overflow-hidden rounded-xl bg-productcard-gradient">
                 {product.discount && (
@@ -100,7 +143,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                         {product.badge}
                     </div>
                 )}
-                <a href={`/shop/${product.title.toLowerCase().replace(/\s+/g, '-')}`} className="group block relative">
+                <div className="group block relative">
                     <div className="img-one">
                         <Image
                             src={product.imgOne}
@@ -119,12 +162,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                             height={435}
                         />
                     </div>
-                </a>
+                </div>
             </div>
 
             {/* product content */}
             <div className="mb-2">
-                <span className="block text-xl font-semibold text-gray-900 mb-0">{product.title}</span>
+                <span className="block text-xl font-semibold text-gray-900 mb-0 group-hover:text-blue-600 transition-colors duration-300">
+                    {product.title}
+                </span>
                 <p className="text-sm font-medium text-gray-500 mt-[2px] mb-2">{product.subtitle}</p>
                 <p className="text-lg font-semibold text-gray-800 pt-1">
                     ${product.price.toLocaleString()}
@@ -134,6 +179,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                         </span>
                     )}
                 </p>
+                {/* Optional: Add action buttons in compact layout too if desired */}
+                <div className="flex flex-row gap-2 mt-3">
+                    <Button
+                        label="Add to Cart"
+                        padding="px-4 py-2"
+                        icon=""
+                        bgColor="bg-blue-900"
+                        textColor="text-white"
+                        onClick={handleAddToCart}
+                    />
+                </div>
             </div>
         </div>
     );

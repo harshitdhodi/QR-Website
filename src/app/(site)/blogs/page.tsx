@@ -1,24 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { blogPosts } from "@/const/blogData";
-import Subscribe from "@/components/ui/Subscribe";
 import AuthorBio from "@/components/ui/AuthorBio";
 import TrendingPosts from "@/components/ui/TrendingPosts";
 
 import { ArrowUpRight, ChevronDown } from "react-feather";
+import PageTitle from "@/components/ui/PageTitle";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 export default function BlogPage() {
-    const featuredPost = blogPosts.find((post) => post.featured);
-    const sidePosts = blogPosts.filter((post) => !post.featured).slice(0, 3);
-    const bottomPosts = blogPosts.filter((post) => !post.featured).slice(3);
+    const [blogPosts, setBlogPosts] = useState<any[]>([]);
+    const [owner, setOwner] = useState<any>(null);
     const [selected, setSelected] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const blogRes = await fetch('/api/blog-posts');
+                const blogData = await blogRes.json();
+                if (Array.isArray(blogData)) {
+                    setBlogPosts(blogData);
+                } else if (blogData.success) {
+                    setBlogPosts(blogData.data);
+                }
+
+                const ownerRes = await fetch('/api/owner');
+                const ownerData = await ownerRes.json();
+                if (ownerData.success && ownerData.data.length > 0) {
+                    setOwner(ownerData.data[0]);
+                }
+            } catch (err) {
+                console.error("Failed to fetch data", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const featuredPost = blogPosts.length > 0 ? blogPosts[0] : null; // first blog is featured here
+    const sidePosts = blogPosts.length > 1 ? blogPosts.slice(1, 4) : [];
+    const bottomPosts = blogPosts.length > 4 ? blogPosts.slice(4) : [];
+
+    if (loading) return <div className="text-center py-40">Loading...</div>;
 
     return (
         <>
-            <div className="page-title bg-light-blue-banner lg:pt-24 pt-16">
+        <div className="pt-24  max-w-screen mx-auto font-dm">
+                {/* Page Title */}
+                <PageTitle title="Blogs" subtitle="">
+                    {/* Breadcrumb */}
+                    <div className="flex justify-center text-center">
+                        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Blogs" }]} variant="light" />
+                    </div>
+                </PageTitle>
+            </div>
+            <div className="page-title bg-light-blue-banner">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:pt-24 pt-20">
                     <div className="grid xl:grid-cols-2 lg:grid-cols-3 grid-cols-1 lg:gap-10 relative lg:space-y-0 space-y-5">
                         <div className="lg:col-span-2 xl:col-span-1">
@@ -62,7 +102,7 @@ export default function BlogPage() {
                         {featuredPost && (
                             <div className="w-full">
                                 <Link
-                                    href={`/${featuredPost.slug}`}
+                                    href={`/blogs/${featuredPost.slug}`}
                                     className="border border-gray-200 rounded-xl overflow-hidden flex flex-col hover:shadow-xs transition-shadow duration-300"
                                 >
                                     <div className="overflow-hidden">
@@ -115,7 +155,7 @@ export default function BlogPage() {
                             {sidePosts.map((post) => (
                                 <div key={post.id} className="article" data-aos="fade-up">
                                     <Link
-                                        href={`/${post.slug}`}
+                                        href={`/blogs/${post.slug}`}
                                         className="border border-gray-200 rounded-xl overflow-hidden flex flex-col lg:flex-row hover:shadow-xs transition-shadow duration-300"
                                     >
                                         <div className="lg:w-1/3 w-full">
@@ -169,7 +209,7 @@ export default function BlogPage() {
                                 <div className="w-full mb-2 aos-init aos-animate">
                                     <div className="flex flex-col md:flex-row gap-4">
                                         <div className="md:w-5/12 h-full">
-                                        
+
                                         </div>
                                         <div className="md:w-7/12">
 
@@ -179,7 +219,7 @@ export default function BlogPage() {
                                 {bottomPosts.map((post) => (
                                     <div key={post.id} className="w-full mb-2" data-aos="zoom-in">
                                         <Link
-                                            href={`/${post.slug}`}
+                                            href={`/blogs/${post.slug}`}
                                             className="flex flex-col md:flex-row gap-4"
                                         >
                                             <div className="md:w-5/12 h-full">
@@ -223,14 +263,26 @@ export default function BlogPage() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </Link>                                        
+                                        </Link>
                                     </div>
                                 ))}
                             </div>
                         </div>
                         <div className="w-full space-y-6">
-                            <Subscribe />
-                            <AuthorBio />
+                            {owner && (
+                                <AuthorBio
+                                    name={owner.name}
+                                    role={owner.role}
+                                    bio={owner.bio}
+                                    avatar={owner.avatar}
+                                    socials={{
+                                        facebook: owner.facebook || undefined,
+                                        linkedin: owner.linkedin || undefined,
+                                        twitch: owner.twitch || undefined,
+                                        twitter: owner.twitter || undefined,
+                                    }}
+                                />
+                            )}
                             <TrendingPosts limit={4} />
                         </div>
                     </div>

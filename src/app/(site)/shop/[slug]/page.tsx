@@ -1,22 +1,44 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import RelatedProducts from "@/components/ui/RelatedProducts";
 import { Star, Truck, Package, Heart } from "lucide-react";
 import ProductGallery from "@/components/ui/ProductGallery";
-import { products } from "@/const/productData";
 import { useCart } from "@/components/providers/CartProvider";
 import { notFound } from "next/navigation";
 import PageTitle from "@/components/ui/PageTitle";
+import Link from "next/link";
+import QuantityDropdown from "@/components/ui/QuantityDropdown";
 
 export default function SingleProductPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
 
-    // Convert title to slug for matching
-    const product = products.find((p) => p.title.toLowerCase().replace(/\s+/g, "-") === slug) || products[0];
+    // FETCH LOGIC
+    const [product, setProduct] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await fetch(`/api/products/${slug}`);
+                if (!res.ok) throw new Error("Product not found");
+                const data = await res.json();
+                setProduct(data);
+            } catch (err) {
+                console.error(err);
+                setProduct(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProduct();
+    }, [slug]);
+
+    if (loading) {
+        return <div className="min-h-[50vh] flex items-center justify-center font-dm text-lg">Loading Product...</div>;
+    }
 
     if (!product) {
         return notFound();
@@ -30,7 +52,17 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     return (
         <>
             <div className="pt-24 pb-12 max-w-screen mx-auto font-dm">
-                <PageTitle title={product.title} subtitle="Complete your purchase" />
+                <PageTitle title={product.title} subtitle="Complete your purchase">
+                    <div className="mt-4 flex justify-center px-6 py-2 ">
+                        <Breadcrumb
+                            items={[
+                                { label: "Home", href: "/" },
+                                { label: "Shop", href: "/shop" },
+                                { label: product.title },
+                            ]}
+                        />
+                    </div>
+                </PageTitle>
             </div>
             <div className="shop-wrap pt-4 sm:pt-8 font-dm">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:py-20 py-12">
@@ -43,14 +75,6 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                         </div>
                         {/* right side */}
                         <div className="w-full">
-                            {/* Breadcrumb */}
-                            <Breadcrumb
-                                items={[
-                                    { label: "Home", href: "/" },
-                                    { label: "Shop", href: "/shop" },
-                                    { label: product.title },
-                                ]}
-                            />
 
                             {/* Review Section */}
                             <div className="flex flex-col mt-3">
@@ -151,26 +175,28 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                     <span className="font-semibold text-gray-800 text-base mb-2 inline-block">
                                         Quantity
                                     </span>
-                                    <div className="flex gap-4 mt-2 max-w-md items-center">
-                                        <select
-                                            value={quantity}
-                                            onChange={(e) => setQuantity(Number(e.target.value))}
-                                            className="w-24 text-base font-medium border-2 border-gray-300 rounded-lg px-3 py-3 focus:outline-none focus:border-gray-800"
-                                        >
-                                            {[1, 2, 3, 4, 5, 10].map((q) => (
-                                                <option key={q} value={q}>{q}</option>
-                                            ))}
-                                        </select>
+                                    <div className="flex gap-4 mt-2 max-w-sm items-center">
+                                        <QuantityDropdown quantity={quantity} setQuantity={setQuantity} />
                                         <div className="flex flex-grow gap-3">
-                                            <button
+                                                <button
                                                 onClick={handleAddToCart}
-                                                className="flex-grow text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-3 font-semibold text-base transition-colors"
+                                                className="flex-grow  border border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white rounded-lg px-4 py-2 font-semibold text-base transition-colors"
                                             >
                                                 Add to Cart
                                             </button>
-                                            <button className="bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 rounded-lg px-4 py-3 flex items-center justify-center transition-colors">
+                                            <Link href="/checkout">
+                                                <button
+                                                    // onClick={handleAddToCart}
+                                                    className="flex-grow text-white bg-blue-900 hover:bg-blue-800 rounded-lg px-9 py-2 font-semibold text-base cursor-pointer transition-colors"
+                                                >
+                                                    Buy Now
+                                                </button>
+                                            </Link>
+                                        
+
+                                            {/* <button className="bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 rounded-lg px-4 py-3 flex items-center justify-center transition-colors">
                                                 <Heart className="w-5 h-5" />
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
@@ -192,17 +218,149 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Long Description */}
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div className="related-products lg:pb-20 pb-12 bg-gray-50 pt-16">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
-                    <div className="flex justify-center lg:mb-12 mb-8">
-                        <h2 className="lg:text-4xl text-3xl font-bold text-gray-900">Related Products</h2>
-                    </div>
-                    <RelatedProducts />
+                    {product.longDesc && (
+                        <div className="mt-10 pt-8 border-t border-gray-200">
+                            <style>{`
+            .product-longdesc {
+                font-family: var(--font-dm, 'DM Sans', sans-serif);
+                font-size: 0.875rem; /* base size for mobile */
+                line-height: 1.7;
+                color: #374151;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+            }
+            @media (min-width: 768px) {
+                .product-longdesc {
+                    font-size: 0.9375rem;
+                    line-height: 1.85;
+                }
+            }
+            .product-longdesc p {
+                margin-bottom: 1rem;
+            }
+            .product-longdesc img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 0.5rem;
+            }
+            .product-longdesc h1,
+            .product-longdesc h2,
+            .product-longdesc h3,
+            .product-longdesc h4,
+            .product-longdesc h5,
+            .product-longdesc h6 {
+                font-weight: 600;
+                color: #111827;
+                margin-top: 1.5rem;
+                margin-bottom: 0.5rem;
+                line-height: 1.3;
+            }
+            .product-longdesc h1 { font-size: 1.35rem; }
+            .product-longdesc h2 { font-size: 1.25rem; }
+            .product-longdesc h3 { font-size: 1.15rem; }
+            @media (min-width: 768px) {
+                .product-longdesc h1 { font-size: 1.75rem; }
+                .product-longdesc h2 { font-size: 1.5rem; }
+                .product-longdesc h3 { font-size: 1.3rem; }
+            }
+            @media (min-width: 1024px) {
+                .product-longdesc h1 { font-size: 2.25rem; }
+                .product-longdesc h2 { font-size: 1.7rem; }
+                .product-longdesc h3 { font-size: 1.5rem; }
+            }
+            .product-longdesc ul,
+            .product-longdesc ol {
+                padding-left: 1.4rem;
+                margin-bottom: 1rem;
+            }
+            .product-longdesc ul { 
+                list-style-type: disc;
+                padding-left: 1.5rem;
+            }
+            @media (min-width: 768px) {
+                .product-longdesc ul { padding-left: 2rem; }
+            }
+            .product-longdesc ol { list-style-type: decimal; }
+            .product-longdesc li {
+                margin-bottom: 0.35rem;
+            }
+            .product-longdesc strong,
+            .product-longdesc b {
+                font-weight: 600;
+                color: #1f2937;
+            }
+            .product-longdesc em,
+            .product-longdesc i {
+                font-style: italic;
+                color: #4b5563;
+            }
+            .product-longdesc a {
+                color: #2563eb;
+                text-decoration: underline;
+                text-underline-offset: 2px;
+                word-break: break-all;
+            }
+            .product-longdesc a:hover { color: #1d4ed8; }
+            .product-longdesc blockquote {
+                border-left: 3px solid #2563eb;
+                padding: 0.5rem 1rem;
+                margin: 1.25rem 0;
+                background: #f0f4ff;
+                border-radius: 0 6px 6px 0;
+                font-style: italic;
+            }
+            .product-longdesc .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin-bottom: 1rem;
+            }
+            .product-longdesc table {
+                width: 100%;
+                min-width: 400px;
+                border-collapse: collapse;
+                font-size: 0.875rem;
+            }
+            .product-longdesc th,
+            .product-longdesc td {
+                border: 1px solid #e5e7eb;
+                padding: 0.5rem 0.75rem;
+                text-align: left;
+            }
+            .product-longdesc th {
+                background: #f9fafb;
+                font-weight: 600;
+                color: #111827;
+            }
+            .product-longdesc tr:nth-child(even) td { background: #f9fafb; }
+            .product-longdesc hr {
+                border: none;
+                border-top: 1px solid #e5e7eb;
+                margin: 1.5rem 0;
+            }
+            .product-longdesc code {
+                background: #f3f4f6;
+                border-radius: 4px;
+                padding: 0.1em 0.4em;
+                font-size: 0.875em;
+                color: #1f2937;
+                word-break: break-word;
+            }
+        `}</style>
+                            <h3 className="text-2xl md:text-[2.2rem] font-semibold text-gray-900 mb-4">Product Details</h3>
+                            <div className="product-longdesc max-w-none">
+                                {/* Using a wrapper to ensure any table generated by the HTML is horizontally scrollable if needed */}
+                                <div dangerouslySetInnerHTML={{
+                                    __html: product.longDesc.replace(/<table/g, '<div class="table-responsive"><table').replace(/<\/table>/g, '</table></div>')
+                                }} />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

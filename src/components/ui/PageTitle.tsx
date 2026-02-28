@@ -1,11 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface PageTitleProps {
     title: string;
     subtitle?: string;
+    children?: ReactNode;
 }
 
-const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle }) => {
+const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle, children }) => {
     return (
         <div
             className="page-title font-dm relative w-full"
@@ -19,9 +20,9 @@ const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle }) => {
         >
             {/* Overlay for text readability */}
             <div className="absolute inset-0 bg-black/50"></div>
-            
+
             {/* Centered content */}
-            <div className="relative z-10 flex items-center justify-center min-h-[350px] px-4">
+            <div className="relative z-10 flex flex-col items-center justify-center min-h-[350px] px-4">
                 <div className="text-center text-white">
                     <h2 className="lg:text-7xl md:text-5xl text-4xl font-bold lg:mb-2 tracking-tight">
                         {title}
@@ -30,6 +31,7 @@ const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle }) => {
                         <p className="text-lg mt-0 mb-0 font-medium">{subtitle}</p>
                     )}
                 </div>
+                {children && <div className="mt-4">{children}</div>}
             </div>
         </div>
     );
