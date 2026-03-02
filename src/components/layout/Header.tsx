@@ -6,7 +6,6 @@ import { Menu, X } from 'react-feather';
 import { useSession } from 'next-auth/react';
 import MenuBlock from './MenuBlock';
 import DarkToggle from './DarkToggle';
-import SearchBox from '../ui/Search';
 import Image from 'next/image';
 import Button from '../ui/Button';
 import UserProfile from './UserProfile';
@@ -99,9 +98,6 @@ const Header = ({
 
                         {/* Right Icons */}
                         <div className="flex items-center space-x-3">
-                            {/* Search Button */}
-                            {/* <SearchBox /> */}
-
                             {/* Dark Mode Toggle */}
                             <DarkToggle />
 

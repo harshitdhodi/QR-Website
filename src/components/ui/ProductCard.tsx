@@ -1,7 +1,7 @@
 // app/shop/components/ProductCard.tsx
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Product } from "@/const/productData";
 import { Star } from "lucide-react";
 import Button from "./Button";

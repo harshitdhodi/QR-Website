@@ -30,7 +30,6 @@ interface CategoryItem {
 export default function CategorySection() {
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [_error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -47,7 +46,6 @@ export default function CategorySection() {
                 setCategories(activeCategories);
             } catch (err) {
                 console.error('Error fetching categories:', err);
-                setError(err instanceof Error ? err.message : 'Failed to load categories');
             } finally {
                 setLoading(false);
             }

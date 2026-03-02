@@ -154,7 +154,7 @@ export default function CheckoutPage() {
         currency: "INR",
         name: "QR Website",
         description: "Payment for products",
-        handler: async function (_response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
+        handler: async function () {
           // Send to checkout API after success
           await completeOrder(normalizedAddress, "PREPAID");
         },
@@ -342,7 +342,7 @@ export default function CheckoutPage() {
 
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
               <h3 className="text-xl font-semibold mb-4 text-gray-900">Order Summary</h3>
-              {cartItems.map((item: any, idx: number) => (
+              {cartItems.map((item: { name: string; quantity: number; price: number }, idx: number) => (
                 <div key={idx} className="flex justify-between py-3 border-b">
                   <div>
                     <p className="font-medium">{item.name}</p>
