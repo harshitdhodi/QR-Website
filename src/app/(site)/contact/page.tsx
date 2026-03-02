@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+
 import { FormEvent, useState } from "react";
 import FaqSection from "@/components/layout/FaqSection";
 import { ArrowUpRight, Zap } from 'react-feather';
@@ -74,8 +74,8 @@ export default function ContactPage() {
                         </div>
 
                         {/* Right Side (Form) */}
-                     <div className="w-full">
-    <div className="bg-white shadow-md border border-gray-200 shadow-lg
+                        <div className="w-full">
+                            <div className="bg-white shadow-md border border-gray-200 shadow-lg
     shadow-blue-900 rounded-2xl p-6 lg:p-8 min-h-[80vh] flex flex-col justify-between">
                                 <h4 className="text-gray-900 font-semibold lg:text-4xl text-3xl">
                                     Connect with us

@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import Link from "next/link";
-import Image from "next/image";
 
 const cartItems = [
     {
@@ -114,6 +113,7 @@ const CartContent = () => {
                                             <tr key={item.id} className="border-b border-gray-200">
                                                 <td className="w-32 p-3">
                                                     <Link href="/checkout" className="inline-block border border-gray-200 bg-gray-100 rounded-xl overflow-hidden">
+                                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                                         <img
                                                             src={categoryImages[item.category] || item.img}
                                                             alt={item.title}

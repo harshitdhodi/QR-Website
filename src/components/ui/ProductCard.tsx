@@ -16,7 +16,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" }) => {
     const { addToCart } = useCart();
-    const [quantity, setQuantity] = useState(1);
+    const quantity = 1;
     const router = useRouter();
 
     // Use the actual backend slug if available, else fallback to formatted title

@@ -32,105 +32,34 @@ interface MenuBlockProps {
     btnlinkColor?: string;
 }
 
-const defaultMenuItems: MenuItem[] = [
-    {
-        title: 'Demo',
-        subMenu: [
-            { title: 'Tech Agency', href: '/home-1' },
-            { title: 'Startup Home', href: '/home-2' },
-            { title: 'Software Company', href: '/home-3' },
-            { title: 'Digital Agency', href: '/home-4' },
-            { title: 'Tech Company', href: '/home-5' },
-            { title: 'Cloud Service', href: '/home-6' },
-            { title: 'Data Analytic', href: '/home-7' },
-            { title: 'FinTech Company', href: '/home-8' },
-            { title: 'Cyber Security', href: '/home-9' },
-            { title: 'Marketing Software', href: '/home-10' },
-            { title: 'Crypto Agency', href: '/home-11' },
-            { title: 'Finance Agency', href: '/home-12' },
-            { title: 'App Agency', href: '/home-13' },
-            { title: 'Copywriting Agency', href: '/coming-soon' },
-        ],
-    },
-    {
-        title: 'Pages',
-        megaMenu: [
-            {
-                title: 'Blog Pages',
-                subMenu: [
-                    { title: 'Blog One', href: '/blog-1' },
-                    { title: 'Blog Two', href: '/blog-2' },
-                    { title: 'Blog Three', href: '/blog-3' },
-                    { title: 'Single Blog', href: '/single-blog-1' },
-                    { title: 'Single Blog v2', href: '/single-blog-2' },
-                    { title: 'Terms of service', href: '/terms' },
-                    { title: 'Privacy policy', href: '/privacy' },
-                ],
-            },
-            {
-                title: 'Special Pages',
-                subMenu: [
-                    { title: 'About', href: '/about' },
-                    { title: 'About v2', href: '/about-2' },
-                    { title: 'Pricing', href: '/pricing' },
-                    { title: 'Pricing v2', href: '/pricing-2' },
-                    { title: 'Team', href: '/team' },
-                    { title: 'Contact', href: '/contact' },
-                    { title: 'Contact v2', href: '/contact-2' },
-                    { title: 'Changelog', href: '/changelog' },
-                ],
-            },
-            {
-                title: 'Shop Pages',
-                subMenu: [
-                    { title: 'Shop One', href: '/shop-1' },
-                    { title: 'Shop Two', href: '/shop-2' },
-                    { title: 'Single Product', href: '/single-product-1' },
-                    { title: 'Single Product v2', href: '/single-product-2' },
-                    { title: 'Cart', href: '/cart' },
-                    { title: 'Cart v2', href: '/cart-2' },
-                    { title: 'Checkout', href: '/checkout' },
-                    { title: 'Checkout v2', href: '/checkout-2' },
-                ],
-            },
-            {
-                title: 'Other Pages',
-                subMenu: [
-                    { title: 'Sign in', href: '/signin' },
-                    { title: 'Sign in v2', href: '/login' },
-                    { title: 'Sign up', href: '/signup' },
-                    { title: 'Sign up v2', href: '/register' },
-                    { title: 'Reset password', href: '/reset-password' },
-                    { title: 'Reset password v2', href: '/forgot-password' },
-                    { title: '404 Page', href: '/404' },
-                    { title: 'Coming Soon', href: '/coming-soon' },
-                ],
-            },
-        ],
-    },
-    { title: 'Service', href: '/about-2' },
-    { title: 'About', href: '/about' },
-    { title: 'Contact', href: '/contact' },
-];
 
 const home1MenuItems: MenuItem[] = [
-    { title: 'Home', href: '#home' },
+    // { title: 'Home', href: '#home' },
+    { title: 'About', href: '#about' },
     { title: 'Shop', href: '/shop' },
     { title: 'Features', href: '#features' },
     { title: 'Services', href: '#services' },
-    { title: 'About', href: '#about' },
+    { title: 'Blogs', href: '/blogs' },
+    // {
+    //     title: 'Policies',
+    //     subMenu: [
+    //         { title: 'Privacy Policy', href: '/privacy-policy' },
+    //         { title: 'Terms & Conditions', href: '/terms-and-conditions' },
+    //         { title: 'Refund Policy', href: '/refund-policy' }
+    //     ]
+    // },
     { title: 'Contact', href: '#contact' },
 ];
 
-const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileMenu, logo = "/images/logo/logo-blue.png" , btnColor = 'bg-blue-600', btnlinkColor = "text-white", }) => {
+const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileMenu, logo = "/images/logo/logo-blue.png", btnColor = 'bg-blue-600', btnlinkColor = "text-white", }) => {
     const [openSubMenu, setOpenSubMenu] = useState<Record<string, boolean>>({});
     const pathname = usePathname();
-    
+
     // Dynamically modify menu items based on current page
     const menuItems = home1MenuItems.map(item => ({
         ...item,
-        href: item.href?.startsWith('#') && pathname !== '/home-1' 
-            ? `/${item.href}` 
+        href: item.href?.startsWith('#') && pathname !== '/home-1'
+            ? `/${item.href}`
             : item.href
     }));
 

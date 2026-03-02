@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import PageTitle from "@/components/ui/PageTitle";
 import { useCart } from "@/components/providers/CartProvider";
-import { UserAddress, ShippingAddress } from '@/types';
+import { ShippingAddress } from '@/types';
 
 declare global {
   interface Window {
@@ -57,12 +57,12 @@ export default function CheckoutPage() {
     country: 'India',
   });
 
-  const cartItems = cart.map(item => ({
+  const cartItems = useMemo(() => cart.map(item => ({
     name: item.product.title,
     sku: `SKU-${item.product.id}`,
     quantity: item.quantity,
     price: item.product.price
-  }));
+  })), [cart]);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -154,7 +154,7 @@ export default function CheckoutPage() {
         currency: "INR",
         name: "QR Website",
         description: "Payment for products",
-        handler: async function (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
+        handler: async function (_response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) {
           // Send to checkout API after success
           await completeOrder(normalizedAddress, "PREPAID");
         },
@@ -342,7 +342,7 @@ export default function CheckoutPage() {
 
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
               <h3 className="text-xl font-semibold mb-4 text-gray-900">Order Summary</h3>
-              {cartItems.map((item, idx) => (
+              {cartItems.map((item: any, idx: number) => (
                 <div key={idx} className="flex justify-between py-3 border-b">
                   <div>
                     <p className="font-medium">{item.name}</p>

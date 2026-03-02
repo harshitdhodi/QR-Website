@@ -30,7 +30,7 @@ interface CategoryItem {
 export default function CategorySection() {
     const [categories, setCategories] = useState<CategoryItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [_error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchCategories = async () => {

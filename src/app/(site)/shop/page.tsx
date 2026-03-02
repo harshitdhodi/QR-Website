@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUpRight } from "react-feather";
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import ProductCard from "@/components/ui/ProductCard";
-import Image from "next/image";
 
 export default function ShopPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [products, setProducts] = useState<any[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [selected, setSelected] = useState("");
@@ -23,6 +22,7 @@ export default function ShopPage() {
 
                 // Extract unique categories dynamically based on categoryNames
                 const uniqueCategories = Array.from(
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     new Set(data.flatMap((p: any) => p.categoryNames || []))
                 ) as string[];
                 setCategories(uniqueCategories.filter(Boolean));

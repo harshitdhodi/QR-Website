@@ -64,7 +64,7 @@ const Button: FC<ButtonProps> = ({
         <Link
             href={href || "#"}
             className={baseClasses}
-            onClick={onClick as any}
+            onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
             data-aos="zoom-in"
         >
             <span>{label}</span>

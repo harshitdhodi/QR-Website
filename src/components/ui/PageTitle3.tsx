@@ -18,7 +18,6 @@ interface PageTitle3Props {
     fontFamily?: string;
     badgeTextBG?: string;
     badgeTextColor?: string;
-
 }
 
 const PageTitle3: React.FC<PageTitle3Props> = ({
@@ -35,8 +34,7 @@ const PageTitle3: React.FC<PageTitle3Props> = ({
     textWeigth = "font-semibold",
     fontFamily = "",
     badgeTextBG = "bg-white",
-    badgeTextColor = "text-gray-900",
-
+    badgeTextColor = "text-blue-900",
 }) => {
     // map alignment to classes
     const alignmentClasses = alignment === "center" ? "items-center text-center" : "items-start text-start";
@@ -50,7 +48,7 @@ const PageTitle3: React.FC<PageTitle3Props> = ({
             {badgeText && (
                 <div className="flex flex-row lg:mb-6 mb-4">
                     <div
-                        className={`px-3 py-1  shadow-sm rounded-lg text-[14px] text-blue-900 font-medium uppercase  items-center gap-2 flex w-auto ${badgeBorder} `}
+                        className={`px-3 py-1 shadow-sm rounded-lg text-[14px] ${badgeTextColor} font-medium uppercase items-center gap-2 flex w-auto ${badgeBorder} ${badgeTextBG}`}
                         data-aos="zoom-in"
                         data-aos-delay="0"
                         data-aos-duration="400"

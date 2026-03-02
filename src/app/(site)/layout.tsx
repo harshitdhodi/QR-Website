@@ -1,7 +1,7 @@
 // app/(site)/layout.tsx
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import CtaSection from '@/components/layout/CtaSection';
+
 
 export const metadata = {
     title: 'Exsit Next',

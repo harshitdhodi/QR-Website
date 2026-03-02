@@ -2,7 +2,7 @@
 
 import { use, useState, useEffect } from "react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { Star, Truck, Package, Heart } from "lucide-react";
+import { Star, Truck, Package } from "lucide-react";
 import ProductGallery from "@/components/ui/ProductGallery";
 import { useCart } from "@/components/providers/CartProvider";
 import { notFound } from "next/navigation";
@@ -16,6 +16,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     const [quantity, setQuantity] = useState(1);
 
     // FETCH LOGIC
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -119,7 +120,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                             Size
                                         </span>
                                         <ul className="flex flex-row gap-2 mt-2">
-                                            {product.size.map((size, i) => (
+                                            {product.size.map((size: string, i: number) => (
                                                 <li key={i}>
                                                     <input
                                                         type="radio"
@@ -148,7 +149,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                             Color
                                         </span>
                                         <ul className="flex flex-row gap-3">
-                                            {product.colors.map((color, idx) => (
+                                            {product.colors.map((color: string, idx: number) => (
                                                 <li key={idx}>
                                                     <input
                                                         type="radio"
@@ -178,7 +179,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                     <div className="flex gap-4 mt-2 max-w-sm items-center">
                                         <QuantityDropdown quantity={quantity} setQuantity={setQuantity} />
                                         <div className="flex flex-grow gap-3">
-                                                <button
+                                            <button
                                                 onClick={handleAddToCart}
                                                 className="flex-grow  border border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white rounded-lg px-4 py-2 font-semibold text-base transition-colors"
                                             >
@@ -192,7 +193,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                                     Buy Now
                                                 </button>
                                             </Link>
-                                        
+
 
                                             {/* <button className="bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 rounded-lg px-4 py-3 flex items-center justify-center transition-colors">
                                                 <Heart className="w-5 h-5" />

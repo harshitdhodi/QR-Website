@@ -11,7 +11,9 @@ import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 export default function BlogPage() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [blogPosts, setBlogPosts] = useState<any[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [owner, setOwner] = useState<any>(null);
     const [selected, setSelected] = useState("");
     const [loading, setLoading] = useState(true);
@@ -49,7 +51,7 @@ export default function BlogPage() {
 
     return (
         <>
-        <div className="pt-24  max-w-screen mx-auto font-dm">
+            <div className="pt-24  max-w-screen mx-auto font-dm">
                 {/* Page Title */}
                 <PageTitle title="Blogs" subtitle="">
                     {/* Breadcrumb */}

@@ -100,7 +100,7 @@ const Header = ({
                         {/* Right Icons */}
                         <div className="flex items-center space-x-3">
                             {/* Search Button */}
-                            <SearchBox />
+                            {/* <SearchBox /> */}
 
                             {/* Dark Mode Toggle */}
                             <DarkToggle />

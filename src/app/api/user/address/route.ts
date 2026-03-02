@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import { addresses, customers } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {

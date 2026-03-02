@@ -1,5 +1,5 @@
 "use client";
-import { blogPosts } from "@/const/blogData";
+
 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -11,8 +11,8 @@ import CounterCarousel from "@/components/ui/MainSlider";
 import maincarsoul from "@/data/maincarsoul.json";
 import videoTestimonials from "@/data/video-testimonials.json";
 import HeroOne from "@/components/layout/Heroone";
-import { ZapIcon, Car, PawPrint, Package } from "lucide-react";
-import { Database, Zap } from "react-feather";
+import { Car, PawPrint, Package } from "lucide-react";
+import { Zap } from "react-feather";
 import FeatureCard from "@/components/ui/FeatureCard4";
 import PageTitle2 from "@/components/ui/PageTitle2";
 import ContactPage from "../(site)/contact/page";
@@ -41,7 +41,7 @@ const getYouTubeVideoId = (url: string) => {
 
 
 export default function HomePage() {
-    const bottomPosts = blogPosts.filter((post) => !post.featured).slice(0, 3);
+
     const [singleVideo, ...carouselVideos] = videoTestimonials;
     const singleVideoId = getYouTubeVideoId(singleVideo.src);
     const singleVideoEmbedUrl = `https://www.youtube.com/embed/${singleVideoId}`;
@@ -52,7 +52,7 @@ export default function HomePage() {
             <Header />
             {/* Hero */}
             <section id="home">
-            <HeroOne />
+                <HeroOne />
             </section>
             {/* category cards */}
             <div id="features" className="counter-wrap lg:pb-24 pb-12 font-dm bg-home-one-gradient-banner relative lg:py-24 py-20">
@@ -176,33 +176,21 @@ export default function HomePage() {
 
             {/* how it works wrap */}
             <section id="about">
-            <PageTitle2
-                icon={Zap}
-                label="Secure QR Communication"
-                title="How it works"
-                subtitle="Smart QR Solutions for Vehicles, Pets & Valuables"
-                align="center"
-                widthClass="xl:w-7/12 lg:w-9/12"
-            />
-            <div className="about-wrap lg:pb-20 pb-16">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-20 2xl:px-5">
-                    <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6 pb-16">
-                        {/* left side */}
-                        <div className="relative w-full h-[615px] rounded-xl">
-                            <Image
-                                src={img2}
-                                alt="banner"
-                                fill
-                                sizes="(max-width: 768px) 100vw,  (max-width: 1200px) 50vw,  33vw"
-                                className="object-cover rounded-xl"
-                                priority
-                            />
-                        </div>
-                        {/* right side */}
-                        <div className="space-y-6">
-                            <div className="relative w-full h-[319px] rounded-xl">
+                <PageTitle2
+                    icon={Zap}
+                    label="Secure QR Communication"
+                    title="How it works"
+                    subtitle="Smart QR Solutions for Vehicles, Pets & Valuables"
+                    align="center"
+                    widthClass="xl:w-7/12 lg:w-9/12"
+                />
+                <div className="about-wrap lg:pb-20 pb-16">
+                    <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-20 2xl:px-5">
+                        <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6 pb-16">
+                            {/* left side */}
+                            <div className="relative w-full h-[615px] rounded-xl">
                                 <Image
-                                    src={img3}
+                                    src={img2}
                                     alt="banner"
                                     fill
                                     sizes="(max-width: 768px) 100vw,  (max-width: 1200px) 50vw,  33vw"
@@ -210,74 +198,86 @@ export default function HomePage() {
                                     priority
                                 />
                             </div>
-                            <div className="w-full" data-aos="fade-up" data-aos-duration="400" data-aos-delay="0">
-                                <div className="font-dm bg-cyan-gradient rounded-xl p-6 h-[275px] flex flex-col dark:bg-image-none dark:bg-gray-800">
-                                    {/* Avatar group  */}
-                                    <div className="flex -space-x-4">
-                                        <Image
-                                            src={a1}
-                                            width={48}
-                                            height={48}
-                                            alt="member-avatar"
-                                            className="w-11 h-11 rounded-full"
-                                            loading="lazy"
-                                        />
-                                        <Image
-                                            src={a2}
-                                            width={48}
-                                            height={48}
-                                            alt="member-avatar"
-                                            className="w-11 h-11 rounded-full"
-                                            loading="lazy"
-                                        />
-                                        <Image
-                                            src={a3}
-                                            width={48}
-                                            height={48}
-                                            alt="member-avatar"
-                                            className="w-11 h-11 rounded-full"
-                                            loading="lazy"
-                                        />
-                                        <Image
-                                            src={a1}
-                                            width={48}
-                                            height={48}
-                                            alt="member-avatar"
-                                            className="w-11 h-11 rounded-full"
-                                            loading="lazy"
-                                        />
-                                    </div>
+                            {/* right side */}
+                            <div className="space-y-6">
+                                <div className="relative w-full h-[319px] rounded-xl">
+                                    <Image
+                                        src={img3}
+                                        alt="banner"
+                                        fill
+                                        sizes="(max-width: 768px) 100vw,  (max-width: 1200px) 50vw,  33vw"
+                                        className="object-cover rounded-xl"
+                                        priority
+                                    />
+                                </div>
+                                <div className="w-full" data-aos="fade-up" data-aos-duration="400" data-aos-delay="0">
+                                    <div className="font-dm bg-cyan-gradient rounded-xl p-6 h-[275px] flex flex-col dark:bg-image-none dark:bg-gray-800">
+                                        {/* Avatar group  */}
+                                        <div className="flex -space-x-4">
+                                            <Image
+                                                src={a1}
+                                                width={48}
+                                                height={48}
+                                                alt="member-avatar"
+                                                className="w-11 h-11 rounded-full"
+                                                loading="lazy"
+                                            />
+                                            <Image
+                                                src={a2}
+                                                width={48}
+                                                height={48}
+                                                alt="member-avatar"
+                                                className="w-11 h-11 rounded-full"
+                                                loading="lazy"
+                                            />
+                                            <Image
+                                                src={a3}
+                                                width={48}
+                                                height={48}
+                                                alt="member-avatar"
+                                                className="w-11 h-11 rounded-full"
+                                                loading="lazy"
+                                            />
+                                            <Image
+                                                src={a1}
+                                                width={48}
+                                                height={48}
+                                                alt="member-avatar"
+                                                className="w-11 h-11 rounded-full"
+                                                loading="lazy"
+                                            />
+                                        </div>
 
-                                    {/* Text block */}
-                                    <div className="mt-auto">
-                                        <h3 className="text-gray-900 font-medium mb-1 text-[75px] leading-none">30x</h3>
-                                        <p className="text-gray-900 text-[22px] leading-7 font-normal italic lg:w-2/3 mb-0 pe-2">Secure & Instant Connections Made Simple.</p>
+                                        {/* Text block */}
+                                        <div className="mt-auto">
+                                            <h3 className="text-gray-900 font-medium mb-1 text-[75px] leading-none">30x</h3>
+                                            <p className="text-gray-900 text-[22px] leading-7 font-normal italic lg:w-2/3 mb-0 pe-2">Secure & Instant Connections Made Simple.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
 
-                    </div>
-                    <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6">
-                        <div className="w-full">
-                            <h3 className="text-gray-900 font-semibold lg:text-[34px] leading-tight text-2xl lg:w-5/6 tracking-tight aos-init aos-animate">We built a smart QR-based safety platform so you can stay reachable without compromising your privacy</h3>
                         </div>
-                        <div className="w-full space-y-6">
-                            <p className="text-gray-600 text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
-                                Our solution allows anyone who scans your QR code to contact you instantly while keeping your personal details completely protected.When a QR code attached to your car, dog collar, or valuable item is scanned, the finder is redirected to a secure contact page. From there, they can connect with you via masked calling, WhatsApp, or SMS without ever seeing your private phone number.
-                            </p>
-                            <p className="text-gray-600 text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
-                                Do not risk losing your vehicle, pet, or belongings due to a lack of communication. With our QR system, you stay connected in real time while maintaining full control over your personal information.
-                                Whether it’s a parking issue, a lost pet, or misplaced item, our platform ensures fast communication, quick resolution, and complete privacy protection.
-                            </p>
-                            <div className="aos-init aos-animate" data-aos="fade-up" data-aos-delay="200" data-aos-duration="400">
-                                <Button href="/about" label="Who we are" bgColor="bg-blue-600" textColor="text-white" />
+                        <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6">
+                            <div className="w-full">
+                                <h3 className="text-gray-900 font-semibold lg:text-[34px] leading-tight text-2xl lg:w-5/6 tracking-tight aos-init aos-animate">We built a smart QR-based safety platform so you can stay reachable without compromising your privacy</h3>
+                            </div>
+                            <div className="w-full space-y-6">
+                                <p className="text-gray-600 text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
+                                    Our solution allows anyone who scans your QR code to contact you instantly while keeping your personal details completely protected.When a QR code attached to your car, dog collar, or valuable item is scanned, the finder is redirected to a secure contact page. From there, they can connect with you via masked calling, WhatsApp, or SMS without ever seeing your private phone number.
+                                </p>
+                                <p className="text-gray-600 text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
+                                    Do not risk losing your vehicle, pet, or belongings due to a lack of communication. With our QR system, you stay connected in real time while maintaining full control over your personal information.
+                                    Whether it’s a parking issue, a lost pet, or misplaced item, our platform ensures fast communication, quick resolution, and complete privacy protection.
+                                </p>
+                                <div className="aos-init aos-animate" data-aos="fade-up" data-aos-delay="200" data-aos-duration="400">
+                                    <Button href="/about" label="Who we are" bgColor="bg-blue-600" textColor="text-white" />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </section>
 
 
@@ -358,7 +358,7 @@ export default function HomePage() {
 
             {/* cta wrap */}
             <section id="contact">
-            <ContactPage />
+                <ContactPage />
             </section>
             {/* <CtaSection /> */}
             {/* footer */}
