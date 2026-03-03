@@ -37,8 +37,8 @@ const home1MenuItems: MenuItem[] = [
     // { title: 'Home', href: '#home' },
     { title: 'About', href: '#about' },
     { title: 'Shop', href: '/shop' },
-    { title: 'Features', href: '#features' },
-    { title: 'Services', href: '#services' },
+    { title: 'Features', href: '#how_it_work' },
+    { title: 'Services', href: '#why_choose_us' },
     { title: 'Blogs', href: '/blogs' },
     // {
     //     title: 'Policies',

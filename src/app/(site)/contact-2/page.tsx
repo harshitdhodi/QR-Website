@@ -10,10 +10,29 @@ import PageTitle2 from "@/components/ui/PageTitle2";
 export default function ContactPage() {
     const [submitted, setSubmitted] = useState(false);
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        // handle form logic here (send data via API route or 3rd party service)
-        setSubmitted(true);
+
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const res = await fetch('/api/inquiry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                setSubmitted(true);
+                form.reset();
+            } else {
+                console.error('Failed to submit form');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
     };
 
     return (

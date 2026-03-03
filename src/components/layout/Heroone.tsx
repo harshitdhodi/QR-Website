@@ -131,18 +131,18 @@ export default function HeroOne() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-8 pb-3">
                 <Button
-                  href={content.primary_button_href?.startsWith('/')
-                    ? content.primary_button_href
-                    : `/${content.primary_button_href}` || fallbackContent.primary_button_href}
-
-                  label={content.primary_button_text || fallbackContent.primary_button_text}
+                  href={content.secondary_button_href || fallbackContent.secondary_button_href}
+                  label={content.secondary_button_text || fallbackContent.secondary_button_text}
                   bgColor="bg-blue-900"
                   textColor="text-white"
                   padding="py-4 px-6"
                 />
                 <Button
-                  href={content.secondary_button_href || fallbackContent.secondary_button_href}
-                  label={content.secondary_button_text || fallbackContent.secondary_button_text}
+                  href={content.primary_button_href?.startsWith('/')
+                    ? content.primary_button_href
+                    : `/${content.primary_button_href}` || fallbackContent.primary_button_href}
+
+                  label={content.primary_button_text || fallbackContent.primary_button_text}
                   bgColor="bg-gray-900"
                   textColor="text-gray-100"
                   padding="py-4 px-6"

@@ -1,17 +1,52 @@
 "use client";
 
 
-import { FormEvent, useState } from "react";
-import FaqSection from "@/components/layout/FaqSection";
+import { FormEvent, useState, useEffect } from "react";
 import { ArrowUpRight, Zap } from 'react-feather';
 
 export default function ContactPage() {
     const [submitted, setSubmitted] = useState(false);
+    const [sectionData, setSectionData] = useState<any>(null);
 
-    const handleSubmit = (e: FormEvent) => {
+    useEffect(() => {
+        const fetchSectionData = async () => {
+            try {
+                const sectionRes = await fetch('/api/feature-sections?section_name=contact_us');
+                if (sectionRes.ok) {
+                    const data = await sectionRes.json();
+                    setSectionData(data);
+                }
+            } catch (err) {
+                console.error('Error fetching contact_us section data:', err);
+            }
+        };
+
+        fetchSectionData();
+    }, []);
+
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        // handle form logic here (send data via API route or 3rd party service)
-        setSubmitted(true);
+
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const res = await fetch('/api/inquiry', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                setSubmitted(true);
+                form.reset();
+            } else {
+                console.error('Failed to submit form');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
     };
 
     return (
@@ -25,24 +60,24 @@ export default function ContactPage() {
                             <div className="flex">
                                 <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-900 bg-white flex items-center gap-2">
                                     <Zap size={18} className="text-blue-900" />
-                                    Our customer feedback
+                                    {sectionData?.tag_line || "Our customer feedback"}
                                 </div>
                             </div>
 
-                            <h2 className="xl:text-[80px] lg:text-5xl text-4xl lg:leading-[1] tracking-tight text-gray-900 font-semibold mb-4 mt-3">
-                                Get in touch, let us know how we help
-                            </h2>
+                            {(() => {
+                                const title = sectionData?.parent_title || "Get in touch, let us know how we help";
+                                const words = title.trim().split(" ");
+                                const lastWord = words.length > 1 ? words.pop() : "";
+                                const firstPart = words.join(" ");
+                                return (
+                                    <h2 className="xl:text-[80px] lg:text-5xl text-4xl lg:leading-[1] tracking-tight text-gray-900 font-semibold mb-4 mt-3">
+                                        {firstPart} <span className="text-blue-900">{lastWord}</span>
+                                    </h2>
+                                );
+                            })()}
 
                             <p className="text-gray-700 font-medium text-base lg:pr-16">
-                                Use the contact form to get in touch or email us at
-                                <a
-                                    href="mailto:info@uitheme.net"
-                                    className="underline text-blue-900"
-                                >
-                                    info@uitheme.net
-                                </a>
-                                We will get back to you asap. Want to know more about our
-                                platform?
+                                {sectionData?.parent_subtitle || "Use the contact form to get in touch or email us at info@uitheme.net. We will get back to you asap. Want to know more about our platform?"}
                             </p>
 
                             {/* <h3 className="text-gray-400 font-medium text-lg lg:mt-24 mt-10">
@@ -193,7 +228,6 @@ export default function ContactPage() {
                     </div>
                 </div>
             </div>
-            <FaqSection />
         </>
     );
 }

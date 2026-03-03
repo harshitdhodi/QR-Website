@@ -27,12 +27,20 @@ interface WhyChooseUsItem {
 
 export default function Home() {
   const [whyChooseUsData, setWhyChooseUsData] = useState<WhyChooseUsItem[]>([]);
+  const [sectionData, setSectionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchWhyChooseUs = async () => {
       try {
+        // Fetch section data
+        const sectionRes = await fetch('/api/feature-sections?section_name=why_choose_us');
+        if (sectionRes.ok) {
+          const sData = await sectionRes.json();
+          setSectionData(sData);
+        }
+
         const response = await fetch(`/api/why-choose-us`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,7 +50,7 @@ export default function Home() {
 
         // Filter active items and sort by sort_order
         const activeItems = Array.isArray(data)
-          ? data.filter(item => item.is_active).sort((a, b) => a.sort_order - b.sort_order)
+          ? data.filter((item: any) => item.is_active).sort((a: any, b: any) => a.sort_order - b.sort_order)
           : [];
 
         setWhyChooseUsData(activeItems);
@@ -127,7 +135,7 @@ export default function Home() {
     return (
       <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
         <GradientDefs />
-        <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
+        <section id="why_choose_us" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-10 md:mb-12">
               <div className="text-gray-600">Loading...</div>
@@ -147,18 +155,30 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       <GradientDefs />
 
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
+      <section id="why_choose_us" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
 
           {/* Header – made more compact */}
-          <div className="text-center mb-10 md:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mb-3">
-              Why <span className='text-blue-900'>Choose Us</span>
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Everything you need for secure, privacy-first QR code communication.
-            </p>
-          </div>
+          {(() => {
+            const title = sectionData?.parent_title || "Why Choose Us";
+            const subtitle = sectionData?.parent_subtitle || "Everything you need for secure, privacy-first QR code communication.";
+
+            // split title to get the last word
+            const words = title.trim().split(' ');
+            const lastWord = words.length > 1 ? words.pop() : '';
+            const firstPart = words.join(' ');
+
+            return (
+              <div className="text-center mb-10 md:mb-12">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mb-3">
+                  {firstPart} <span className="text-blue-900">{lastWord}</span>
+                </h1>
+                <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+                  {subtitle}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* Features Grid – constrained height on larger screens */}
           {/* Features Grid – removed height constraints and overflow hidden */}

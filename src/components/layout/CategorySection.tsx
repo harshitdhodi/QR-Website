@@ -67,7 +67,7 @@ export default function CategorySection() {
             id: "219986b3-2280-415b-8965-3b9687213e65",
             image: "https://ik.imagekit.io/mikbqwyy0/ChatGPT_Image_Feb_26__2026__03_17_14_PM-removebg-preview.png",
             title: "Pet",
-            subtitle: "Smart tags to ensure your furry friends can always be identified.",
+            subtitle: "Smarts tags to ensure your furry friends can always be identified.",
             button_name: "Buy Now",
             is_active: true,
             sort_order: 1

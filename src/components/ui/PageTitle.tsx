@@ -24,7 +24,7 @@ const PageTitle: React.FC<PageTitleProps> = ({ title, subtitle, children }) => {
             {/* Centered content */}
             <div className="relative z-10 flex flex-col items-center justify-center min-h-[350px] px-4">
                 <div className="text-center text-white">
-                    <h2 className="lg:text-7xl md:text-5xl text-4xl font-bold lg:mb-2 tracking-tight">
+                    <h2 className="lg:text-5xl md:text-5xl text-4xl font-bold lg:mb-2 tracking-tight">
                         {title}
                     </h2>
                     {subtitle && (

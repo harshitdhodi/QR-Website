@@ -1,0 +1,1 @@
+{"id":"dcdf565c-befb-4669-acdb-c6c78a7eadee","parent_title":"How it work","parent_subtitle":"Secure • Private • Instant — The smartest way to connect without exposing personal details.","tag_line":null,"is_active":true,"section_name":"how_it_work","sort_order":0,"created_at":"2026-03-02T16:15:16.000Z","updated_at":"2026-03-02T16:15:16.000Z"}

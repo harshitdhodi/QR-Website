@@ -61,6 +61,7 @@ function useInView(threshold = 0.2) {
 
 export default function WhyChooseUs2() {
   const [howItWorksData, setHowItWorksData] = useState<HowItWorksItem[]>([]);
+  const [sectionData, setSectionData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -69,6 +70,13 @@ export default function WhyChooseUs2() {
   useEffect(() => {
     const fetchHowItWorks = async () => {
       try {
+        // Fetch section data
+        const sectionRes = await fetch('/api/feature-sections?section_name=how_it_work');
+        if (sectionRes.ok) {
+          const sData = await sectionRes.json();
+          setSectionData(sData);
+        }
+
         const response = await fetch(`/api/how-it-works`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,7 +86,7 @@ export default function WhyChooseUs2() {
 
         // Filter active items and sort by sort_order
         const activeItems = Array.isArray(data)
-          ? data.filter(item => item.is_active).sort((a, b) => a.sort_order - b.sort_order)
+          ? data.filter((item: any) => item.is_active).sort((a: any, b: any) => a.sort_order - b.sort_order)
           : [];
 
         setHowItWorksData(activeItems);
@@ -145,7 +153,7 @@ export default function WhyChooseUs2() {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-home-one-gradient-banner text-gray-800">
+      <section id="how_it_work" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-home-one-gradient-banner text-gray-800">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
             <div className="text-gray-600">Loading...</div>
@@ -161,10 +169,10 @@ export default function WhyChooseUs2() {
   }
 
   return (
-    <section className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-home-one-gradient-banner text-gray-800">
+    <section id="how_it_work" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-home-one-gradient-banner text-gray-800">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <HeaderBlock />
+        <HeaderBlock sectionData={sectionData} />
 
         {/* Vertical Timeline */}
         <div ref={timelineRef} className="relative max-w-3xl mx-auto">
@@ -193,8 +201,17 @@ export default function WhyChooseUs2() {
   );
 }
 
-function HeaderBlock() {
+function HeaderBlock({ sectionData }: { sectionData?: any }) {
   const { ref, inView } = useInView(0.3);
+
+  const title = sectionData?.parent_title || "How it work";
+  const subtitle = sectionData?.parent_subtitle || "Secure • Private • Instant — The smartest way to connect without exposing personal details.";
+
+  // split title to get the last word
+  const words = title.trim().split(' ');
+  const lastWord = words.length > 1 ? words.pop() : '';
+  const firstPart = words.join(' ');
+
   return (
     <div
       ref={ref}
@@ -205,10 +222,10 @@ function HeaderBlock() {
       }}
     >
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-4">
-        How it <span className='text-blue-900'>work</span>
+        {firstPart} <span className="text-blue-900">{lastWord}</span>
       </h2>
       <p className="text-lg text-gray-400 max-w-3xl mx-auto">
-        Secure • Private • Instant — The smartest way to connect without exposing personal details.
+        {subtitle}
       </p>
     </div>
   );

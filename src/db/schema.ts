@@ -5,6 +5,7 @@ import {
   timestamp,
   int,
   double,
+  text,
 } from 'drizzle-orm/mysql-core';
 import { relations } from 'drizzle-orm';
 
@@ -100,3 +101,14 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
     references: [orders.id],
   }),
 }));
+
+// ─── Inquiries ────────────────────────────────────────────────────────────────
+export const inquiries = mysqlTable('inquiries', {
+  id: int('id').primaryKey().autoincrement(),
+  firstName: varchar('first_name', { length: 255 }).notNull(),
+  lastName: varchar('last_name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 50 }),
+  message: text('message').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});

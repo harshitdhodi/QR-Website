@@ -20,9 +20,15 @@ export default function HomePage() {
             <section id="home">
                 <HeroOne />
             </section>
-            <WhyChooseUs2 />
-            {/* why choose us */}
-            <WhyChooseUs />
+            {/* features (How it works) */}
+            <section id="features">
+                <WhyChooseUs2 />
+            </section>
+
+            {/* services (Why choose us) */}
+            <section id="services">
+                <WhyChooseUs />
+            </section>
 
             {/* dynamic category section */}
             <CategorySection />

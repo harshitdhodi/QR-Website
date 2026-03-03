@@ -17,11 +17,19 @@ interface FaqItem {
 
 const FaqSection = () => {
     const [faqs, setFaqs] = useState<FaqItem[]>([]);
+    const [sectionData, setSectionData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchFaqs = async () => {
             try {
+                // Fetch section data
+                const sectionRes = await fetch('/api/feature-sections?section_name=faq');
+                if (sectionRes.ok) {
+                    const sData = await sectionRes.json();
+                    setSectionData(sData);
+                }
+
                 const response = await fetch('/api/faqs');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,9 +86,9 @@ const FaqSection = () => {
                     <div className="xl:col-span-6 col-span-12 lg:col-span-6 flex flex-col">
                         <PageTitle3
                             icon={<HelpCircle size={18} />}
-                            badgeText="Frequently Asked Question"
-                            title="Have any questions? here some answers"
-                            subtitle="Whether you're building a startup landing page, a dashboard interface, or a modern web app gives you full control."
+                            badgeText={sectionData?.tag_line || "Frequently Asked Question"}
+                            title={sectionData?.parent_title || "Have any questions? here some answers"}
+                            subtitle={sectionData?.parent_subtitle || "Whether you're building a startup landing page, a dashboard interface, or a modern web app gives you full control."}
                             widthClass="xl:w-10/12 lg:w-2/3 w-full"
                             alignment="start"
                             padding="pb-16"

@@ -23,11 +23,19 @@ interface BlogItem {
 
 export default function BlogSection() {
     const [blogs, setBlogs] = useState<BlogItem[]>([]);
+    const [sectionData, setSectionData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
+                // Fetch section data
+                const sectionRes = await fetch('/api/feature-sections?section_name=blogs');
+                if (sectionRes.ok) {
+                    const sData = await sectionRes.json();
+                    setSectionData(sData);
+                }
+
                 const response = await fetch('/api/blog-posts');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -62,9 +70,9 @@ export default function BlogSection() {
             <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0 lg:py-4 py-0">
                 <div className="flex flex-wrap justify-between pb-16 gap-y-4">
                     <PageTitle3
-                        badgeText=""
-                        title="Stay informed with our latest blog entries"
-                        subtitle="New blog articles, insights, and updates here."
+                        badgeText={sectionData?.tag_line || ""}
+                        title={sectionData?.parent_title || "Stay informed with our latest blog entries"}
+                        subtitle={sectionData?.parent_subtitle || "New blog articles, insights, and updates here."}
                         widthClass="w-full xl:w-5/12 lg:w-7/12"
                         alignment="start"
                         padding="pb-0"

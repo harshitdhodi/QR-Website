@@ -132,3 +132,88 @@ export async function sendOTPEmail(email: string, otp: string) {
     return { success: false, message: 'Failed to send OTP' };
   }
 }
+
+export async function sendInquiryAdminEmail(data: { firstName: string, lastName: string, email: string, phone?: string, message: string }) {
+  try {
+    const htmlTemplate = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+          .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border: 1px solid #ddd; }
+          h2 { color: #333; }
+          .label { font-weight: bold; color: #555; }
+          .detail { margin-bottom: 10px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>New Inquiry Received</h2>
+          <p>You have a new inquiry from your website.</p>
+          <div class="detail"><span class="label">Name:</span> ${data.firstName} ${data.lastName}</div>
+          <div class="detail"><span class="label">Email:</span> ${data.email}</div>
+          <div class="detail"><span class="label">Phone:</span> ${data.phone || 'N/A'}</div>
+          <div class="detail"><span class="label">Message:</span><br/>${data.message.replace(/\n/g, '<br/>')}</div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const mailOptions = {
+      from: '"Website System" <' + process.env.EMAIL_USER + '>',
+      to: process.env.EMAIL_USER, // sending it to the admin
+      subject: 'New Inquiry from ' + data.firstName + ' ' + data.lastName,
+      html: htmlTemplate,
+    };
+
+    await transporter.sendMail(mailOptions);
+    return { success: true };
+  } catch (error) {
+    console.error('Admin Email sending failed:', error);
+    return { success: false, error };
+  }
+}
+
+export async function sendInquiryUserEmail(data: { firstName: string, email: string }) {
+  try {
+    const htmlTemplate = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+          .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border: 1px solid #ddd; }
+          h2 { color: #333; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Thank you for your inquiry, ${data.firstName}!</h2>
+          <p>We have successfully received your message.</p>
+          <p>Our team is currently reviewing your request and will get back to you as soon as possible, usually within 24-48 business hours.</p>
+          <p>If you have any further questions, simply reply to this email.</p>
+          <br/>
+          <p>Best regards,<br/>The Team</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const mailOptions = {
+      from: '"Support Team" <' + process.env.EMAIL_USER + '>',
+      to: data.email,
+      subject: 'Thank you for contacting us',
+      html: htmlTemplate,
+    };
+
+    await transporter.sendMail(mailOptions);
+    return { success: true };
+  } catch (error) {
+    console.error('User Email sending failed:', error);
+    return { success: false, error };
+  }
+}
+

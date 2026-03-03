@@ -1,6 +1,8 @@
 import Image from "next/image";
 import React from "react";
 import PopularPost from "@/components/ui/PopularPost";
+import PageTitle from "@/components/ui/PageTitle";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 const SingleBlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     // Next 15 compatibility
@@ -23,19 +25,26 @@ const SingleBlogPage = async ({ params }: { params: Promise<{ slug: string }> })
 
     return (
         <>
+            <div className="pt-24 max-w-screen mx-auto font-dm">
+                {/* Page Title */}
+                <PageTitle title={blogPost.title} subtitle="">
+                    {/* Breadcrumb */}
+                    <div className="flex justify-center text-center">
+                        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Blogs", href: "/blogs" }, { label: blogPost.title }]} variant="light" />
+                    </div>
+                </PageTitle>
+            </div>
+
             <div className="blog-wrap font-dm">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:pb-24 pb-20 justify-center">
-                    <div className="blog-title bg-light-blue-banner lg:pt-20 pt-14 font-dm">
-                        {/* Post Title */}
-                        <div className="lg:w-8/12 text-center pb-12 mx-auto lg:pt-20 pt-14">
+                    <div className="blog-title lg:pt-14 pt-10 font-dm">
+                        {/* Post Meta */}
+                        <div className="lg:w-8/12 text-center pb-12 mx-auto lg:pt-10 pt-6">
                             <div className="flex justify-center mb-3">
                                 <div className="px-3 py-1 border border-gray-200 rounded-lg text-xs font-semibold uppercase text-gray-900 bg-white shadow-sm flex items-center gap-2 w-auto" data-aos="zoom-in" data-aos-delay="0" data-aos-duration="400">
                                     Blog
                                 </div>
                             </div>
-                            <h2 className="text-3xl md:text-5xl text-gray-900 font-semibold mb-1 md:mb-2" data-aos="fade-up" data-aos-duration="400" data-aos-delay="0">
-                                {blogPost.title}
-                            </h2>
                             <p className="text-gray-800 font-medium text-base mb-0" data-aos="fade-up" data-aos-duration="400" data-aos-delay="100">
                                 {blogPost.date} &bull; {blogPost.readTime}
                             </p>
@@ -49,9 +58,9 @@ const SingleBlogPage = async ({ params }: { params: Promise<{ slug: string }> })
                     </div>
 
                     {/* Post Content */}
-                   {/* Post Content */}
-<div className="lg:w-8/12 mx-auto">
-    <style>{`
+                    {/* Post Content */}
+                    <div className="lg:w-8/9 mx-auto">
+                        <style>{`
         .blog-content {
             // font-family: 'Georgia', 'Times New Roman', serif;
             color: #1a1a2e;
@@ -232,15 +241,15 @@ const SingleBlogPage = async ({ params }: { params: Promise<{ slug: string }> })
             margin-bottom: 1.5rem;
         }
     `}</style>
-    <div
-        className="blog-content"
-        dangerouslySetInnerHTML={{
-            __html: blogPost.content
-                .replace(/<table/g, '<div class="table-responsive"><table')
-                .replace(/<\/table>/g, '</table></div>')
-        }}
-    />
-</div>
+                        <div
+                            className="blog-content"
+                            dangerouslySetInnerHTML={{
+                                __html: blogPost.content
+                                    .replace(/<table/g, '<div class="table-responsive"><table')
+                                    .replace(/<\/table>/g, '</table></div>')
+                            }}
+                        />
+                    </div>
 
                     {/* Author Bottom */}
                     <div className="lg:w-8/12 mx-auto mt-10 p-6 border rounded-lg flex items-center gap-4">
