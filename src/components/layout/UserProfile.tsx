@@ -58,7 +58,7 @@ export default function UserProfile() {
                     <button
                         onClick={() => {
                             setIsOpen(false);
-                            router.push('/dashboard');
+                            router.push('/');
                         }}
                         className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
                     >

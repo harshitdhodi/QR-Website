@@ -1,37 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";  // 👈 add this
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import ProductCard from "@/components/ui/ProductCard";
 
 export default function ShopPage() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [products, setProducts] = useState<any[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [selected, setSelected] = useState("");
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+    const searchParams = useSearchParams();  // 👈 add this
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const res = await fetch("/api/products");
                 const data = await res.json();
-                console.log(data);
                 setProducts(data);
 
-                // Extract unique categories dynamically based on categoryNames
                 const uniqueCategories = Array.from(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     new Set(data.flatMap((p: any) => p.categoryNames || []))
                 ) as string[];
                 setCategories(uniqueCategories.filter(Boolean));
+
+                // 👇 Read category from URL and auto-select it
+                const categoryFromUrl = searchParams.get("category");
+                if (categoryFromUrl) {
+                    setSelectedCategories([categoryFromUrl]);
+                }
             } catch (err) {
                 console.error("Error fetching products:", err);
             }
         };
         fetchProducts();
-    }, []);
+    }, [searchParams]); // 👈 depend on searchParams
 
     const handleCategoryChange = (cat: string) => {
         setSelectedCategories((prev) =>

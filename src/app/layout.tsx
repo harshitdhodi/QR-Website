@@ -19,8 +19,8 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
-  title: 'Exsit Next',
-  description: 'Modern Next.js app with Tailwind + TypeScript + SCSS',
+  title: 'Secure QR Code Contact System | Private & Smart QR Communication',
+  description: 'Connect instantly with privacy-first QR codes. Enable masked calling, WhatsApp, and SMS without revealing personal numbers. Secure, smart, and scalable QR communication.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

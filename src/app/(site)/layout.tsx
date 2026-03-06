@@ -13,8 +13,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className='font-dm-sans'>
             <Header />
             {children}
-            <div className='lg:py-24 py-12'>
-            </div>
             {/* <CtaSection /> */}
             <Footer />
         </div>

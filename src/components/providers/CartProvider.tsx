@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useSession } from "next-auth/react";
 import { Product } from "@/const/productData";
 
 export interface CartItem {
@@ -19,9 +20,11 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+    const { data: session, status } = useSession();
     const [cart, setCart] = useState<CartItem[]>([]);
+    const [isDbLoaded, setIsDbLoaded] = useState(false);
 
-    // Load from local storage
+    // Initial load: Local storage
     useEffect(() => {
         const savedCart = localStorage.getItem("cart");
         if (savedCart) {
@@ -33,10 +36,62 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    // Save to local storage
+    // Load from DB if user is logged in
     useEffect(() => {
+        if (status === 'authenticated' && session?.user && !isDbLoaded) {
+            const customerId = (session.user as any).id || session.user.email;
+            if (!customerId) return;
+
+            fetch(`/api/carts?customerId=${customerId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data?.items?.length > 0) {
+                        // Merge or replace cart from DB
+                        // Simple approach: map db items to CartItem structure
+                        const dbCart = data.data.items.map((it: any) => ({
+                            product: {
+                                id: it.productId,
+                                title: it.title || `Product #${it.productId}`,
+                                price: parseFloat(it.price || 0),
+                                slug: it.slug,
+                                imgOne: it.imgOne
+                            },
+                            quantity: it.quantity
+                        }));
+                        setCart(dbCart);
+                    }
+                    setIsDbLoaded(true);
+                })
+                .catch(err => console.error("Failed to fetch user cart", err));
+        }
+    }, [status, session, isDbLoaded]);
+
+    // Save to local storage & DB
+    useEffect(() => {
+        // ALWAYS update local storage as fallback
         localStorage.setItem("cart", JSON.stringify(cart));
-    }, [cart]);
+
+        // If logged in, sync to DB
+        if (status === 'authenticated' && session?.user && isDbLoaded) {
+            const customerId = (session.user as any).id || session.user.email;
+            if (!customerId) return;
+
+            const payload = {
+                customerId,
+                items: cart.map(item => ({
+                    productId: item.product.id,
+                    quantity: item.quantity,
+                    options: {}
+                }))
+            };
+
+            fetch('/api/carts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(e => console.error("Failed to sync cart to DB", e));
+        }
+    }, [cart, status, session, isDbLoaded]);
 
     const addToCart = (product: Product, quantity: number = 1) => {
         setCart((prev) => {

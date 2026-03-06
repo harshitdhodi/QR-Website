@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageTitle3 from '@/components/ui/PageTitle3';
-
+import { useSearchParams } from 'next/navigation';
 interface CategoryItem {
     id: string;
     image: string;
@@ -29,7 +29,18 @@ interface CategoryItem {
 
 export default function CategorySection() {
     const [categories, setCategories] = useState<CategoryItem[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
+const searchParams = useSearchParams();
+
+useEffect(() => {
+    const categoryFromUrl = searchParams.get('category');
+    
+    if (categoryFromUrl && categories.includes(categoryFromUrl)) {
+        setSelectedCategories([categoryFromUrl]);
+    }
+}, [categories, searchParams]);
+
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -112,7 +123,7 @@ export default function CategorySection() {
                     {displayData.map((category, index) => (
                         <Link
                             key={category.id}
-                            href={`/cart?category=${category.title}`}
+                            href={`/shop?category=${category.title}`}
                             className="w-full block group"
                         >
                             <div

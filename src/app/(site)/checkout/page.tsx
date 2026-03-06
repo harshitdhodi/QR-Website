@@ -183,10 +183,11 @@ export default function CheckoutPage() {
 
   const completeOrder = async (address: ShippingAddress, completePaymentMethod: string) => {
     try {
-      const res = await fetch('/api/checkout', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          customerId: (session?.user as any)?.id || null,
           items: cartItems,
           paymentMethod: completePaymentMethod,
           address: address,
