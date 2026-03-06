@@ -30,8 +30,7 @@ const HOVER_MAP: Record<string, string> = {
     "bg-red-600": "hover:bg-red-700",
 };
 
-export default function Footer({ layout = "default", foretextColor = "text-white", logo = "/images/logo/logo-white.png", borderColor = "border-gray-800", bgColor = "bg-gray-900", foreColor = "bg-blue-600", iconbgColor = "bg-gray-800" }: FooterProps) {
-    const hoverClass = HOVER_MAP[foreColor] || "hover:opacity-90";
+export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterProps) {
 
     const getDarkLogo = (src: string) => {
         // If the filename already contains "-white" before the extension, return as is

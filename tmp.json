@@ -1,0 +1,30 @@
+[
+  {
+    "id": "7d53e4a0-159b-44c2-a82a-e78a64c4df23",
+    "badge": "Online program is now available",
+    "title": "Empowering Superior results by thinking",
+    "subtitle": "When you join our journey, you are choosing a partner who believes in a healthier, more balanced you — and works tirelessly to help you get there.",
+    "primary_button_text": "Start Trial for 14 day's",
+    "primary_button_href": "checkout",
+    "secondary_button_text": "Explore more",
+    "secondary_button_href": "features",
+    "main_image_url": "/uploads/hero/3496a9a5-f822-4415-b182-c08c88ebe263_1772768591917.png",
+    "decorative_image_url": "",
+    "floating_icon_type": "boxes",
+    "avatar1_url": "https://ik.imagekit.io/mikbqwyy0/p2.webp?updatedAt=1742545250755",
+    "avatar2_url": "https://ik.imagekit.io/mikbqwyy0/p4.webp?updatedAt=1742545250377",
+    "avatar3_url": "https://ik.imagekit.io/mikbqwyy0/p1.webp?updatedAt=1742545249892",
+    "stats_text": " 7.65m+",
+    "stats_subtext": "Content Creators and Teams",
+    "carousel_items": "[\"Built to scale with your needs\",\"Affordables & scalable plans\",\"Plans that fit every stage\"]",
+    "is_active": true,
+    "sort_order": 0,
+    "created_at": "2026-02-25T11:52:24.000Z",
+    "updated_at": "2026-02-25T11:52:24.000Z",
+    "carouselItems": [
+      "Built to scale with your needs",
+      "Affordables & scalable plans",
+      "Plans that fit every stage"
+    ]
+  }
+]

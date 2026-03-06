@@ -12,8 +12,14 @@ interface HowItWorksItem {
   tagline: string;
   is_active: boolean;
   sort_order: number;
-  created_at: string;
   updated_at: string;
+}
+
+interface SectionData {
+  tag_line?: string;
+  parent_title?: string;
+  parent_subtitle?: string;
+  [key: string]: unknown;
 }
 
 function useScrollProgress(ref: React.RefObject<HTMLElement>) {
@@ -61,7 +67,7 @@ function useInView(threshold = 0.2) {
 
 export default function WhyChooseUs2() {
   const [howItWorksData, setHowItWorksData] = useState<HowItWorksItem[]>([]);
-  const [sectionData, setSectionData] = useState<any>(null);
+  const [sectionData, setSectionData] = useState<SectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -86,7 +92,7 @@ export default function WhyChooseUs2() {
 
         // Filter active items and sort by sort_order
         const activeItems = Array.isArray(data)
-          ? data.filter((item: any) => item.is_active).sort((a: any, b: any) => a.sort_order - b.sort_order)
+          ? data.filter((item: HowItWorksItem) => item.is_active).sort((a: HowItWorksItem, b: HowItWorksItem) => a.sort_order - b.sort_order)
           : [];
 
         setHowItWorksData(activeItems);
@@ -201,7 +207,7 @@ export default function WhyChooseUs2() {
   );
 }
 
-function HeaderBlock({ sectionData }: { sectionData?: any }) {
+function HeaderBlock({ sectionData }: { sectionData?: SectionData | null }) {
   const { ref, inView } = useInView(0.3);
 
   const title = sectionData?.parent_title || "How it work";

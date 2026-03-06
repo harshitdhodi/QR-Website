@@ -15,9 +15,16 @@ interface FaqItem {
     updated_at: string;
 }
 
+interface SectionData {
+    tag_line?: string;
+    parent_title?: string;
+    parent_subtitle?: string;
+    [key: string]: unknown;
+}
+
 const FaqSection = () => {
     const [faqs, setFaqs] = useState<FaqItem[]>([]);
-    const [sectionData, setSectionData] = useState<any>(null);
+    const [sectionData, setSectionData] = useState<SectionData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

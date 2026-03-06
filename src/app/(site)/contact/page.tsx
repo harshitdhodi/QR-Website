@@ -4,9 +4,16 @@
 import { FormEvent, useState, useEffect } from "react";
 import { ArrowUpRight, Zap } from 'react-feather';
 
+interface SectionData {
+    tag_line?: string;
+    parent_title?: string;
+    parent_subtitle?: string;
+    [key: string]: unknown;
+}
+
 export default function ContactPage() {
     const [submitted, setSubmitted] = useState(false);
-    const [sectionData, setSectionData] = useState<any>(null);
+    const [sectionData, setSectionData] = useState<SectionData | null>(null);
 
     useEffect(() => {
         const fetchSectionData = async () => {

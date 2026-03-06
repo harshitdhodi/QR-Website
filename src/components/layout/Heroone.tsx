@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Boxes } from "lucide-react";
 import Button from "../ui/Button";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import TopCarousel from "../ui/TopCarousel";
 import img from "../../../public/images/right-banner-bg.webp";
 import a1 from "../../../public/images/avater-11.webp";
@@ -28,6 +28,16 @@ interface HeroContent {
   decorative_image_url?: string;
   floating_icon_type?: string;
 }
+
+const resolveImageUrl = (url: string | null | undefined, fallback: string | StaticImageData) => {
+  if (!url) return fallback;
+  if (typeof url !== 'string') return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('/uploads/')) return `https://www.qradmin.rndtd.com${url}`;
+  return url;
+};
+
+
 
 export default function HeroOne() {
   const [heroData, setHeroData] = useState<HeroContent | null>(null);
@@ -79,7 +89,7 @@ export default function HeroOne() {
   };
 
   const content = heroData || fallbackContent;
-
+  console.log("content", content);
   // Parse carousel items from string to array
   const carouselItems = content.carousel_items
     ? JSON.parse(content.carousel_items)
@@ -152,7 +162,7 @@ export default function HeroOne() {
               {/* Decorative Image */}
               <div data-aos="zoom-in" data-aos-duration="300" className="aos-init aos-animate">
                 <Image
-                  src={content.decorative_image_url || fallbackContent.decorative_image_url}
+                  src={resolveImageUrl(content.decorative_image_url, fallbackContent.decorative_image_url)}
                   alt="text"
                   className="relative left-5"
                   width={299}
@@ -168,7 +178,7 @@ export default function HeroOne() {
             <div className="relative rounded-xl lg:overflow-visible overflow-hidden aos-init aos-animate" data-aos="fade-up" data-aos-duration="600">
               {/* Main Image */}
               <Image
-                src={content.main_image_url || img}
+                src={resolveImageUrl(content.main_image_url, img)}
                 alt="banner"
                 decoding="async"
                 loading="eager"
@@ -189,7 +199,7 @@ export default function HeroOne() {
               <div className="absolute top-4 -right-8 bg-white rounded-xl border border-gray-200 shadow-sm p-3 gap-4 mt-4 hidden lg:flex flex-row items-center aos-init aos-animate" data-aos="fade-up" data-aos-duration="400" data-delay="400">
                 <div className="flex -space-x-4">
                   <Image
-                    src={content.avatar1_url || a1}
+                    src={resolveImageUrl(content.avatar1_url, a1)}
                     width={48}
                     height={48}
                     alt="member-avatar"
@@ -197,7 +207,7 @@ export default function HeroOne() {
                     loading="lazy"
                   />
                   <Image
-                    src={content.avatar2_url || a2}
+                    src={resolveImageUrl(content.avatar2_url, a2)}
                     width={48}
                     height={48}
                     alt="member-avatar"
@@ -205,7 +215,7 @@ export default function HeroOne() {
                     loading="lazy"
                   />
                   <Image
-                    src={content.avatar3_url || a3}
+                    src={resolveImageUrl(content.avatar3_url, a3)}
                     width={48}
                     height={48}
                     alt="member-avatar"

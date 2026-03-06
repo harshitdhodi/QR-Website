@@ -25,9 +25,16 @@ interface WhyChooseUsItem {
   updated_at: string;
 }
 
+interface SectionData {
+  tag_line?: string;
+  parent_title?: string;
+  parent_subtitle?: string;
+  [key: string]: unknown;
+}
+
 export default function Home() {
   const [whyChooseUsData, setWhyChooseUsData] = useState<WhyChooseUsItem[]>([]);
-  const [sectionData, setSectionData] = useState<any>(null);
+  const [sectionData, setSectionData] = useState<SectionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +57,7 @@ export default function Home() {
 
         // Filter active items and sort by sort_order
         const activeItems = Array.isArray(data)
-          ? data.filter((item: any) => item.is_active).sort((a: any, b: any) => a.sort_order - b.sort_order)
+          ? data.filter((item: WhyChooseUsItem) => item.is_active).sort((a: WhyChooseUsItem, b: WhyChooseUsItem) => a.sort_order - b.sort_order)
           : [];
 
         setWhyChooseUsData(activeItems);

@@ -21,9 +21,16 @@ interface BlogItem {
     updatedAt: string;
 }
 
+interface SectionData {
+    tag_line?: string;
+    parent_title?: string;
+    parent_subtitle?: string;
+    [key: string]: unknown;
+}
+
 export default function BlogSection() {
     const [blogs, setBlogs] = useState<BlogItem[]>([]);
-    const [sectionData, setSectionData] = useState<any>(null);
+    const [sectionData, setSectionData] = useState<SectionData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

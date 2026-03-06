@@ -238,7 +238,7 @@ export default function CheckoutPage() {
               <ShoppingBag size={32} />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
-            <p className="text-gray-500 mb-8 max-w-md text-center">Looks like you haven't added anything to your cart yet. Browse our products and find something you love!</p>
+            <p className="text-gray-500 mb-8 max-w-md text-center">Looks like you haven&apos;t added anything to your cart yet. Browse our products and find something you love!</p>
             <button
               onClick={() => router.push('/shop')}
               className="px-8 py-3 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-xl transition-all shadow-md shadow-blue-900/20 flex items-center gap-2"
@@ -391,8 +391,8 @@ export default function CheckoutPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <label
                         className={`flex items-center gap-3 cursor-pointer border-2 px-5 py-4 rounded-xl transition-all ${paymentMethod === 'COD'
-                            ? 'border-blue-900 bg-blue-50/50'
-                            : 'border-gray-100 hover:border-gray-200 bg-white'
+                          ? 'border-blue-900 bg-blue-50/50'
+                          : 'border-gray-100 hover:border-gray-200 bg-white'
                           }`}
                       >
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === 'COD' ? 'border-blue-900' : 'border-gray-300'}`}>
@@ -407,8 +407,8 @@ export default function CheckoutPage() {
 
                       <label
                         className={`flex items-center gap-3 cursor-pointer border-2 px-5 py-4 rounded-xl transition-all ${paymentMethod === 'ONLINE'
-                            ? 'border-blue-900 bg-blue-50/50'
-                            : 'border-gray-100 hover:border-gray-200 bg-white'
+                          ? 'border-blue-900 bg-blue-50/50'
+                          : 'border-gray-100 hover:border-gray-200 bg-white'
                           }`}
                       >
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${paymentMethod === 'ONLINE' ? 'border-blue-900' : 'border-gray-300'}`}>
@@ -473,7 +473,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <button
-                  onClick={(e) => {
+                  onClick={() => {
                     const form = document.getElementById('checkout-form') as HTMLFormElement;
                     if (form.checkValidity()) {
                       if (typeof form.requestSubmit === 'function') {
