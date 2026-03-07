@@ -1,18 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";  // 👈 add this
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import ProductCard from "@/components/ui/ProductCard";
+import { Product as BaseProduct } from "@/const/productData";
 
-export default function ShopPage() {
-    const [products, setProducts] = useState<any[]>([]);
+interface Product extends BaseProduct {
+    categoryNames?: string[];
+}
+
+function ShopContent() {
+    const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [selected, setSelected] = useState("");
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-    const searchParams = useSearchParams();  // 👈 add this
+    const searchParams = useSearchParams();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -22,11 +27,11 @@ export default function ShopPage() {
                 setProducts(data);
 
                 const uniqueCategories = Array.from(
-                    new Set(data.flatMap((p: any) => p.categoryNames || []))
+                    new Set(data.flatMap((p: Product) => p.categoryNames || []))
                 ) as string[];
                 setCategories(uniqueCategories.filter(Boolean));
 
-                // 👇 Read category from URL and auto-select it
+                // Read category from URL and auto-select it
                 const categoryFromUrl = searchParams.get("category");
                 if (categoryFromUrl) {
                     setSelectedCategories([categoryFromUrl]);
@@ -36,7 +41,7 @@ export default function ShopPage() {
             }
         };
         fetchProducts();
-    }, [searchParams]); // 👈 depend on searchParams
+    }, [searchParams]);
 
     const handleCategoryChange = (cat: string) => {
         setSelectedCategories((prev) =>
@@ -103,117 +108,6 @@ export default function ShopPage() {
                                     </div>
                                 ))}
                             </div>
-
-                            {/* Sizes */}
-                            {/* 
-                            <div className="flex flex-col gap-2 mb-6 pb-6 border-b border-gray-200">
-                                <h3 className="text-base font-semibold text-gray-900 mb-3">
-                                    Size
-                                </h3>
-                                {sizes.map((size, i) => (
-                                    <div key={i} className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <input
-                                                type="checkbox"
-                                                id={`size-${i}`}
-                                                className="accent-blue-500"
-                                            />
-                                            <label
-                                                htmlFor={`size-${i}`}
-                                                className="text-base text-gray-900 font-medium"
-                                            >
-                                                {size}
-                                            </label>
-                                        </div>
-                                        <span className="text-sm text-gray-600 font-medium">
-                                            {products.filter((p) => p.size.includes(size)).length}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div> 
-                            */}
-
-                            {/* Availability */}
-                            {/* 
-                            <div className="flex flex-col gap-2 mb-6 pb-6 border-b border-gray-200">
-                                <h3 className="text-base font-semibold text-gray-900 mb-3">
-                                    Availability
-                                </h3>
-                                {availability.map((avail, i) => (
-                                    <div key={i} className="flex justify-between items-center">
-                                        <div className="flex items-center gap-2">
-                                            <input
-                                                type="checkbox"
-                                                id={`avail-${i}`}
-                                                className="accent-blue-500"
-                                            />
-                                            <label
-                                                htmlFor={`avail-${i}`}
-                                                className="text-base text-gray-900 font-medium"
-                                            >
-                                                {avail}
-                                            </label>
-                                        </div>
-                                        <span className="text-sm text-gray-600 font-medium">
-                                            {products.filter((p) => p.availability === avail).length}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div> 
-                            */}
-
-                            {/* Colors */}
-                            {/* 
-                            <div className="flex flex-col gap-2 mb-6 pb-6 border-b border-gray-200">
-                                <h3 className="text-base font-semibold text-gray-900 mb-3">
-                                    Colors
-                                </h3>
-                                {colors.map((color, i) => {
-                                    const colorName = color.replace("bg-", "").replace(/-\d+$/, "");
-                                    return (
-                                        <div key={i} className="flex justify-between items-center">
-                                            <div className="flex items-center gap-2">
-                                                <input type="checkbox" id={`color-${i}`} className="hidden" />
-                                                <span
-                                                    className={`inline-block w-6 h-6 rounded-full ${color}`}
-                                                ></span>
-                                                <label className="text-base text-gray-900 font-medium capitalize">
-                                                    {colorName}
-                                                </label>
-                                            </div>
-
-                                            <span className="text-sm text-gray-600 font-medium">
-                                                {products.filter((p) => p.colors.includes(color)).length}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </div> 
-                            */}
-
-                            {/* Banner */}
-                            {/* <div className="relative rounded-md overflow-hidden bg-gray-900">
-                                <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
-                                <div className="absolute bottom-0 z-20 w-full text-white text-center p-12 transform -translate-x-1/2 left-1/2">
-                                    <span className="uppercase text-sm font-semibold">Summer Sale</span>
-                                    <h2 className="uppercase text-3xl font-bold mt-2 mb-7">
-                                        SALE UP TO 25% OFF
-                                    </h2>
-                                    <a
-                                        href="#"
-                                        className="px-6 py-3 bg-blue-600 text-white text-base font-medium rounded-md hover:bg-blue-700 transition duration-300"
-                                    >
-                                        Explore
-                                    </a>
-                                </div>
-                                <Image
-                                    src="/images/product.svg"
-                                    alt="banner"
-                                    className="w-full"
-                                    width={284}
-                                    height={426}
-                                />
-                            </div> */}
                         </div>
 
                         {/* Product Listing */}
@@ -258,5 +152,13 @@ export default function ShopPage() {
                 </div>
             </div>
         </>
+    );
+}
+
+export default function ShopPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading shop...</div>}>
+            <ShopContent />
+        </Suspense>
     );
 }

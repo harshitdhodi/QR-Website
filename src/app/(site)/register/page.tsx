@@ -3,7 +3,6 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Instagram, Facebook, Twitter, Mail } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    SVG Illustration  (SVG attrs are not CSS —
@@ -64,40 +63,7 @@ function StepIndicator({ step }: { step: 1 | 2 }) {
 /* ─────────────────────────────────────────────
    Reusable Field
 ───────────────────────────────────────────── */
-interface FieldProps {
-    id: string;
-    label: string;
-    type: string;
-    placeholder: string;
-    value: string;
-    onChange: (v: string) => void;
-    required?: boolean;
-    maxLength?: number;
-    extraClassName?: string;
-}
 
-function Field({ id, label, type, placeholder, value, onChange, required, maxLength, extraClassName = '' }: FieldProps) {
-    return (
-        <div className="space-y-1.5">
-            <label
-                htmlFor={id}
-                className="block text-[0.7rem] font-semibold uppercase tracking-widest text-white/40"
-            >
-                {label}
-            </label>
-            <input
-                id={id}
-                type={type}
-                placeholder={placeholder}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                required={required}
-                maxLength={maxLength}
-                className={`w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/20 focus:border-blue-500 focus:bg-white/[0.07] focus:ring-1 focus:ring-blue-500/40 ${extraClassName}`}
-            />
-        </div>
-    );
-}
 
 /* ─────────────────────────────────────────────
    Spinner
@@ -223,12 +189,6 @@ function RegisterContent() {
         );
     }
 
-    const socialLinks = [
-        { icon: <Instagram size={17} />, label: 'Instagram' },
-        { icon: <Facebook size={17} />, label: 'Facebook' },
-        { icon: <Twitter size={17} />, label: 'Twitter' },
-        { icon: <Mail size={17} />, label: 'Email' },
-    ];
 
     const field = (
         id: string, label: string, type: string, placeholder: string,

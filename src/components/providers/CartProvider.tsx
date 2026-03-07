@@ -39,7 +39,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Load from DB if user is logged in
     useEffect(() => {
         if (status === 'authenticated' && session?.user && !isDbLoaded) {
-            const customerId = (session.user as any).id || session.user.email;
+            const customerId = (session.user as { id?: string }).id || session.user.email;
             if (!customerId) return;
 
             fetch(`/api/carts?customerId=${customerId}`)
@@ -48,11 +48,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                     if (data.success && data.data?.items?.length > 0) {
                         // Merge or replace cart from DB
                         // Simple approach: map db items to CartItem structure
-                        const dbCart = data.data.items.map((it: any) => ({
+                        const dbCart = data.data.items.map((it: { productId: number; title: string; price: string | number; slug: string; imgOne: string; quantity: number }) => ({
                             product: {
                                 id: it.productId,
                                 title: it.title || `Product #${it.productId}`,
-                                price: parseFloat(it.price || 0),
+                                price: parseFloat(String(it.price || 0)),
                                 slug: it.slug,
                                 imgOne: it.imgOne
                             },
@@ -73,7 +73,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
         // If logged in, sync to DB
         if (status === 'authenticated' && session?.user && isDbLoaded) {
-            const customerId = (session.user as any).id || session.user.email;
+            const customerId = (session.user as { id?: string }).id || session.user.email;
             if (!customerId) return;
 
             const payload = {

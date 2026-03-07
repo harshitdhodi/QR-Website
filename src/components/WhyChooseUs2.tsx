@@ -88,7 +88,7 @@ export default function WhyChooseUs2() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
+
 
         // Filter active items and sort by sort_order
         const activeItems = Array.isArray(data)

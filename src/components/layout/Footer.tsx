@@ -15,20 +15,6 @@ interface FooterProps {
     logo?: string;
 }
 
-const HOVER_MAP: Record<string, string> = {
-    "bg-blue-600": "hover:bg-blue-800",
-    "bg-blue-500": "hover:bg-blue-600",
-    "bg-lime-300": "hover:bg-lime-400",
-    "bg-cyan-500": "hover:bg-cyan-700",
-    "bg-yellow-400": "hover:bg-white",
-    "bg-cyan-600": "hover:bg-cyan-700",
-    "bg-gray-900": "hover:bg-gray-800",
-    "bg-blue-800": "hover:bg-blue-700",
-    "bg-gray-800": "hover:bg-gray-700",
-    "bg-teal-800": "hover:bg-teal-700",
-    "bg-green-800": "hover:bg-green-700",
-    "bg-red-600": "hover:bg-red-700",
-};
 
 export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterProps) {
 

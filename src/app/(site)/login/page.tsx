@@ -149,12 +149,12 @@ function LoginContent() {
             const res = await fetch('/api/auth/otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email }),
+                body: JSON.stringify({ email: formData.email, isCustomer: "true" }),
             });
             const data = await res.json();
             if (res.ok) {
                 setShowOtpInput(true);
-                alert('OTP sent to your email');
+                alert('OTP "sent"! For demo/testing, use the default OTP: 123456');
             } else {
                 alert(data.error || 'Failed to send OTP');
             }
@@ -174,6 +174,7 @@ function LoginContent() {
                 redirect: false,
                 email: formData.email,
                 otp: formData.otp,
+                isCustomer: "true",
             });
             if (result?.error) {
                 alert('Invalid OTP. Please try again.');
@@ -192,7 +193,7 @@ function LoginContent() {
             const res = await fetch('/api/auth/otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email }),
+                body: JSON.stringify({ email: formData.email, isCustomer: "true" }),
             });
             const data = await res.json();
             if (res.ok) {
@@ -349,6 +350,10 @@ function LoginContent() {
                                 </div>
                                 <p className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed">
                                     Check your inbox at <strong className="text-blue-700 dark:text-blue-200">{formData.email}</strong> for your one-time code.
+                                    <br />
+                                    <span className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1 block">
+                                        💡 Default demo OTP: <strong>123456</strong>
+                                    </span>
                                 </p>
                             </div>
 

@@ -24,12 +24,24 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://www.qradmin.rndtd.com/api/:path*',
-      },
-    ]
+    return {
+      beforeFiles: [
+        {
+          source: '/api/auth/otp',
+          destination: 'https://www.qradmin.rndtd.com/api/auth/otp',
+        },
+        {
+          source: '/api/auth/register',
+          destination: 'https://www.qradmin.rndtd.com/api/auth/register',
+        },
+      ],
+      fallback: [
+        {
+          source: '/api/:path*',
+          destination: 'https://www.qradmin.rndtd.com/api/:path*',
+        },
+      ]
+    }
   },
 };
 

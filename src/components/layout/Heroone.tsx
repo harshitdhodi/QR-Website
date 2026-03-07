@@ -52,7 +52,7 @@ export default function HeroOne() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
+
         // Data comes as an array, take the first item
         if (Array.isArray(data) && data.length > 0) {
           setHeroData(data[0]);
@@ -89,7 +89,7 @@ export default function HeroOne() {
   };
 
   const content = heroData || fallbackContent;
-  console.log("content", content);
+
   // Parse carousel items from string to array
   const carouselItems = content.carousel_items
     ? JSON.parse(content.carousel_items)
