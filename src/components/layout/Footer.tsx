@@ -1,8 +1,9 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, Mail, Facebook, Linkedin, Instagram, MapPin } from "react-feather";
+import { Phone, Mail, Facebook, Linkedin, Instagram, MapPin, Twitter } from "react-feather";
+
 type FooterLayout = "default" | "classic" | "modern" | "light" | "elegant";
 
 interface FooterProps {
@@ -15,18 +16,53 @@ interface FooterProps {
     logo?: string;
 }
 
+interface DynamicFooterData {
+    logo_url: string;
+    description: string;
+    phone: string;
+    email: string;
+    address: string;
+    facebook_url: string;
+    instagram_url: string;
+    linkedin_url: string;
+    twitter_url: string;
+}
 
 export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterProps) {
+    const [footerData, setFooterData] = useState<DynamicFooterData | null>(null);
+
+    useEffect(() => {
+        const fetchFooter = async () => {
+            try {
+                // Using the proxied /api/footer which points to the remote backend
+                const res = await fetch('/api/footer');
+                const result = await res.json();
+                if (result.success && result.data) {
+                    setFooterData(result.data);
+                }
+            } catch (err) {
+                console.error("Failed to fetch footer data:", err);
+            }
+        };
+        fetchFooter();
+    }, []);
 
     const getDarkLogo = (src: string) => {
-        // If the filename already contains "-white" before the extension, return as is
+        if (!src) return logo;
+        // If it's a dynamic URL from API, we return it as is
+        if (src.includes('/api/image/download')) return src;
+
         if (/-white\.(png|jpg|jpeg|svg)$/i.test(src)) {
             return src;
         }
-
-        // Otherwise, insert "-white" before the file extension
         return src.replace(/\.(png|jpg|jpeg|svg)$/i, '-white.$1');
     };
+
+    const displayLogo = footerData?.logo_url || logo;
+    const description = footerData?.description || "We place great emphasis on designers, artists, and brands.";
+    const phone = footerData?.phone || "+91-730 494 5821";
+    const email = footerData?.email || "info@qr.com";
+    const address = footerData?.address || "3rd Floor, Sapphire, Sarigam Rd, above Axis Bank, Gujarat 396191";
 
     return (
         <footer className={`font-dm relative z-10 text-gray-300 bg-gray-900 pt-16 pb-8`}>
@@ -37,7 +73,7 @@ export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterP
                     <div className="lg:col-span-4 lg:pr-10">
                         <Link href="/" className="inline-block mb-6">
                             <Image
-                                src={getDarkLogo(logo)}
+                                src={getDarkLogo(displayLogo)}
                                 alt="logo"
                                 width={180}
                                 height={60}
@@ -46,21 +82,42 @@ export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterP
                             />
                         </Link>
                         <p className="mb-8 text-gray-400 font-medium leading-relaxed max-w-xs">
-                            We place great emphasis on designers, artists, and brands.
+                            {description}
                         </p>
                         <div className="flex items-center gap-3">
-                            <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
-                                <Facebook size={18} className="text-gray-300 group-hover:text-white" />
-                            </Link>
-                            <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
-                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" className="text-gray-300 group-hover:text-white"><path d="M12.006 12.274h6.9c-.312 2.296-1.585 4.39-3.725 5.586-2.272 1.258-5.358 1.104-7.46-.42-2.103-1.523-2.91-4.22-1.957-6.52.894-2.164 3.012-3.666 5.374-3.834 2.112-.15 4.148.882 5.253 2.602l3.414-3.414c-2.486-2.613-6.265-3.824-9.873-2.94-3.533.864-6.425 3.553-7.534 7.027-1.12 3.489.157 7.375 3.086 9.537 2.872 2.122 6.84 2.454 10.02.83 3.193-1.633 5.3-5.275 5.09-8.914h-8.588v2.46z" /></svg>
-                            </Link>
-                            <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
-                                <Instagram size={18} className="text-gray-300 group-hover:text-white" />
-                            </Link>
-                            <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
-                                <Linkedin size={18} className="text-gray-300 group-hover:text-white" />
-                            </Link>
+                            {footerData?.facebook_url && (
+                                <Link href={footerData.facebook_url} target="_blank" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                    <Facebook size={18} className="text-gray-300 group-hover:text-white" />
+                                </Link>
+                            )}
+                            {footerData?.twitter_url && (
+                                <Link href={footerData.twitter_url} target="_blank" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                    <Twitter size={18} className="text-gray-300 group-hover:text-white" />
+                                </Link>
+                            )}
+                            {footerData?.instagram_url && (
+                                <Link href={footerData.instagram_url} target="_blank" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                    <Instagram size={18} className="text-gray-300 group-hover:text-white" />
+                                </Link>
+                            )}
+                            {footerData?.linkedin_url && (
+                                <Link href={footerData.linkedin_url} target="_blank" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                    <Linkedin size={18} className="text-gray-300 group-hover:text-white" />
+                                </Link>
+                            )}
+                            {!footerData && (
+                                <>
+                                    <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                        <Facebook size={18} className="text-gray-300 group-hover:text-white" />
+                                    </Link>
+                                    <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                        <Instagram size={18} className="text-gray-300 group-hover:text-white" />
+                                    </Link>
+                                    <Link href="#" className="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-blue-900 hover:text-white transition group">
+                                        <Linkedin size={18} className="text-gray-300 group-hover:text-white" />
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -94,30 +151,30 @@ export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterP
                     </div>
 
                     {/* Column 4: Contact Us */}
-                    <div className="lg:col-span-3">
+                    <div className="lg:col-span-4">
                         <h4 className="text-white font-bold mb-6 tracking-widest uppercase relative pb-4 
                         after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-px after:bg-gray-600">
                             CONTACT US
                         </h4>
                         <ul className="flex flex-col gap-5 text-gray-300 font-medium text-sm">
-                            <li className="flex items-start gap-4 hover:text-white transition cursor-pointer">
+                            <li className="flex items-start gap-4 hover:text-white transition">
                                 <div className="w-8 h-8 rounded-full bg-blue-900 border border-gray-800 flex items-center justify-center flex-shrink-0 text-white">
                                     <Phone size={14} />
                                 </div>
-                                <div className="pt-1.5">+91-730 494 5823</div>
+                                <div className="pt-1.5">{phone}</div>
                             </li>
-                            <li className="flex items-start gap-4 hover:text-white transition cursor-pointer">
+                            <li className="flex items-start gap-4 hover:text-white transition">
                                 <div className="w-8 h-8 rounded-full bg-blue-900 border border-gray-800 flex items-center justify-center flex-shrink-0 text-white">
                                     <Mail size={14} />
                                 </div>
-                                <div className="pt-1.5">info@rndtechnosoft.com</div>
+                                <div className="pt-1.5">{email}</div>
                             </li>
-                            <li className="flex items-start gap-4 hover:text-white transition cursor-pointer">
+                            <li className="flex items-start gap-4 hover:text-white transition">
                                 <div className="w-8 h-8 rounded-full bg-blue-900 border border-gray-800 flex items-center justify-center flex-shrink-0 text-white">
                                     <MapPin size={14} />
                                 </div>
                                 <div className="pt-1.5 leading-relaxed">
-                                    3rd Floor, Sapphire, Daman Rd, above Axis Bank, Daulat Nagar, Chala, Vapi, Gujarat 396191
+                                    {address}
                                 </div>
                             </li>
                         </ul>
@@ -127,7 +184,7 @@ export default function Footer({ logo = "/images/logo/logo-white.png" }: FooterP
                 {/* Bottom Section */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4 text-gray-400 font-medium text-sm">
                     <p className="mb-0">
-                        Copyright © 2026 RnD Technosoft. All rights reserved.
+                        Copyright © {new Date().getFullYear()} RnD Technosoft. All rights reserved.
                     </p>
                 </div>
             </div>

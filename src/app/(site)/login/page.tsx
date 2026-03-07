@@ -146,7 +146,8 @@ function LoginContent() {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch('/api/auth/otp', {
+            const adminApiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3060/api';
+            const res = await fetch(`${adminApiUrl}/auth/otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: formData.email, isCustomer: "true" }),

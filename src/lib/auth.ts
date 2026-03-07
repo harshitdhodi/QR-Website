@@ -1,11 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { db } from "@/lib/db";
-import { customers } from "@/db/schema";
-import { eq, or } from "drizzle-orm";
 
-// Universal default/bypass OTP for development & demo access
-const DEFAULT_OTP = "123456";
+const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || "http://localhost:3060/api";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -18,67 +14,36 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email or Phone", type: "text" },
         otp: { label: "OTP", type: "text" },
-        isCustomer: { label: "isCustomer", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.otp) return null;
 
-        const { email, otp } = credentials;
-
         try {
-          // Find customer by email or phone
-          const customerRows = await db
-            .select()
-            .from(customers)
-            .where(
-              or(
-                eq(customers.email, email),
-                eq(customers.phone, email)
-              )
-            )
-            .limit(1);
+          // CALL ADMIN API for login logic
+          const res = await fetch(`${ADMIN_API_URL}/auth/customer-login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: credentials.email,
+              otp: credentials.otp,
+            }),
+          });
 
-          const customer = customerRows[0];
+          const data = await res.json();
 
-          if (!customer) {
-            console.log("[AUTH] Customer not found for:", email);
-            return null;
+          if (res.ok && data.user) {
+            return {
+              id: data.user.id,
+              name: data.user.name,
+              email: data.user.email,
+              role: data.user.role || "customer",
+            };
           }
 
-          // ── OTP validation ──────────────────────────────────────────────
-          // 1. Accept the universal default OTP "123456" (bypass for demo/dev)
-          const isDefaultOtp = otp === DEFAULT_OTP;
-
-          // 2. Accept if it matches the OTP stored in DB and hasn't expired
-          const isStoredOtpValid =
-            customer.otp &&
-            customer.otp === otp &&
-            customer.otpExpires &&
-            new Date() <= new Date(customer.otpExpires);
-
-          if (!isDefaultOtp && !isStoredOtpValid) {
-            console.log("[AUTH] OTP invalid or expired for:", email);
-            return null;
-          }
-
-          // Clear OTP after successful login (non-fatal)
-          try {
-            await db
-              .update(customers)
-              .set({ otp: null, otpExpires: null, isPhoneVerified: true })
-              .where(eq(customers.id, customer.id));
-          } catch (updateErr) {
-            console.warn("[AUTH] Failed to clear OTP (non-fatal):", updateErr);
-          }
-
-          return {
-            id: customer.id,
-            name: customer.name ?? "",
-            email: customer.email ?? email,
-            role: customer.role ?? "customer",
-          };
+          console.error("[AUTH] Admin login failure:", data.message);
+          return null;
         } catch (error) {
-          console.error("[AUTH] Error during customer authorization:", error);
+          console.error("[AUTH] Connection error to Admin API:", error);
           return null;
         }
       },
