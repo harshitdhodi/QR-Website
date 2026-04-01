@@ -71,11 +71,11 @@ export default function HeroOne() {
   // Fallback content when API fails or loading
   const fallbackContent = {
     badge: "Online program is now available",
-    title: "Empowering <span className='text-blue-900'>Superior</span> results by thinking",
+    title: "Empowering <span className='text-brand-primary'>Superior</span> results by thinking",
     subtitle: "When you join our journey, you are choosing a partner who believes in a healthier, more balanced you — and works tirelessly to help you get there.",
-    primary_button_text: "Start trial for 14 days",
+    primary_button_text: "Get Free Digital QR",
     primary_button_href: "/pricing",
-    secondary_button_text: "Explore more",
+    secondary_button_text: "Buy Now",
     secondary_button_href: "/about",
     stats_text: "7.65m+",
     stats_subtext: "Content Creators and Teams",
@@ -122,7 +122,7 @@ export default function HeroOne() {
             <div className="flex flex-col">
               {/* Badge */}
               <div>
-                <span className="inline-block py-2 px-3 rounded-full border border-gray-200 bg-white text-sm text-blue-600 font-medium aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
+                <span className="inline-block py-2 px-3 rounded-full border border-brand-secondary bg-white text-sm text-brand-primary font-medium aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
                   {content.badge}
                 </span>
               </div>
@@ -143,7 +143,7 @@ export default function HeroOne() {
                 <Button
                   href={content.secondary_button_href || fallbackContent.secondary_button_href}
                   label={content.secondary_button_text || fallbackContent.secondary_button_text}
-                  bgColor="bg-blue-900"
+                  bgColor="bg-brand-primary"
                   textColor="text-white"
                   padding="py-4 px-6"
                 />
@@ -153,22 +153,22 @@ export default function HeroOne() {
                     : `/${content.primary_button_href}` || fallbackContent.primary_button_href}
 
                   label={content.primary_button_text || fallbackContent.primary_button_text}
-                  bgColor="bg-gray-900"
-                  textColor="text-gray-100"
+                  bgColor="bg-brand-secondary"
+                  textColor="text-white"
                   padding="py-4 px-6"
                 />
               </div>
 
               {/* Decorative Image */}
               <div data-aos="zoom-in" data-aos-duration="300" className="aos-init aos-animate">
-                <Image
+                {/* <Image
                   src={resolveImageUrl(content.decorative_image_url, fallbackContent.decorative_image_url)}
                   alt="text"
                   className="relative left-5"
                   width={299}
                   height={70}
                   loading="eager"
-                />
+                /> */}
               </div>
             </div>
           </div>

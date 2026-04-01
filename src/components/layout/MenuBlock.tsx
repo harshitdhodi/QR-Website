@@ -35,11 +35,12 @@ interface MenuBlockProps {
 
 const home1MenuItems: MenuItem[] = [
     // { title: 'Home', href: '#home' },
-    { title: 'About', href: '#about' },
+    // { title: 'About', href: '#about' },
     { title: 'Shop', href: '/shop' },
-    { title: 'Features', href: '#how_it_work' },
-    { title: 'Services', href: '#why_choose_us' },
-    { title: 'Blogs', href: '/blogs' },
+    { title: 'Bulk Purchase', href: '/bulk-purchase' },
+    // { title: 'Features', href: '#how_it_work' },
+    // { title: 'Services', href: '#why_choose_us' },
+    // { title: 'Blogs', href: '/blogs' },
     // {
     //     title: 'Policies',
     //     subMenu: [
@@ -48,10 +49,10 @@ const home1MenuItems: MenuItem[] = [
     //         { title: 'Refund Policy', href: '/refund-policy' }
     //     ]
     // },
-    { title: 'Contact', href: '#contact' },
+    // { title: 'Contact', href: '#contact' },
 ];
 
-const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileMenu, logo = "/images/logo/logo-blue.png", btnColor = 'bg-blue-600', btnlinkColor = "text-white", }) => {
+const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileMenu, logo = "/images/logo/logo-blue.png", btnColor = 'bg-brand-primary', btnlinkColor = "text-white", }) => {
     const [openSubMenu, setOpenSubMenu] = useState<Record<string, boolean>>({});
     const pathname = usePathname();
 
@@ -250,7 +251,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileM
                 <div className="mt-auto p-4">
                     <Link
                         href="/register"
-                        className={`flex items-center justify-center gap-3 px-6 py-3  rounded-md text-sm font-medium hover:bg-blue-700 transition-all duration-200 ${btnColor} ${btnlinkColor}`}
+                        className={`flex items-center justify-center gap-3 px-6 py-3 rounded-md text-sm font-medium hover:opacity-90 transition-all duration-200 ${btnColor} ${btnlinkColor}`}
                     >
                         Register
                     </Link>

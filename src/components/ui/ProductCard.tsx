@@ -128,18 +128,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
     // --- Compact layout (default) ---
     return (
         <div
-            className="flex flex-col gap-2 cursor-pointer transition-all duration-300 hover:-translate-y-1"
+            className="group flex flex-col gap-2 cursor-pointer transition-all duration-300 hover:-translate-y-1 rounded-xl border border-gray-200 bg-white p-3 shadow-sm hover:shadow-md"
             onClick={handleCardClick}
         >
             {/* product image */}
-            <div className="relative overflow-hidden rounded-xl bg-productcard-gradient">
+            <div className="relative overflow-hidden rounded-xl bg-productcard-gradient min-h-[180px] flex items-center justify-center">
                 {product.discount && (
-                    <div className="absolute top-3 left-3 z-10 bg-green-600 text-white text-xs font-medium py-1 px-2 rounded-md">
+                    <div className="absolute top-3 left-3 z-10 bg-green-600 text-white text-[11px] font-medium py-1 px-2 rounded-md">
                         {product.discount}
                     </div>
                 )}
                 {product.badge && (
-                    <div className="absolute top-3 left-3 z-10 bg-red-600 text-white text-xs font-medium py-1 px-2 rounded-md">
+                    <div className="absolute top-3 right-3 z-10 bg-red-600 text-white text-[11px] font-medium py-1 px-2 rounded-md">
                         {product.badge}
                     </div>
                 )}
@@ -166,28 +166,40 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
             </div>
 
             {/* product content */}
-            <div className="mb-2">
-                <span className="block text-xl font-semibold text-gray-900 mb-0 group-hover:text-blue-600 transition-colors duration-300">
+            <div className="mb-1">
+                <span className="block text-[17px] leading-6 font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2 min-h-[3rem]">
                     {product.title}
                 </span>
-                <p className="text-sm font-medium text-gray-500 mt-[2px] mb-2">{product.subtitle}</p>
+                <p className="text-sm font-medium text-gray-500 mt-[2px] mb-2 line-clamp-1">{product.subtitle}</p>
                 <p className="text-lg font-semibold text-gray-800 pt-1">
-                    ${product.price.toLocaleString()}
+                    ₹{product.price.toLocaleString()}
                     {product.oldPrice && (
                         <span className="line-through text-sm text-gray-500 font-medium ml-2">
-                            ${product.oldPrice.toLocaleString()}
+                            ₹{product.oldPrice.toLocaleString()}
                         </span>
                     )}
                 </p>
+                {product.review && (
+                    <div className="flex items-center text-blue-500 mb-1 mt-1">
+                        <Star fill="blue" size={15} strokeWidth={0} />
+                        <span className="text-xs text-gray-600 font-medium leading-6 ml-1 inline-block">
+                            {product.review}
+                        </span>
+                    </div>
+                )}
                 {/* Optional: Add action buttons in compact layout too if desired */}
                 <div className="flex flex-row gap-2 mt-3">
                     <Button
-                        label="Add to Cart"
+                        label="View Details"
                         padding="px-4 py-2"
                         icon=""
-                        bgColor="bg-blue-900"
+                        bgColor="bg-brand-primary"
                         textColor="text-white"
-                        onClick={handleAddToCart}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            router.push(`/shop/${productSlug}`);
+                        }}
                     />
                 </div>
             </div>

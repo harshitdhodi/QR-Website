@@ -257,6 +257,8 @@
 :root {
     --background: #fff;
     --foreground: #0a0a0a;
+    --color-primary: #486dae;
+    --color-secondary: #86b4e1;
 }
 
 /* Dark mode variables (override when .dark class is present) */
@@ -372,6 +374,70 @@ body.dark {
 
 
 @layer utilities {
+    .bg-brand-primary {
+        background-color: var(--color-primary) !important;
+    }
+    .bg-brand-secondary {
+        background-color: var(--color-secondary) !important;
+    }
+    .text-brand-primary {
+        color: var(--color-primary) !important;
+    }
+    .text-brand-secondary {
+        color: var(--color-secondary) !important;
+    }
+    .border-brand-primary {
+        border-color: var(--color-primary) !important;
+    }
+    .border-brand-secondary {
+        border-color: var(--color-secondary) !important;
+    }
+    .from-brand-primary {
+        --tw-gradient-from: var(--color-primary) var(--tw-gradient-from-position) !important;
+        --tw-gradient-to: rgb(72 109 174 / 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+    }
+    .to-brand-secondary {
+        --tw-gradient-to: var(--color-secondary) var(--tw-gradient-to-position) !important;
+    }
+
+    /* Map common blue shades to project brand palette */
+    .bg-blue-900,
+    .bg-blue-800,
+    .bg-blue-700,
+    .bg-blue-600 {
+        background-color: var(--color-primary) !important;
+    }
+    .bg-blue-50 {
+        background-color: #eef4fb !important;
+    }
+    .text-blue-900,
+    .text-blue-800,
+    .text-blue-700,
+    .text-blue-600 {
+        color: var(--color-primary) !important;
+    }
+    .border-blue-900,
+    .border-blue-800,
+    .border-blue-700,
+    .border-blue-600 {
+        border-color: var(--color-primary) !important;
+    }
+    .from-blue-900,
+    .from-blue-800,
+    .from-blue-700,
+    .from-blue-600 {
+        --tw-gradient-from: var(--color-primary) var(--tw-gradient-from-position) !important;
+        --tw-gradient-to: rgb(72 109 174 / 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+    }
+    .to-blue-900,
+    .to-blue-800,
+    .to-blue-700,
+    .to-blue-600 {
+        --tw-gradient-to: var(--color-secondary) var(--tw-gradient-to-position) !important;
+    }
+
     .bg-home-one-gradient-banner {
         background-image: url('/images/svg/dots.svg'),
         linear-gradient(166deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, .4)),
