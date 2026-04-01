@@ -159,7 +159,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <main className="bg-gradient-to-b from-background to-muted/20">
       <GradientDefs />
 
       <section id="why_choose_us" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
@@ -180,7 +180,7 @@ export default function Home() {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mb-3">
                   {firstPart} <span className="text-blue-900">{lastWord}</span>
                 </h1>
-                <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-black md:text-lg text-muted-foreground max-w-2xl mx-auto">
                   {subtitle}
                 </p>
               </div>

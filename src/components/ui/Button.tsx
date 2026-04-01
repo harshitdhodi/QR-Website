@@ -18,6 +18,8 @@ interface ButtonProps {
 
 // ✅ Static Tailwind-safe hover map
 const HOVER_MAP: Record<string, string> = {
+    "bg-brand-primary": "hover:opacity-90",
+    "bg-brand-secondary": "hover:opacity-90",
     "bg-blue-900": "hover:bg-blue-800",
     "bg-blue-500": "hover:bg-blue-600",
     "bg-lime-300": "hover:bg-lime-400",

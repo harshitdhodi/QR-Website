@@ -22,13 +22,13 @@ interface HeaderProps {
 }
 
 const Header = ({
-    btnColor = 'bg-blue-600',
+    btnColor = 'bg-brand-primary',
     bgColor = "bg-transparent",
     headerClass = "",
     position = "absolute",
     btnlinkColor = "text-white",
     theme = "header-dark",
-    logo = "/images/logo/logo.png"
+    logo = "/images/logo/Icon Logo (2000x2000).png"
 }: HeaderProps) => {
     const { data: session } = useSession();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -69,8 +69,8 @@ const Header = ({
                             <Image
                                 src={logo}
                                 alt="logo"
-                                width={125}
-                                height={40}
+                                width={60}
+                                height={60}
                                 priority
                                 className='light-logo'
                             />
@@ -78,8 +78,8 @@ const Header = ({
                             <Image
                                 src={getDarkLogo(logo)}
                                 alt="logo dark"
-                                width={125}
-                                height={40}
+                                width={60}
+                                height={60}
                                 priority
                                 className='dark-logo'
                             />
