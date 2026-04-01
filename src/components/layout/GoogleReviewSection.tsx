@@ -123,7 +123,7 @@ export default function GoogleReviewSection() {
                                     <Star key={starIndex} size={16} fill="currentColor" />
                                 ))}
                             </div>
-                            <p className="text-gray-700 dark:text-gray-200 leading-7">"{item.review}"</p>
+                            <p className="text-gray-700 dark:text-gray-200 leading-7">{item.review}</p>
                             <p className="mt-4 font-semibold text-gray-900 dark:text-white">{item.name}</p>
                         </div>
                     ))}
