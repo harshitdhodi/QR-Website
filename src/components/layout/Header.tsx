@@ -23,12 +23,12 @@ interface HeaderProps {
 
 const Header = ({
     btnColor = 'bg-brand-primary',
-    bgColor = "bg-transparent",
+    bgColor = "bg-transparent dark:[#0a1016]",
     headerClass = "",
     position = "absolute",
     btnlinkColor = "text-white",
     theme = "header-dark",
-    logo = "/images/logo/Icon Logo (2000x2000).png"
+    logo = "/images/logo/Combined Logo (2000x400).png"
 }: HeaderProps) => {
     const { data: session } = useSession();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -56,7 +56,7 @@ const Header = ({
 
     return (
         <header
-            className={`header-wrapper w-full ${position} left-0 z-50 transition-all duration-300 ease-in-out font-dm-sans ${headerClass === "bg-color-none" ? "bg-color-none top-0" : ""} ${theme} ${scrolled ? "scroll-header shadow-xs" : `${bgColor} border-transparent`
+            className={`header-wrapper w-full border-b border-gray-200 dark:border-gray-800 ${position} left-0 z-50 transition-all duration-300 ease-in-out font-dm-sans ${headerClass === "bg-color-none" ? "bg-color-none top-0" : ""} ${theme} ${scrolled ? "scroll-header shadow-xs" : `${bgColor}`
                 }`}
         >
             <div className="max-w-screen-xl mx-auto px-3  sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
@@ -69,8 +69,8 @@ const Header = ({
                             <Image
                                 src={logo}
                                 alt="logo"
-                                width={60}
-                                height={60}
+                                width={150}
+                                height={150}
                                 priority
                                 className='light-logo'
                             />
@@ -78,8 +78,8 @@ const Header = ({
                             <Image
                                 src={getDarkLogo(logo)}
                                 alt="logo dark"
-                                width={60}
-                                height={60}
+                                width={150}
+                                height={150}
                                 priority
                                 className='dark-logo'
                             />
