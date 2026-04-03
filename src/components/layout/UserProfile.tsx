@@ -5,7 +5,9 @@ import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { User, ChevronDown, LogOut, Settings, ShoppingBag } from 'react-feather';
 
-export default function UserProfile() {
+type UserProfileProps = { variant?: 'default' | 'headerMobile' };
+
+export default function UserProfile({ variant = 'default' }: UserProfileProps) {
     const { data: session } = useSession();
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
@@ -31,19 +33,29 @@ export default function UserProfile() {
         return null;
     }
 
+    const compact = variant === 'headerMobile';
+
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative shrink-0" ref={dropdownRef}>
             <button
+                type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className={
+                    compact
+                        ? 'flex items-center gap-1 rounded-lg px-1.5 py-1.5 sm:gap-2 sm:px-3 sm:py-2 hover:bg-gray-100 transition-colors'
+                        : 'flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors'
+                }
             >
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600">
                     <User size={16} className="text-white" />
                 </div>
                 <span className="hidden md:block text-sm font-medium text-gray-700">
                     {session.user.name?.split(' ')[0] || 'User'}
                 </span>
-                <ChevronDown size={14} className={`text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                    size={14}
+                    className={`shrink-0 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''} ${compact ? 'hidden sm:block' : ''}`}
+                />
             </button>
 
             {isOpen && (

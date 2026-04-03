@@ -28,7 +28,7 @@ interface DynamicFooterData {
     twitter_url: string;
 }
 
-export default function Footer({ logo = "/images/logo/Icon Logo (2000x2000)-white.png" }: FooterProps) {
+export default function Footer({ logo = "/images/logo/Combined Logo (2000x400)-white.png" }: FooterProps) {
     const [footerData, setFooterData] = useState<DynamicFooterData | null>(null);
 
     useEffect(() => {

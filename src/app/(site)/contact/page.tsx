@@ -64,12 +64,12 @@ export default function ContactPage() {
                     <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-6 space-y-5 lg:space-y-0">
                         {/* Left Side */}
                         <div className="w-full lg:pr-16">
-                            <div className="flex">
+                            {/* <div className="flex">
                                 <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-900 bg-white flex items-center gap-2">
                                     <Zap size={18} className="text-blue-900" />
                                     {sectionData?.tag_line || "Our customer feedback"}
                                 </div>
-                            </div>
+                            </div> */}
 
                             {(() => {
                                 const title = sectionData?.parent_title || "Get in touch, let us know how we help";

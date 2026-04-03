@@ -30,11 +30,11 @@ export default function HomePage() {
             <section id="services">
                 <WhyChooseUs />
             </section>
+            <CategorySection />
 
             <GoogleReviewSection />
 
             {/* dynamic category section */}
-            <CategorySection />
 
             {/* FAQ section */}
             <FaqSection />
@@ -45,7 +45,7 @@ export default function HomePage() {
             </section>
 
             {/* dynamic blog section */}
-            <BlogSection />
+            {/* <BlogSection /> */}
 
             {/* footer */}
             <Footer />

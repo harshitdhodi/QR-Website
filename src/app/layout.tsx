@@ -5,6 +5,7 @@ import AOSWrapper from "@/components/layout/AOSWrapper";
 import SessionProviderWrapper from '@/components/providers/SessionProviderWrapper';
 
 import { CartProvider } from '@/components/providers/CartProvider';
+import ForceLightTheme from '@/components/layout/ForceLightTheme';
 
 // Define a secondary font for headings
 const sora = Sora({
@@ -25,8 +26,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sora.variable} ${dmSans.variable}`}>
-      <body>
+    <html lang="en" className={`${sora.variable} ${dmSans.variable} overflow-x-hidden`}>
+      <body className="overflow-x-hidden bg-white text-gray-900">
+        <ForceLightTheme />
         <SessionProviderWrapper>
           <CartProvider>
             <AOSWrapper />

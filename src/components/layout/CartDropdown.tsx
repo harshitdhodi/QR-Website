@@ -13,9 +13,13 @@ export default function CartDropdown() {
     const toggleDropdown = () => setIsOpen(!isOpen);
 
     return (
-        <div className="relative">
-            <button onClick={toggleDropdown} className="relative p-2 text-gray-700 hover:text-blue-600">
-                <ShoppingCart size={24} />
+        <div className="relative shrink-0">
+            <button
+                type="button"
+                onClick={toggleDropdown}
+                className="relative p-1.5 text-gray-700 hover:text-blue-600 sm:p-2"
+            >
+                <ShoppingCart size={22} />
                 {cart.length > 0 && (
                     <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                         {cart.length}
