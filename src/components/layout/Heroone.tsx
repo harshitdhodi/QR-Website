@@ -97,8 +97,8 @@ export default function HeroOne() {
 
   if (loading) {
     return (
-      <div className="banner-wrap lg:pb-24 pb-12 font-dm bg-home-one-gradient-banner relative pt-24">
-        <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
+      <div className="banner-wrap pb-12 font-dm bg-home-one-gradient-banner relative overflow-x-hidden pt-36 lg:pb-24 lg:pt-24">
+        <div className="mx-auto max-w-screen-xl min-w-0 px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
           <div className="flex items-center justify-center h-96">
             <div className="text-gray-600">Loading...</div>
           </div>
@@ -113,13 +113,19 @@ export default function HeroOne() {
   }
 
   return (
-    <div className="banner-wrap lg:pb-24 pb-12 font-dm bg-home-one-gradient-banner relative pt-24">
-      <Image src={shap} alt="shape" className="object-cover absolute top-0 left-0 object-center opacity-20" />
-      <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-10 lg:pt-10 relative z-10">
+    <div className="banner-wrap pb-12 font-dm bg-home-one-gradient-banner relative overflow-x-hidden pt-36 lg:pb-24 lg:pt-24">
+      <Image
+        src={shap}
+        alt=""
+        width={800}
+        height={600}
+        className="pointer-events-none absolute top-0 left-1/2 max-h-[min(80vw,28rem)] w-auto max-w-[100vw] -translate-x-1/2 object-cover object-center opacity-20"
+      />
+      <div className="mx-auto max-w-screen-xl min-w-0 px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
+        <div className="relative z-10 grid min-w-0 grid-cols-1 gap-10 lg:grid-cols-2 lg:pt-10">
           {/* left side */}
-          <div className="w-full items-center flex h-full xl:pr-8">
-            <div className="flex flex-col">
+          <div className="flex h-full w-full min-w-0 items-center xl:pr-8">
+            <div className="flex min-w-0 flex-col">
               {/* Badge */}
               <div>
                 <span className="inline-block py-2 px-3 rounded-full border border-brand-secondary bg-white text-sm text-brand-primary font-medium aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
@@ -129,7 +135,7 @@ export default function HeroOne() {
 
               {/* Heading */}
               <h1
-                className="text-gray-900 font-semibold xl:text-[80px] lg:text-6xl text-5xl mt-2 mb-3 tracking-tighter aos-init aos-animate"
+                className="break-words text-balance text-gray-900 font-semibold text-4xl sm:text-5xl lg:text-6xl xl:text-[80px] mt-2 mb-3 tracking-tighter aos-init aos-animate [overflow-wrap:anywhere]"
                 data-aos="fade-up"
                 data-aos-duration="400"
                 dangerouslySetInnerHTML={{ __html: content.title || fallbackContent.title }}
@@ -174,8 +180,8 @@ export default function HeroOne() {
           </div>
 
           {/* right side */}
-          <div className="w-full">
-            <div className="relative rounded-xl lg:overflow-visible overflow-hidden aos-init aos-animate" data-aos="fade-up" data-aos-duration="600">
+          <div className="w-full min-w-0">
+            <div className="relative min-w-0 overflow-hidden rounded-xl lg:overflow-visible aos-init aos-animate" data-aos="fade-up" data-aos-duration="600">
               {/* Main Image */}
               <Image
                 src={resolveImageUrl(content.main_image_url, img)}
@@ -189,14 +195,14 @@ export default function HeroOne() {
               />
 
               {/* Floating Icon */}
-              <div className="absolute top-16 left-0 -translate-x-1/2 hidden lg:flex">
+              {/* <div className="absolute top-16 left-0 -translate-x-1/2 hidden lg:flex">
                 <div className="w-16 h-16 rounded-xl bg-lime-300 flex items-center justify-center text-center">
                   <Boxes size={34} strokeWidth="1.5" />
                 </div>
-              </div>
+              </div> */}
 
               {/* Avatar Group */}
-              <div className="absolute top-4 -right-8 bg-white rounded-xl border border-gray-200 shadow-sm p-3 gap-4 mt-4 hidden lg:flex flex-row items-center aos-init aos-animate" data-aos="fade-up" data-aos-duration="400" data-delay="400">
+              {/* <div className="absolute top-4 -right-8 bg-white rounded-xl border border-gray-200 shadow-sm p-3 gap-4 mt-4 hidden lg:flex flex-row items-center aos-init aos-animate" data-aos="fade-up" data-aos-duration="400" data-delay="400">
                 <div className="flex -space-x-4">
                   <Image
                     src={resolveImageUrl(content.avatar1_url, a1)}
@@ -229,7 +235,7 @@ export default function HeroOne() {
                     {content.stats_subtext || fallbackContent.stats_subtext}
                   </span>
                 </div>
-              </div>
+              </div> */}
 
               {/* topslider */}
               <TopCarousel

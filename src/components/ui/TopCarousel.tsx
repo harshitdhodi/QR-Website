@@ -64,13 +64,13 @@ export default function TopCarousel({
         };
     }, [height, interval]);
 
-    return (
-        <div className="absolute bottom-0 left-0 z-10 m-5 flex flex-col w-full">
-            <div
-                id="vertical-carousel"
-                ref={splideRef}
-                className="splide overflow-hidden vertical-slider slider-no-dots"
-            >
+  return (
+    <div className="absolute inset-x-4 bottom-4 z-10 flex min-w-0 flex-col max-w-full">
+      <div
+        id="vertical-carousel"
+        ref={splideRef}
+        className="splide overflow-hidden vertical-slider slider-no-dots w-full min-w-0 max-w-full"
+      >
                 <div className="splide__track">
                     <ul className="splide__list">
                         {items.map((item, idx) => (

@@ -114,7 +114,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                 </p>
 
                                 {/* Size */}
-                                {product.size && product.size.length > 0 && (
+                                {/* {product.size && product.size.length > 0 && (
                                     <div className="mt-6">
                                         <span className="font-semibold text-gray-800 text-base mb-3 inline-block">
                                             Size
@@ -140,7 +140,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                             ))}
                                         </ul>
                                     </div>
-                                )}
+                                )} */}
 
                                 {/* Color */}
                                 {product.colors && product.colors.length > 0 && (
