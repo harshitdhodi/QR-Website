@@ -26,13 +26,14 @@ export default function HomePage() {
                     <WhyChooseUs2 />
                 </section>
 
+                <section>
+                    <CategorySection />
+                </section>
+
                 <section id="services">
                     <WhyChooseUs />
                 </section>
 
-                <section>
-                    <CategorySection />
-                </section>
 
                 <section>
                     <GoogleReviewSection />
