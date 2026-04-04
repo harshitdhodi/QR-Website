@@ -1,0 +1,51 @@
+{
+  "slides": [
+    {
+      "id": "vs-1",
+      "icon": "Command",
+      "iconBg": "bg-white",
+      "title": "Reliability",
+      "value": "99.9%",
+      "subtitle": "Target uptime",
+      "image": "/images/banner-6a.svg"
+    },
+    {
+      "id": "vs-2",
+      "icon": "Compass",
+      "iconBg": "bg-white",
+      "title": "Coverage",
+      "value": "Global",
+      "subtitle": "Edge-ready",
+      "image": "/images/banner-bg-10.svg"
+    },
+    {
+      "id": "vs-3",
+      "icon": "HardDrive",
+      "iconBg": "bg-white",
+      "title": "Storage",
+      "value": "Secure",
+      "subtitle": "Encrypted at rest",
+      "image": "/images/banner-bg-9.svg"
+    }
+  ],
+  "thumbnails": [
+    {
+      "id": "th-1",
+      "number": "1",
+      "title": "Performance",
+      "description": "Built for scale with sensible defaults."
+    },
+    {
+      "id": "th-2",
+      "number": "2",
+      "title": "Reach",
+      "description": "Works wherever your customers are."
+    },
+    {
+      "id": "th-3",
+      "number": "3",
+      "title": "Trust",
+      "description": "Security practices you can stand behind."
+    }
+  ]
+}

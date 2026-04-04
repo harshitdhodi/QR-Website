@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "image": "/images/feedback-member-1.svg",
+    "avatar": "/images/member-1.svg",
+    "name": "Rahul S.",
+    "position": "Product designer",
+    "text": "Outstanding experience from onboarding to daily use.",
+    "rating": 5
+  },
+  {
+    "id": "2",
+    "image": "/images/feedback-member-1.svg",
+    "avatar": "/images/member-2.svg",
+    "name": "Neha V.",
+    "position": "Founder",
+    "text": "Support was fast and the product is exactly what we needed.",
+    "rating": 4.5
+  },
+  {
+    "id": "3",
+    "image": "/images/feedback-member-1.svg",
+    "avatar": "/images/member.svg",
+    "name": "Aman P.",
+    "position": "Ops lead",
+    "text": "Clean UI and reliable notifications every time.",
+    "rating": 5
+  }
+]
