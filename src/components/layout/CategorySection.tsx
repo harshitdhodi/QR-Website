@@ -88,7 +88,7 @@ export default function CategorySection() {
 
     if (loading) {
         return (
-            <div className="counter-wrap font-dm bg-home-one-gradient-banner relative py-12">
+            <div className="counter-wrap relative bg-home-one-gradient-banner py-10 font-dm">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-4">
                     <div className="text-center">Loading categories...</div>
                 </div>
@@ -97,7 +97,7 @@ export default function CategorySection() {
     }
 
     return (
-        <div id="features" className="counter-wrap font-dm bg-home-one-gradient-banner relative py-12 lg:py-16">
+        <div id="features" className="counter-wrap relative bg-home-one-gradient-banner py-10 font-dm lg:py-14">
             <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-4">
                 <PageTitle3
                     badgeText=""
@@ -105,7 +105,7 @@ export default function CategorySection() {
                     subtitle="Select a category to find the perfect QR solution for your needs."
                     widthClass="xl:w-7/12 lg:w-2/3 mx-auto"
                     alignment="center"
-                    padding="pb-10"
+                    padding="pb-6"
                     textColor=""
                 />
 

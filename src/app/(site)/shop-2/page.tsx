@@ -1,7 +1,8 @@
 "use client";
 
-import { products } from "@/const/productData";
-import { useState } from "react";
+import type { Product } from "@/const/productData";
+import { fetchProductsEnriched } from "@/lib/fetchProductsClient";
+import { useState, useEffect } from "react";
 import { ArrowUpRight  } from "react-feather";
 import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -9,14 +10,19 @@ import ProductCard from "@/components/ui/ProductCard";
 import Image from "next/image";
 
 export default function ShopPage() {
-    // Extract unique filter options dynamically
-    const categories = Array.from(
-        new Set(products.flatMap((p) => p.categories))
-    );
+    const [products, setProducts] = useState<Product[]>([]);
+    const [selected, setSelected] = useState("");
+
+    useEffect(() => {
+        fetchProductsEnriched()
+            .then(setProducts)
+            .catch((e) => console.error("Shop products:", e));
+    }, []);
+
+    const categories = Array.from(new Set(products.flatMap((p) => p.categories)));
     const sizes = Array.from(new Set(products.flatMap((p) => p.size)));
     const availability = Array.from(new Set(products.map((p) => p.availability)));
     const colors = Array.from(new Set(products.flatMap((p) => p.colors)));
-    const [selected, setSelected] = useState("");
 
     return (
         <>

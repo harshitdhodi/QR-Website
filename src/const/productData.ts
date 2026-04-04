@@ -1,23 +1,22 @@
-import productsJson from "@/data/products.json";
-
 export interface Product {
     id: number;
     title: string;
     subtitle: string;
-    price: number;
-    oldPrice?: number;
+    /** API may return decimal strings (e.g. `"299.00"`). */
+    price: number | string;
+    oldPrice?: number | string;
     discount?: string;
     badge?: string;
     imgOne: string;
     imgTwo: string;
     categories: string[];
+    /** Resolved from category UUIDs when using `fetchProductsEnriched`. */
+    categoryNames?: string[];
     size: string[];
     availability: "In Stock" | "Out of Stock";
-    colors: string[]; // tailwind bg-color classes
-    review?: number; // e.g., 4.5
+    colors: string[];
+    review?: number | string;
     shortDesc?: string;
+    longDesc?: string;
     slug?: string;
 }
-
-
-export const products = productsJson as Product[];

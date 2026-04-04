@@ -1,13 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
-import { products, Product } from "@/const/productData";
+import type { Product } from "@/const/productData";
+import { fetchProductsEnriched } from "@/lib/fetchProductsClient";
 import ProductCard from "@/components/ui/ProductCard";
 
 export default function RelatedProducts() {
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        fetchProductsEnriched()
+            .then(setProducts)
+            .catch((e) => console.error("Related products:", e));
+    }, []);
+
     return (
-        <div className="splide slider-no-dots slider-arrows-white four-slider" id="related-product">
+    <div className="splide slider-no-dots slider-arrows-white four-slider" id="related-product">
             <Splide
                 options={{
                     perPage: 4,

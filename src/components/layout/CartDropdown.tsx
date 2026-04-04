@@ -17,7 +17,7 @@ export default function CartDropdown() {
             <button
                 type="button"
                 onClick={toggleDropdown}
-                className="relative p-1.5 text-gray-700 hover:text-blue-600 sm:p-2"
+                className="tap-target relative inline-flex items-center justify-center rounded-lg p-2.5 text-gray-700 transition hover:bg-gray-100 hover:text-blue-600 active:scale-95"
             >
                 <ShoppingCart size={22} />
                 {cart.length > 0 && (

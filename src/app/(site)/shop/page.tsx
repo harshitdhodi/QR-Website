@@ -6,6 +6,7 @@ import PageTitle from "@/components/ui/PageTitle";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import ProductCard from "@/components/ui/ProductCard";
 import { Product as BaseProduct } from "@/const/productData";
+import { fetchProductsEnriched } from "@/lib/fetchProductsClient";
 
 interface Product extends BaseProduct {
     categoryNames?: string[];
@@ -26,8 +27,7 @@ function ShopContent() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await fetch("/api/products");
-                const data = await res.json();
+                const data = await fetchProductsEnriched();
                 setProducts(data);
 
                 const uniqueCategories = Array.from(
@@ -110,7 +110,7 @@ function ShopContent() {
 
     return (
         <>
-            <div className="pt-24 pb-12 max-w-screen mx-auto font-dm">
+            <div className=" max-w-screen mx-auto font-dm">
                 {/* Page Title */}
                 <PageTitle title="Shop" subtitle="">
                     {/* Breadcrumb */}
@@ -119,7 +119,7 @@ function ShopContent() {
                     </div>
                 </PageTitle>
             </div>
-            <div className="shop-wrap font-dm lg:pt-12 pt-8">
+            <div className="shop-wrap font-dm pt-6 lg:pt-8">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:pb-24 pb-12">
                     <div className="grid lg:grid-cols-4 grid-cols-1 lg:gap-8 gap-6 relative">
                         {/* Filters */}

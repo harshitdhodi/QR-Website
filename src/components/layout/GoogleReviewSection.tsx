@@ -82,9 +82,9 @@ export default function GoogleReviewSection() {
     }, [displayReviews]);
 
     return (
-        <section className="lg:py-24 py-12 bg-white dark:bg-gray-900">
-            <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
-                <div className="flex flex-col items-center text-center mb-12">
+        <section className="bg-white py-12 dark:bg-gray-900 lg:py-16">
+            <div className="mx-auto max-w-screen-xl px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
+                <div className="mb-10 flex flex-col items-center text-center">
                     <span className="inline-flex items-center gap-2 rounded-full border border-brand-secondary px-4 py-2 text-sm font-medium text-brand-primary bg-white dark:bg-gray-800">
                         <Star size={14} fill="currentColor" />
                         Google Reviews
@@ -113,10 +113,7 @@ export default function GoogleReviewSection() {
                     {(loading ? fallbackReviews : displayReviews).map((item, index) => (
                         <div
                             key={`${item.name}-${index}`}
-                            className="rounded-xl border border-gray-200 dark:border-gray-700 p-6 bg-gray-50 dark:bg-gray-800"
-                            data-aos="fade-up"
-                            data-aos-duration="300"
-                            data-aos-delay={index * 100}
+                            className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800"
                         >
                             <div className="flex items-center gap-1 text-brand-primary mb-3">
                                 {Array.from({ length: item.rating }).map((_, starIndex) => (
@@ -129,7 +126,7 @@ export default function GoogleReviewSection() {
                     ))}
                 </div>
 
-                <div className="mt-10 flex justify-center">
+                <div className="mt-12 flex justify-center">
                     <Button
                         href="/contact"
                         label="Share your review"

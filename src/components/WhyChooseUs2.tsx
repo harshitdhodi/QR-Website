@@ -114,9 +114,9 @@ export default function WhyChooseUs2() {
 
   if (loading) {
     return (
-      <section id="how_it_work" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-home-one-gradient-banner text-gray-800">
+      <section id="how_it_work" className="bg-home-one-gradient-banner px-4 py-12 text-gray-800 sm:px-6 md:py-16 lg:px-8">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 md:mb-16">
+          <div className="text-center mb-8 md:mb-10">
             <div className="text-gray-600">Loading...</div>
           </div>
         </div>
@@ -138,16 +138,16 @@ export default function WhyChooseUs2() {
   const firstPart = words.join(' ');
 
   return (
-    <section id="how_it_work" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-home-one-gradient-banner text-gray-800">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12 md:mb-16" data-aos="fade-up" data-aos-duration="300">
+      <section id="how_it_work" className="bg-home-one-gradient-banner px-4 py-12 text-gray-800 sm:px-6 md:py-16 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-8 md:mb-10" data-aos="fade-up" data-aos-duration="300">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-4">
             {firstPart} <span className="text-brand-primary">{lastWord}</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">{subtitle}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-5">
           {displayData.map((step, index) => (
             <div
               key={step.id}

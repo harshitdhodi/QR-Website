@@ -1,22 +1,23 @@
 // app/layout.tsx
 import './globals.css';
-import { Sora, DM_Sans } from 'next/font/google';
+import { Inter, Sora } from 'next/font/google';
 import AOSWrapper from "@/components/layout/AOSWrapper";
 import SessionProviderWrapper from '@/components/providers/SessionProviderWrapper';
 
 import { CartProvider } from '@/components/providers/CartProvider';
 import ForceLightTheme from '@/components/layout/ForceLightTheme';
 
-// Define a secondary font for headings
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+/** Display font for marketing headings (pairs with Inter body). */
 const sora = Sora({
   subsets: ['latin'],
   variable: '--font-sora',
-});
-
-// Define a font for your primary body text
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
+  display: 'swap',
 });
 
 export const metadata = {
@@ -26,8 +27,8 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sora.variable} ${dmSans.variable} overflow-x-hidden`}>
-      <body className="overflow-x-hidden bg-white text-gray-900">
+    <html lang="en" className={`${inter.variable} ${sora.variable} overflow-x-hidden`}>
+      <body className="overflow-x-hidden bg-white text-gray-900 font-sans antialiased selection:bg-brand-primary/15 selection:text-gray-900">
         <ForceLightTheme />
         <SessionProviderWrapper>
           <CartProvider>

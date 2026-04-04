@@ -255,10 +255,20 @@
 
 /* Light mode variables (default) */
 :root {
-    --background: #fff;
-    --foreground: #0a0a0a;
-    --color-primary: #486dae;
-    --color-secondary: #86b4e1;
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --color-primary: #2563eb;
+    --color-secondary: #0ea5e9;
+    --section-y: clamp(1.25rem, 2.5vw, 2rem);
+    --radius-card: 1rem;
+    --shadow-card: 0 4px 6px -1px rgb(15 23 42 / 0.06), 0 2px 4px -2px rgb(15 23 42 / 0.05);
+    --shadow-card-hover: 0 16px 24px -8px rgb(37 99 235 / 0.12), 0 8px 12px -6px rgb(15 23 42 / 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --motion-duration: 0.01ms;
+    }
 }
 
 /* Dark mode variables (override when .dark class is present) */
@@ -271,20 +281,56 @@ body.dark {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --shadow-xs: 0 4px 80px rgba(0, 0, 0, 0.1);
-    --font-sora: var(--font-sora) var(--font-fallback-sans);
-    --font-dm-sans: var(--font-dm-sans) var(--font-fallback-sans);
+    --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.07), 0 2px 4px -2px rgb(15 23 42 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.05);
+    --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    --font-sora: var(--font-sora), ui-sans-serif, sans-serif;
+    /* Legacy class name used across templates → Inter */
+    --font-dm-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
     --font-merri: "Merri";
 
 }
 @layer base {
-    /* Set the default font globally */
     html {
-        font-family: var(--font-dm-sans);
+        font-family: var(--font-sans);
+        scroll-behavior: smooth;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
     }
     body {
         background: var(--background);
         color: var(--foreground);
     }
+    h1, h2, h3, h4 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes shimmer {
+    100% { transform: translateX(100%); }
 }
 
 
@@ -394,7 +440,7 @@ body.dark {
     }
     .from-brand-primary {
         --tw-gradient-from: var(--color-primary) var(--tw-gradient-from-position) !important;
-        --tw-gradient-to: rgb(72 109 174 / 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-to: rgb(37 99 235 / 0) var(--tw-gradient-to-position) !important;
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
     }
     .to-brand-secondary {
@@ -409,7 +455,7 @@ body.dark {
         background-color: var(--color-primary) !important;
     }
     .bg-blue-50 {
-        background-color: #eef4fb !important;
+        background-color: #eff6ff !important;
     }
     .text-blue-900,
     .text-blue-800,
@@ -428,7 +474,7 @@ body.dark {
     .from-blue-700,
     .from-blue-600 {
         --tw-gradient-from: var(--color-primary) var(--tw-gradient-from-position) !important;
-        --tw-gradient-to: rgb(72 109 174 / 0) var(--tw-gradient-to-position) !important;
+        --tw-gradient-to: rgb(37 99 235 / 0) var(--tw-gradient-to-position) !important;
         --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
     }
     .to-blue-900,
@@ -439,12 +485,20 @@ body.dark {
     }
 
     .bg-home-one-gradient-banner {
-        background-image: url('/images/svg/dots.svg'),
-        linear-gradient(166deg, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, .4)),
-        linear-gradient(#f3f0ff, #f0f6ff);
+        background-color: #f8fafc;
+        background-image:
+            url('/images/svg/dots.svg'),
+            radial-gradient(ellipse 100% 70% at 50% -15%, rgba(37, 99, 235, 0.13), transparent 52%),
+            radial-gradient(ellipse 55% 45% at 100% 15%, rgba(14, 165, 233, 0.1), transparent 48%),
+            radial-gradient(ellipse 50% 40% at 0% 90%, rgba(99, 102, 241, 0.07), transparent 50%),
+            linear-gradient(165deg, #eff6ff 0%, #f8fafc 38%, #ffffff 72%, #f1f5f9 100%);
+        background-size: auto, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
     }
     .bg-gradient-blue-light {
-        background-image: radial-gradient(circle at 70% 30%, rgba(173, 216, 230, .8) 0, rgba(173, 216, 230, .4) 30%, transparent 60%), radial-gradient(circle at 30% 70%, rgba(100, 149, 237, .4) 0, transparent 60%), linear-gradient(135deg, #dff1ff, #b0d0ff 50%, #a6cfff);
+        background-image:
+            radial-gradient(circle at 75% 25%, rgba(14, 165, 233, 0.2) 0%, transparent 42%),
+            radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.12) 0%, transparent 45%),
+            linear-gradient(145deg, #e0f2fe 0%, #f0f9ff 45%, #dbeafe 100%);
     }
     @keyframes wordSlider {
         0%, 27% { transform: translateY(0%); }
@@ -466,7 +520,7 @@ body.dark {
     .bg-blue-gradient { background-image: linear-gradient(to bottom, #98fcff,#d7e0ff); }
 
     .bg-productcard-gradient {
-        background-image: linear-gradient(to bottom, #f1f1f1, #e2e2e2);
+        background-image: linear-gradient(165deg, #f8fafc 0%, #f1f5f9 100%);
     }
     .bg-home-one-feature {
         background-image: url('/images/home-9-hero.svg');
@@ -549,17 +603,14 @@ body.dark {
     }
 
     .bg-light-blue-banner {
-        background-image: radial-gradient(circle farthest-corner at 130% 110%, #fff 15%, rgba(255, 255, 255, 0) 37%),
-        linear-gradient(50deg, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, .8) 93%),
-        linear-gradient(100deg, #fff 12%, rgba(255, 255, 255, 0) 30%),
-        linear-gradient(0deg, #fff, rgba(255, 255, 255, 0) 85%),
-        radial-gradient(circle at -20% -40%, rgba(255, 255, 255, 0) 8%, rgba(173, 216, 224, .4) 33%, rgba(255, 255, 255, 0) 68%),
-        repeating-linear-gradient(210deg, rgba(255, 255, 255, 0), rgba(230, 247, 255, .3019607843) 18%, rgba(255, 255, 255, 0) 50%),
-        repeating-linear-gradient(195deg, rgba(255, 255, 255, 0) 55%, rgba(77, 166, 255, .3019607843) 66%, rgba(255, 255, 255, 0) 85%);
+        background-image:
+            radial-gradient(ellipse 80% 60% at 100% 0%, rgba(37, 99, 235, 0.07), transparent 50%),
+            radial-gradient(ellipse 70% 50% at 0% 100%, rgba(14, 165, 233, 0.08), transparent 52%),
+            linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
     }
     
     .scroll-header {
-        @apply bg-white shadow-xs fixed top-0;
+        @apply bg-white/95 shadow-md backdrop-blur-sm fixed top-0;
     }
     .scroll-header.bg-color-none {
         @apply bg-transparent shadow-none;
@@ -770,10 +821,38 @@ body.dark {
         @apply lg:border-transparent;
     }
     .btn-transition {
-        transition:all 0.4s ease !important;
+        transition: all 0.25s ease !important;
     }
-    
-    
-    
 
+    .animate-fade-in-up {
+        animation: fade-in-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .animate-fade-in {
+        animation: fade-in 0.45s ease-out both;
+    }
+    .site-section {
+        padding-block: var(--section-y);
+    }
+    .card-surface {
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        transition: box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .card-surface:hover {
+        box-shadow: var(--shadow-card-hover);
+    }
+    .interactive-press:active {
+        transform: scale(0.98);
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .animate-fade-in-up,
+        .animate-fade-in {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+        .card-surface {
+            transition: none;
+        }
+    }
 }

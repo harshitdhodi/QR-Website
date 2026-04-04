@@ -21,26 +21,29 @@ export default function HomePage() {
             <section id="home">
                 <HeroOne />
             </section>
-            {/* features (How it works) */}
-            <section id="features">
-                <WhyChooseUs2 />
-            </section>
+            <div className="flex flex-col gap-12 md:gap-16 lg:gap-[4.5rem]">
+                <section id="features">
+                    <WhyChooseUs2 />
+                </section>
 
-            {/* services (Why choose us) */}
-            <section id="services">
-                <WhyChooseUs />
-            </section>
-            <CategorySection />
+                <section id="services">
+                    <WhyChooseUs />
+                </section>
 
-            <GoogleReviewSection />
+                <section>
+                    <CategorySection />
+                </section>
 
-            {/* dynamic category section */}
+                <section>
+                    <GoogleReviewSection />
+                </section>
 
-            {/* FAQ section */}
-            <FaqSection />
+                <section>
+                    <FaqSection />
+                </section>
+            </div>
 
-            {/* cta wrap */}
-            <section id="contact">
+            <section id="contact" className="mt-10 md:mt-14">
                 <ContactPage />
             </section>
 

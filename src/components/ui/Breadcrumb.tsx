@@ -1,34 +1,31 @@
 import Link from "next/link";
-import { ChevronRight } from 'react-feather';
+import { ChevronRight } from "react-feather";
 
 interface BreadcrumbProps {
     items: { label: string; href?: string }[];
+    /** Kept for API compatibility; both use dark text on light backgrounds. */
     variant?: "default" | "light";
 }
 
-export const Breadcrumb = ({ items, variant = "default" }: BreadcrumbProps) => {
-    const textColor = variant === "light" ? "text-gray-200" : "text-gray-500";
-    const hoverColor = variant === "light" ? "hover:text-white" : "hover:text-gray-700";
-    const activeColor = variant === "light" ? "text-white" : "text-gray-700";
-
+export const Breadcrumb = ({ items, variant: _variant = "default" }: BreadcrumbProps) => {
     return (
-        <nav className={`text-sm font-medium ${textColor}`} aria-label="Breadcrumb">
-            <ol className="inline-flex items-center text-white space-x-1 md:space-x-3">
+        <nav className="text-sm font-medium text-gray-800" aria-label="Breadcrumb">
+            <ol className="inline-flex flex-wrap items-center justify-center gap-x-1 gap-y-1 md:space-x-1 md:gap-x-0">
                 {items.map((item, index) => (
-                    <li key={index} className="inline-flex items-center text-base text-white font-medium">
+                    <li key={index} className="inline-flex items-center text-base font-medium text-gray-900">
                         {item.href ? (
                             <Link
                                 href={item.href}
-                                className={`inline-flex items-center text-white ${hoverColor}`}
+                                className="inline-flex items-center text-gray-700 hover:text-gray-900"
                             >
                                 {item.label}
                             </Link>
                         ) : (
-                            <span className={`${activeColor} items-center flex text-white`}>{item.label}</span>
+                            <span className="text-gray-900">{item.label}</span>
                         )}
 
                         {index < items.length - 1 && (
-                            <ChevronRight size={20} className="ml-2" />
+                            <ChevronRight size={20} className="ml-2 shrink-0 text-gray-400" aria-hidden />
                         )}
                     </li>
                 ))}
