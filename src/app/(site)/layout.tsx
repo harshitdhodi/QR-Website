@@ -4,16 +4,15 @@ import Footer from '@/components/layout/Footer';
 
 
 export const metadata = {
-    title: 'Exsit Next',
-    description: 'Modern Next.js app with Tailwind + TypeScript + SCSS',
+    title: 'odokho',
+    description: 'your everyday solution ',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className='font-dm-sans'>
+        <div className="font-dm-sans">
             <Header />
-            {children}
-            {/* <CtaSection /> */}
+            <main className="min-h-[40vh] w-full overflow-x-hidden">{children}</main>
             <Footer />
         </div>
     );

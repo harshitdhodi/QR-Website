@@ -9,6 +9,12 @@ import Image from "next/image";
 import { useCart } from "@/components/providers/CartProvider";
 import { useRouter } from "next/navigation";
 
+function formatInr(value: number | string | undefined) {
+    const n = Number(value);
+    if (Number.isNaN(n)) return String(value ?? "");
+    return n.toLocaleString("en-IN");
+}
+
 interface ProductCardProps {
     product: Product;
     variant?: "compact" | "extended";
@@ -38,7 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
     if (variant === "extended") {
         return (
             <div
-                className="flex sm:flex-row flex-col md:space-x-7 md:gap-0 gap-3 cursor-pointer transition-all duration-300 hover:bg-gray-50 p-3 -m-3 rounded-xl"
+                className="card-surface group flex cursor-pointer flex-col gap-3 rounded-2xl border border-gray-100/90 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-50/80 sm:flex-row md:gap-0 md:space-x-7"
                 onClick={handleCardClick}
             >
                 {/* product image */}
@@ -77,10 +83,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                     </span>
                     <p className="text-sm font-medium text-gray-500 mt-[2px] mb-2">{product.subtitle}</p>
                     <p className="text-lg font-semibold text-gray-800 pt-1">
-                        ₹{product.price.toLocaleString()}
-                        {product.oldPrice && (
+                        ₹{formatInr(product.price)}
+                        {product.oldPrice != null && product.oldPrice !== "" && (
                             <span className="line-through text-sm text-gray-500 font-medium ml-2">
-                                ₹{product.oldPrice.toLocaleString()}
+                                ₹{formatInr(product.oldPrice)}
                             </span>
                         )}
                     </p>
@@ -128,7 +134,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
     // --- Compact layout (default) ---
     return (
         <div
-            className="group flex flex-col gap-2 cursor-pointer transition-all duration-300 hover:-translate-y-1 rounded-xl border border-gray-200 bg-white p-3 shadow-sm hover:shadow-md"
+            className="card-surface group flex cursor-pointer flex-col gap-2 rounded-2xl border border-gray-100/90 bg-white p-3 transition-all duration-300 ease-out hover:-translate-y-1"
             onClick={handleCardClick}
         >
             {/* product image */}
@@ -172,10 +178,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                 </span>
                 <p className="text-sm font-medium text-gray-500 mt-[2px] mb-2 line-clamp-1">{product.subtitle}</p>
                 <p className="text-lg font-semibold text-gray-800 pt-1">
-                    ₹{product.price.toLocaleString()}
-                    {product.oldPrice && (
+                    ₹{formatInr(product.price)}
+                    {product.oldPrice != null && product.oldPrice !== "" && (
                         <span className="line-through text-sm text-gray-500 font-medium ml-2">
-                            ₹{product.oldPrice.toLocaleString()}
+                            ₹{formatInr(product.oldPrice)}
                         </span>
                     )}
                 </p>

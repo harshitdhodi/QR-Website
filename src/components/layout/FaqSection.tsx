@@ -77,7 +77,7 @@ const FaqSection = () => {
 
     if (loading) {
         return (
-            <div className="faq-wrap font-dm bg-home-one-gradient-banner lg:py-20 py-16">
+            <div className="faq-wrap bg-home-one-gradient-banner py-12 font-dm lg:py-16">
                 <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 text-center">
                     Loading FAQs...
                 </div>
@@ -86,9 +86,9 @@ const FaqSection = () => {
     }
 
     return (
-        <div className="faq-wrap font-dm bg-home-one-gradient-banner lg:py-20 py-16">
+        <div className="faq-wrap bg-home-one-gradient-banner py-12 font-dm lg:py-16">
             <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
-                <div className="grid lg:grid-cols-12 xl:gap-24 gap-8">
+                <div className="grid gap-8 lg:grid-cols-12 xl:gap-16">
                     {/* Left Side */}
                     <div className="xl:col-span-6 col-span-12 lg:col-span-6 flex flex-col">
                         <PageTitle3
@@ -98,7 +98,7 @@ const FaqSection = () => {
                             subtitle={sectionData?.parent_subtitle || "Whether you're building a startup landing page, a dashboard interface, or a modern web app gives you full control."}
                             widthClass="xl:w-10/12 lg:w-2/3 w-full"
                             alignment="start"
-                            padding="pb-16"
+                            padding="pb-8"
                         />
                     </div>
 

@@ -4,6 +4,7 @@ import { Boxes } from "lucide-react";
 import Button from "../ui/Button";
 import Image, { StaticImageData } from "next/image";
 import TopCarousel from "../ui/TopCarousel";
+import { Skeleton } from "../ui/Skeleton";
 import img from "../../../public/images/right-banner-bg.webp";
 import a1 from "../../../public/images/avater-11.webp";
 import a2 from "../../../public/images/avater-12.webp";
@@ -97,10 +98,20 @@ export default function HeroOne() {
 
   if (loading) {
     return (
-      <div className="banner-wrap pb-12 font-dm bg-home-one-gradient-banner relative overflow-x-hidden pt-36 lg:pb-24 lg:pt-24">
-        <div className="mx-auto max-w-screen-xl min-w-0 px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
-          <div className="flex items-center justify-center h-96">
-            <div className="text-gray-600">Loading...</div>
+      <div className="banner-wrap relative overflow-x-hidden bg-home-one-gradient-banner pb-10 pt-28 font-dm lg:pb-16 lg:pt-20">
+        <div className="mx-auto max-w-screen-xl min-w-0 px-3 pb-0 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
+          <div className="grid min-h-[20rem] grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10">
+            <div className="flex flex-col justify-center gap-4 pt-2">
+              <Skeleton className="h-8 w-40 rounded-full" rounded="full" />
+              <Skeleton className="h-14 w-full max-w-xl" rounded="lg" />
+              <Skeleton className="h-14 w-full max-w-lg" rounded="lg" />
+              <Skeleton className="h-6 w-full max-w-md" rounded="md" />
+              <div className="flex flex-wrap gap-3 pt-4">
+                <Skeleton className="h-12 w-36" rounded="lg" />
+                <Skeleton className="h-12 w-36" rounded="lg" />
+              </div>
+            </div>
+            <Skeleton className="min-h-[280px] w-full self-center rounded-2xl lg:min-h-[340px]" rounded="lg" />
           </div>
         </div>
       </div>
@@ -113,7 +124,7 @@ export default function HeroOne() {
   }
 
   return (
-    <div className="banner-wrap pb-12 font-dm bg-home-one-gradient-banner relative overflow-x-hidden pt-36 lg:pb-24 lg:pt-24">
+    <div className="banner-wrap relative overflow-x-hidden bg-home-one-gradient-banner pb-10 pt-28 font-dm lg:pb-16 lg:pt-20">
       <Image
         src={shap}
         alt=""
@@ -122,15 +133,15 @@ export default function HeroOne() {
         className="pointer-events-none absolute top-0 left-1/2 max-h-[min(80vw,28rem)] w-auto max-w-[100vw] -translate-x-1/2 object-cover object-center opacity-20"
       />
       <div className="mx-auto max-w-screen-xl min-w-0 px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0">
-        <div className="relative z-10 grid min-w-0 grid-cols-1 gap-10 lg:grid-cols-2 lg:pt-10">
+        <div className="relative z-10 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10 lg:pt-6">
           {/* left side */}
           <div className="flex h-full w-full min-w-0 items-center xl:pr-8">
             <div className="flex min-w-0 flex-col">
               {/* Badge */}
               <div>
-                <span className="inline-block py-2 px-3 rounded-full border border-brand-secondary bg-white text-sm text-brand-primary font-medium aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
+                {/* <span className="inline-block py-2 px-3 rounded-full border border-brand-secondary bg-white text-sm text-brand-primary font-medium aos-init aos-animate" data-aos="fade-up" data-aos-duration="200">
                   {content.badge}
-                </span>
+                </span> */}
               </div>
 
               {/* Heading */}
@@ -144,14 +155,15 @@ export default function HeroOne() {
                 {content.subtitle}
               </p>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-8 pb-3">
+              {/* CTA Buttons — mobile: full-width pills, label + icon grouped; desktop: inline */}
+              <div className="flex w-full flex-col gap-4 pt-6 pb-2 sm:flex-row sm:items-center sm:gap-4 md:gap-5">
                 <Button
                   href={content.secondary_button_href || fallbackContent.secondary_button_href}
                   label={content.secondary_button_text || fallbackContent.secondary_button_text}
                   bgColor="bg-brand-primary"
                   textColor="text-white"
-                  padding="py-4 px-6"
+                  padding="py-3.5 px-5 sm:py-4 sm:px-6"
+                  className="w-full !rounded-full text-center text-[15px] font-semibold tracking-tight shadow-md sm:w-auto sm:!rounded-xl sm:text-base"
                 />
                 <Button
                   href={content.primary_button_href?.startsWith('/')
@@ -161,7 +173,8 @@ export default function HeroOne() {
                   label={content.primary_button_text || fallbackContent.primary_button_text}
                   bgColor="bg-brand-secondary"
                   textColor="text-white"
-                  padding="py-4 px-6"
+                  padding="py-3.5 px-5 sm:py-4 sm:px-6"
+                  className="w-full !rounded-full text-center text-[15px] font-semibold tracking-tight shadow-md sm:w-auto sm:!rounded-xl sm:text-base"
                 />
               </div>
 

@@ -93,14 +93,14 @@ const Header = ({
                                     <UserProfile variant="headerMobile" />
                                 ) : (
                                     <>
-                                        <Button href='/register' label='Register' icon="" className="hidden min-[400px]:inline-flex text-xs sm:text-sm register-btn px-2 sm:px-3 py-1.5" bgColor={` ${btnColor} `} textColor={` ${btnlinkColor} `} />
+                                        <Button href='/register' label='Register' icon="" className="hidden min-[400px]:inline-flex text-xs sm:text-sm register-btn px-2 sm:px-3 py-1.5" bgColor={btnColor} textColor={btnlinkColor} />
                                         <Button href='/login' label='Login' icon="" className="text-xs sm:text-sm register-btn px-2.5 sm:px-3 py-1.5" bgColor="transparent" textColor="text-gray-700 border border-gray-300" />
                                     </>
                                 )}
                                 <button
                                     type="button"
                                     aria-label="menu"
-                                    className="-mr-0.5 flex shrink-0 items-center p-1.5 sm:p-1"
+                                    className="tap-target -mr-0.5 flex shrink-0 items-center justify-center rounded-lg p-2.5 text-gray-800 transition hover:bg-gray-100 active:scale-95 sm:p-2"
                                     onClick={toggleMobileMenu}
                                 >
                                     {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -131,7 +131,7 @@ const Header = ({
                                 <UserProfile />
                             ) : (
                                 <>
-                                    <Button href='/register' label='Register' icon="" className="text-sm register-btn" bgColor={` ${btnColor} `} textColor={` ${btnlinkColor} `} />
+                                    <Button href='/register' label='Register' icon="" className="text-sm register-btn" bgColor={btnColor} textColor={btnlinkColor} />
                                     <Button href='/login' label='Login' icon="" className="text-sm register-btn" bgColor="transparent" textColor="text-gray-700 border border-gray-300" />
                                 </>
                             )}

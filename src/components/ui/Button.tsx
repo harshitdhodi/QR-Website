@@ -32,6 +32,7 @@ const HOVER_MAP: Record<string, string> = {
     "bg-teal-800": "hover:bg-teal-700",
     "bg-green-800": "hover:bg-green-700",
     "bg-red-600": "hover:bg-red-700",
+    transparent: "hover:bg-gray-50",
 };
 
 const Button: FC<ButtonProps> = ({
@@ -45,15 +46,26 @@ const Button: FC<ButtonProps> = ({
     className = "",
     onClick,
 }) => {
-    const safeHoverClass = hoverBgColor || HOVER_MAP[bgColor] || "hover:opacity-90";
-    const baseClasses = `inline-flex justify-between items-center group gap-2 ${padding} ${textColor} text-base font-medium rounded-lg ${bgColor} ${safeHoverClass} transition btn-transition duration-300 ${className}`;
+    const bg = bgColor.trim();
+    const fg = textColor.trim();
+    const safeHoverClass = hoverBgColor || HOVER_MAP[bg] || "hover:opacity-90";
+    /* Single normalized string — avoids SSR/client class whitespace drift from padded props e.g. ` ${btnColor} ` */
+    const baseClasses = [
+        "inline-flex min-h-11 min-w-[2.75rem] cursor-pointer items-center justify-center gap-2 rounded-xl text-base font-medium shadow-sm transition duration-300 btn-transition hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/35 focus-visible:ring-offset-2 group",
+        padding,
+        fg,
+        bg,
+        safeHoverClass,
+        className.trim(),
+    ]
+        .filter(Boolean)
+        .join(" ");
 
     if (onClick && (!href || href === "#")) {
         return (
             <button
                 onClick={onClick}
                 className={baseClasses}
-                data-aos="zoom-in"
                 type="button"
             >
                 <span>{label}</span>
@@ -67,7 +79,6 @@ const Button: FC<ButtonProps> = ({
             href={href || "#"}
             className={baseClasses}
             onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
-            data-aos="zoom-in"
         >
             <span>{label}</span>
             {icon}

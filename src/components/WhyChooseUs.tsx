@@ -7,8 +7,8 @@ const GradientDefs = () => (
   <svg width="0" height="0">
     <defs>
       <linearGradient id="blueToBlackGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#477fee" />
-        <stop offset="100%" stopColor="#174dd4" />
+        <stop offset="0%" stopColor="#38bdf8" />
+        <stop offset="100%" stopColor="#2563eb" />
       </linearGradient>
     </defs>
   </svg>
@@ -142,9 +142,9 @@ export default function Home() {
     return (
       <main className="min-h-screen bg-gradient-to-b from-background to-muted/20">
         <GradientDefs />
-        <section id="why_choose_us" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
+        <section id="why_choose_us" className="px-4 py-12 sm:px-6 md:py-16 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-10 md:mb-12">
+            <div className="text-center mb-8 md:mb-10">
               <div className="text-gray-600">Loading...</div>
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function Home() {
     <main className="bg-gradient-to-b from-background to-muted/20">
       <GradientDefs />
 
-      <section id="why_choose_us" className="py-16 md:py-20 px-4 sm:px-6 lg:px-8">
+      <section id="why_choose_us" className="px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="max-w-7xl mx-auto">
 
           {/* Header – made more compact */}
@@ -176,7 +176,7 @@ export default function Home() {
             const firstPart = words.join(' ');
 
             return (
-              <div className="text-center mb-10 md:mb-12">
+              <div className="text-center mb-8 md:mb-10">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-foreground mb-3">
                   {firstPart} <span className="text-blue-900">{lastWord}</span>
                 </h1>
@@ -191,8 +191,8 @@ export default function Home() {
           {/* Features Grid – removed height constraints and overflow hidden */}
           <div className="
             grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
-            gap-5 sm:gap-6 lg:gap-7 
-            pb-8
+            gap-4 sm:gap-5 lg:gap-6 
+            pb-4
           ">
             {displayData.map((feature, index) => (
               <div

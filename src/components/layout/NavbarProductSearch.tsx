@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search } from 'react-feather';
 import type { Product } from '@/const/productData';
+import { fetchProductsEnriched } from '@/lib/fetchProductsClient';
 
 type ProductWithCategories = Product & { categoryNames?: string[] };
 
@@ -17,18 +18,19 @@ export default function NavbarProductSearch({ className = '' }: { className?: st
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch('/api/products');
-        if (!res.ok) return;
-        const data = await res.json();
-        if (Array.isArray(data)) setProducts(data);
+        const data = await fetchProductsEnriched();
+        setProducts(data);
       } catch {
         /* ignore */
+      } finally {
+        setLoading(false);
       }
     };
     load();
@@ -36,17 +38,15 @@ export default function NavbarProductSearch({ className = '' }: { className?: st
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return products
-      .filter((p) => {
-        const title = (p.title || '').toLowerCase();
-        const sub = (p.subtitle || '').toLowerCase();
-        const cats = [...(p.categories || []), ...((p as ProductWithCategories).categoryNames || [])]
-          .join(' ')
-          .toLowerCase();
-        return title.includes(q) || sub.includes(q) || cats.includes(q);
-      })
-      .slice(0, 8);
+    if (!q) return products;
+    return products.filter((p) => {
+      const title = (p.title || '').toLowerCase();
+      const sub = (p.subtitle || '').toLowerCase();
+      const cats = [...(p.categories || []), ...((p as ProductWithCategories).categoryNames || [])]
+        .join(' ')
+        .toLowerCase();
+      return title.includes(q) || sub.includes(q) || cats.includes(q);
+    });
   }, [query, products]);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function NavbarProductSearch({ className = '' }: { className?: st
             setQuery(e.target.value);
             setOpen(true);
           }}
-          onFocus={() => query.trim() && setOpen(true)}
+          onFocus={() => setOpen(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && filtered[0]) {
               e.preventDefault();
@@ -91,14 +91,18 @@ export default function NavbarProductSearch({ className = '' }: { className?: st
             }
             if (e.key === 'Escape') setOpen(false);
           }}
-          className="w-full min-w-0 rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-3 text-sm text-gray-900 placeholder:text-gray-400 shadow-sm focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+          className="tap-target w-full min-w-0 rounded-xl border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
         />
       </div>
 
-      {open && query.trim() && (
+      {open && (
         <div className="absolute left-0 right-0 top-full z-[60] mt-1 max-h-[min(20rem,70vh)] w-full min-w-0 overflow-y-auto overflow-x-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <p className="px-3 py-2 text-sm text-gray-500">Loading products…</p>
+          ) : filtered.length === 0 && query.trim() ? (
             <p className="px-3 py-2 text-sm text-gray-500">No products found.</p>
+          ) : filtered.length === 0 ? (
+            <p className="px-3 py-2 text-sm text-gray-500">No products available.</p>
           ) : (
             <ul className="divide-y divide-gray-100">
               {filtered.map((p) => {

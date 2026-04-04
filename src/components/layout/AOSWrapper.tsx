@@ -6,9 +6,11 @@ import AOS from "aos";
 export default function AOSWrapper() {
     useEffect(() => {
         AOS.init({
-            duration: 200, // animation duration
-            once: true,    // whether animation should happen only once
+            duration: 650,
+            once: true,
             easing: "ease-out-cubic",
+            offset: 48,
+            delay: 0,
         });
     }, []);
 
