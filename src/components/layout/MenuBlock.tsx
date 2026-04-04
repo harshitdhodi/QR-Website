@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, X, ArrowUpRight } from 'react-feather';
 import Image from 'next/image';
@@ -54,7 +55,21 @@ const home1MenuItems: MenuItem[] = [
 
 const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileMenu, logo = "/images/logo/logo-blue.png", btnColor = 'bg-brand-primary', btnlinkColor = "text-white", }) => {
     const [openSubMenu, setOpenSubMenu] = useState<Record<string, boolean>>({});
+    const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!mobileOpen) return;
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = prev;
+        };
+    }, [mobileOpen]);
 
     // Dynamically modify menu items based on current page
     const menuItems = home1MenuItems.map(item => ({
@@ -154,109 +169,128 @@ const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileM
                 ))}
             </ul>
 
-
-            {/* Mobile Menu */}
-            <div
-                className={`fixed top-0 left-0 h-full w-72 bg-white z-50 transform transition-transform duration-300 flex flex-col lg:hidden ${mobileOpen ? 'translate-x-0' : '-translate-x-full'
-                    }`}
-            >
-                <div className="flex items-center justify-between p-4 border-b border-gray-200">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center">
-                        {/* Light Logo */}
-                        <Image
-                            src={logo}
-                            alt="logo"
-                            width={125}
-                            height={40}
-                            priority
-                            className="h-9 dark:hidden w-auto"
-                        />
-                        {/* Dark Logo (auto-generated) */}
-                        <Image
-                            src={getDarkLogo(logo)}
-                            alt="logo dark"
-                            width={125}
-                            height={40}
-                            priority
-                            className="h-9 hidden dark:flex w-auto"
-                        />
-                    </Link>
-                    <button onClick={toggleMobileMenu} aria-label="close menu">
-                        <X size={24} />
-                    </button>
-                </div>
-                <ul className="flex flex-col p-4 gap-2 overflow-y-auto">
-                    {menuItems.map((item, index) => (
-                        <li key={index}>
-                            {item.subMenu || item.megaMenu ? (
-                                <>
-                                    <button
-                                        onClick={() => toggleSubMenu(`${index}`)}
-                                        className="flex justify-between w-full items-center py-2 font-medium text-gray-900"
-                                    >
-                                        {item.title} <ChevronDown size={18} />
-                                    </button>
-                                    {openSubMenu[`${index}`] && (
-                                        <ul className="pl-4 mt-2 flex flex-col gap-2">
-                                            {/* Regular SubMenu */}
-                                            {item.subMenu &&
-                                                item.subMenu.map((sub, subIndex) => (
-                                                    <li key={subIndex}>
-                                                        <Link href={sub.href || '#'} className="text-gray-700 py-1 block font-medium">
-                                                            {sub.title}
-                                                        </Link>
-                                                    </li>
-                                                ))}
-
-                                            {/* Mega Menu Sections */}
-                                            {item.megaMenu &&
-                                                item.megaMenu.map((section, secIndex) => (
-                                                    <li key={secIndex}>
-                                                        <button
-                                                            onClick={() =>
-                                                                toggleSubMenu(`${index}-${secIndex}`)
-                                                            }
-                                                            className="flex justify-between w-full items-center py-1 font-medium text-gray-900"
-                                                        >
-                                                            {section.title} <ChevronDown size={16} />
-                                                        </button>
-                                                        {openSubMenu[`${index}-${secIndex}`] && (
-                                                            <ul className="pl-4 mt-1 flex flex-col gap-1">
-                                                                {section.subMenu.map((sub, subIndex) => (
-                                                                    <li key={subIndex}>
-                                                                        <Link
-                                                                            href={sub.href || '#'}
-                                                                            className="text-gray-700 py-1 block font-medium"
-                                                                        >
-                                                                            {sub.title}
-                                                                        </Link>
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        )}
-                                                    </li>
-                                                ))}
-                                        </ul>
-                                    )}
-                                </>
-                            ) : (
-                                <Link href={item.href || '#'} className="py-2 block text-gray-900 font-medium">
-                                    {item.title}
+            {/* Mobile menu + backdrop: portaled to body so z-index is not trapped under main content stacking contexts */}
+            {mounted &&
+                createPortal(
+                    <>
+                        {mobileOpen && (
+                            <div
+                                className="fixed inset-0 z-[10050] bg-black/60 lg:hidden"
+                                aria-hidden
+                                onClick={() => toggleMobileMenu?.()}
+                            />
+                        )}
+                        <div
+                            className={`fixed top-0 left-0 z-[10051] flex h-full w-72 flex-col bg-white shadow-xl transition-transform duration-300 ease-out lg:hidden ${
+                                mobileOpen ? 'translate-x-0' : '-translate-x-full'
+                            }`}
+                        >
+                            <div className="flex items-center justify-between border-b border-gray-200 p-4">
+                                <Link href="/" className="flex items-center" onClick={() => toggleMobileMenu?.()}>
+                                    <Image
+                                        src={logo}
+                                        alt="logo"
+                                        width={125}
+                                        height={40}
+                                        priority
+                                        className="h-9 w-auto dark:hidden"
+                                    />
+                                    <Image
+                                        src={getDarkLogo(logo)}
+                                        alt="logo dark"
+                                        width={125}
+                                        height={40}
+                                        priority
+                                        className="hidden h-9 w-auto dark:flex"
+                                    />
                                 </Link>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-                <div className="mt-auto p-4">
-                    <Link
-                        href="/register"
-                        className={`flex items-center justify-center gap-3 px-6 py-3 rounded-md text-sm font-medium hover:opacity-90 transition-all duration-200 ${btnColor} ${btnlinkColor}`}
-                    >
-                        Register
-                    </Link>
-                </div>
-            </div>
+                                <button type="button" onClick={() => toggleMobileMenu?.()} aria-label="Close menu">
+                                    <X size={24} />
+                                </button>
+                            </div>
+                            <ul className="flex flex-col gap-2 overflow-y-auto p-4">
+                                {menuItems.map((item, index) => (
+                                    <li key={index}>
+                                        {item.subMenu || item.megaMenu ? (
+                                            <>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => toggleSubMenu(`${index}`)}
+                                                    className="flex w-full items-center justify-between py-2 font-medium text-gray-900"
+                                                >
+                                                    {item.title} <ChevronDown size={18} />
+                                                </button>
+                                                {openSubMenu[`${index}`] && (
+                                                    <ul className="mt-2 flex flex-col gap-2 pl-4">
+                                                        {item.subMenu &&
+                                                            item.subMenu.map((sub, subIndex) => (
+                                                                <li key={subIndex}>
+                                                                    <Link
+                                                                        href={sub.href || '#'}
+                                                                        className="block py-1 font-medium text-gray-700"
+                                                                        onClick={() => toggleMobileMenu?.()}
+                                                                    >
+                                                                        {sub.title}
+                                                                    </Link>
+                                                                </li>
+                                                            ))}
+                                                        {item.megaMenu &&
+                                                            item.megaMenu.map((section, secIndex) => (
+                                                                <li key={secIndex}>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            toggleSubMenu(`${index}-${secIndex}`)
+                                                                        }
+                                                                        className="flex w-full items-center justify-between py-1 font-medium text-gray-900"
+                                                                    >
+                                                                        {section.title} <ChevronDown size={16} />
+                                                                    </button>
+                                                                    {openSubMenu[`${index}-${secIndex}`] && (
+                                                                        <ul className="mt-1 flex flex-col gap-1 pl-4">
+                                                                            {section.subMenu.map((sub, subIndex) => (
+                                                                                <li key={subIndex}>
+                                                                                    <Link
+                                                                                        href={sub.href || '#'}
+                                                                                        className="block py-1 font-medium text-gray-700"
+                                                                                        onClick={() => toggleMobileMenu?.()}
+                                                                                    >
+                                                                                        {sub.title}
+                                                                                    </Link>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    )}
+                                                                </li>
+                                                            ))}
+                                                    </ul>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <Link
+                                                href={item.href || '#'}
+                                                className="block py-2 font-medium text-gray-900"
+                                                onClick={() => toggleMobileMenu?.()}
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                            <div className="mt-auto p-4">
+                                <Link
+                                    href="/register"
+                                    className={`flex items-center justify-center gap-3 rounded-md px-6 py-3 text-sm font-medium transition-all duration-200 hover:opacity-90 ${btnColor} ${btnlinkColor}`}
+                                    onClick={() => toggleMobileMenu?.()}
+                                >
+                                    Register
+                                </Link>
+                            </div>
+                        </div>
+                    </>,
+                    document.body
+                )}
         </>
     );
 };

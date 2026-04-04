@@ -1,8 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
-import Image from 'next/image';
+import type { LucideIcon } from 'lucide-react';
+import {
+  Droplets,
+  EyeOff,
+  Lock,
+  PencilLine,
+  Smartphone,
+  Timer,
+} from 'lucide-react';
 
 interface HowItWorksItem {
   id: string;
@@ -22,6 +29,102 @@ interface SectionData {
   [key: string]: unknown;
 }
 
+/** Visual theme per card — pastel square + icon color (matches reference layout). */
+const FEATURE_THEMES: { Icon: LucideIcon; boxClass: string }[] = [
+  { Icon: EyeOff, boxClass: 'bg-blue-100 text-blue-600' },
+  { Icon: Smartphone, boxClass: 'bg-purple-100 text-purple-600' },
+  { Icon: Droplets, boxClass: 'bg-cyan-100 text-cyan-600' },
+  { Icon: Lock, boxClass: 'bg-orange-100 text-orange-600' },
+  { Icon: PencilLine, boxClass: 'bg-green-100 text-green-600' },
+  { Icon: Timer, boxClass: 'bg-pink-100 text-pink-600' },
+];
+
+/** Avoids a lone card on the last row (e.g. 4 items + 3 columns = 3+1). */
+function gridClassForCount(count: number): string {
+  if (count <= 0) {
+    return 'grid grid-cols-1 gap-5 sm:gap-6';
+  }
+  if (count === 1) {
+    return 'grid grid-cols-1 gap-5 sm:gap-6 max-w-md mx-auto';
+  }
+  if (count === 2) {
+    return 'grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 max-w-3xl mx-auto';
+  }
+  if (count === 3) {
+    return 'grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto';
+  }
+  if (count === 4) {
+    return 'grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 max-w-4xl mx-auto';
+  }
+  if (count === 5) {
+    return 'grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto';
+  }
+  return 'grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto';
+}
+
+const DEFAULT_FEATURES: HowItWorksItem[] = [
+  {
+    id: '1',
+    image: '',
+    title: 'Number Hidden',
+    subtitle: 'Your mobile number stays private.',
+    tagline: '',
+    is_active: true,
+    sort_order: 0,
+    updated_at: '',
+  },
+  {
+    id: '2',
+    image: '',
+    title: 'Easy Scan',
+    subtitle: 'Works with any camera or scanner app.',
+    tagline: '',
+    is_active: true,
+    sort_order: 1,
+    updated_at: '',
+  },
+  {
+    id: '3',
+    image: '',
+    title: 'Waterproof',
+    subtitle: 'Weather-resistant for all conditions.',
+    tagline: '',
+    is_active: true,
+    sort_order: 2,
+    updated_at: '',
+  },
+  {
+    id: '4',
+    image: '',
+    title: 'Durable',
+    subtitle: 'High-quality material lasts for years.',
+    tagline: '',
+    is_active: true,
+    sort_order: 3,
+    updated_at: '',
+  },
+  {
+    id: '5',
+    image: '',
+    title: 'Editable Info',
+    subtitle: 'Update details anytime from the dashboard.',
+    tagline: '',
+    is_active: true,
+    sort_order: 4,
+    updated_at: '',
+  },
+  {
+    id: '6',
+    image: '',
+    title: 'Lifetime Validity',
+    subtitle: 'No subscription fees. Pay once, use forever.',
+    tagline: '',
+    is_active: true,
+    sort_order: 5,
+    updated_at: '',
+  },
+];
+
 export default function WhyChooseUs2() {
   const [howItWorksData, setHowItWorksData] = useState<HowItWorksItem[]>([]);
   const [sectionData, setSectionData] = useState<SectionData | null>(null);
@@ -31,7 +134,6 @@ export default function WhyChooseUs2() {
   useEffect(() => {
     const fetchHowItWorks = async () => {
       try {
-        // Fetch section data
         const sectionRes = await fetch('/api/feature-sections?section_name=how_it_work');
         if (sectionRes.ok) {
           const sData = await sectionRes.json();
@@ -44,10 +146,10 @@ export default function WhyChooseUs2() {
         }
         const data = await response.json();
 
-
-        // Filter active items and sort by sort_order
         const activeItems = Array.isArray(data)
-          ? data.filter((item: HowItWorksItem) => item.is_active).sort((a: HowItWorksItem, b: HowItWorksItem) => a.sort_order - b.sort_order)
+          ? data
+              .filter((item: HowItWorksItem) => item.is_active)
+              .sort((a: HowItWorksItem, b: HowItWorksItem) => a.sort_order - b.sort_order)
           : [];
 
         setHowItWorksData(activeItems);
@@ -62,62 +164,28 @@ export default function WhyChooseUs2() {
     fetchHowItWorks();
   }, []);
 
-  // Fallback data when API fails or loading
-  const fallbackData = [
-    {
-      id: "1",
-      image: "/images/icon-3.png",
-      title: "QR Scanned",
-      subtitle: "Category-specific landing page loads instantly. Scanner sees: 'You are trying to contact the owner.'",
-      tagline: "+ Landing shown",
-      is_active: true,
-      sort_order: 0,
-      created_at: "",
-      updated_at: ""
-    },
-    {
-      id: "2",
-      image: "/images/icon-4.png",
-      title: "Fill Dynamic Form",
-      subtitle: "Category-based fields appear (e.g., vehicle: parking issue). Reason dropdown dynamically loaded.",
-      tagline: "+ Form submitted",
-      is_active: true,
-      sort_order: 1,
-      created_at: "",
-      updated_at: ""
-    },
-    {
-      id: "3",
-      image: "/images/text-icon-2.png",
-      title: "Auto Location Captured",
-      subtitle: "GPS or IP-based location auto-fetched. Scan rate limiting prevents repeated abuse.",
-      tagline: "+ Location logged",
-      is_active: true,
-      sort_order: 2,
-      created_at: "",
-      updated_at: ""
-    },
-    {
-      id: "4",
-      image: "/images/text-icon-3.png",
-      title: "Contact Options Shown",
-      subtitle: "Masked call, WhatsApp, or SMS options presented. Call hidden if DND is enabled.",
-      tagline: "+ Contact ready",
-      is_active: true,
-      sort_order: 3,
-      created_at: "",
-      updated_at: ""
-    }
-  ];
-
-  const displayData = howItWorksData.length > 0 ? howItWorksData : fallbackData;
+  const displayData =
+    howItWorksData.length > 0 ? howItWorksData : DEFAULT_FEATURES;
+  const gridClass = gridClassForCount(displayData.length);
 
   if (loading) {
     return (
-      <section id="how_it_work" className="bg-home-one-gradient-banner px-4 py-12 text-gray-800 sm:px-6 md:py-16 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8 md:mb-10">
-            <div className="text-gray-600">Loading...</div>
+      <section
+        id="how_it_work"
+        className="bg-white px-4 py-12 sm:px-6 md:py-16 lg:px-8"
+      >
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 text-center md:mb-12">
+            <div className="mx-auto h-8 w-48 animate-pulse rounded-lg bg-gray-200" />
+            <div className="mx-auto mt-3 h-4 w-full max-w-lg animate-pulse rounded bg-gray-100" />
+          </div>
+          <div className={gridClassForCount(6)}>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-24 animate-pulse rounded-xl bg-gray-100 sm:h-28"
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -126,54 +194,71 @@ export default function WhyChooseUs2() {
 
   if (error) {
     console.error('How it works error:', error);
-    // Still render with fallback data
   }
 
-  const title = sectionData?.parent_title || 'How it work';
+  const title = sectionData?.parent_title || 'Why choose us';
   const subtitle =
     sectionData?.parent_subtitle ||
     'Secure • Private • Instant — The smartest way to connect without exposing personal details.';
-  const words = title.trim().split(' ');
+  const words = title.trim().split(/\s+/);
   const lastWord = words.length > 1 ? words.pop() : '';
   const firstPart = words.join(' ');
 
   return (
-      <section id="how_it_work" className="bg-home-one-gradient-banner px-4 py-12 text-gray-800 sm:px-6 md:py-16 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8 md:mb-10" data-aos="fade-up" data-aos-duration="300">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-4">
-            {firstPart} <span className="text-brand-primary">{lastWord}</span>
+    <section
+      id="how_it_work"
+      className="bg-white px-4 py-12 text-gray-900 sm:px-6 md:py-16 lg:px-8"
+    >
+      <div className="mx-auto w-full max-w-7xl">
+        <div
+          className="mb-8 text-center sm:mb-10"
+          data-aos="fade-up"
+          data-aos-duration="300"
+        >
+          <h2 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 sm:mb-3 sm:text-3xl md:text-4xl">
+            {firstPart}{' '}
+            {lastWord ? (
+              <span className="text-brand-primary">{lastWord}</span>
+            ) : null}
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">{subtitle}</p>
+          <p className="mx-auto max-w-2xl text-sm text-gray-600 sm:text-base">
+            {subtitle}
+          </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 md:gap-5">
-          {displayData.map((step, index) => (
-            <div
-              key={step.id}
-              className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              data-aos="fade-up"
-              data-aos-delay={index * 100}
-              data-aos-duration="350"
-            >
-              <div className="flex items-start gap-4">
+        <div className={gridClass}>
+          {displayData.map((step, index) => {
+            const { Icon, boxClass } = FEATURE_THEMES[index % FEATURE_THEMES.length];
+            return (
+              <div
+                key={step.id}
+                className="flex flex-row items-start gap-3 rounded-xl border border-gray-100/80 bg-gray-50 p-4 shadow-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-3.5"
+                data-aos="fade-up"
+                data-aos-delay={Math.min(index * 80, 400)}
+                data-aos-duration="350"
+              >
                 <div
-                  className="w-12 h-12 rounded-xl border border-brand-secondary/50 flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: "#ffffff" }}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${boxClass}`}
+                  aria-hidden
                 >
-                  <Image src={step.image} alt={step.title} width={24} height={24} className="w-6 h-6 object-contain" />
+                  <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2} />
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-gray-900">{step.title}</h3>
-                  <p className="text-gray-600 mt-2 leading-7">{step.subtitle}</p>
-                  <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-primary bg-brand-primary/10 px-3 py-1 rounded-full">
-                    <CheckCircle2 className="w-4 h-4" />
-                    {step.tagline}
-                  </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-sm font-semibold leading-snug text-gray-900 sm:text-base">
+                    {step.title}
+                  </h3>
+                  <p className="mt-1 text-xs leading-relaxed text-gray-600 sm:text-sm sm:leading-relaxed">
+                    {step.subtitle}
+                  </p>
+                  {step.tagline?.trim() ? (
+                    <p className="mt-2 text-xs font-medium text-brand-primary">
+                      {step.tagline}
+                    </p>
+                  ) : null}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
