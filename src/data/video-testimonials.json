@@ -1,0 +1,17 @@
+[
+  {
+    "src": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "title": "Featured video",
+    "subtitle": "Primary"
+  },
+  {
+    "src": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "title": "Carousel clip 1",
+    "subtitle": "More"
+  },
+  {
+    "src": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "title": "Carousel clip 2",
+    "subtitle": "More"
+  }
+]

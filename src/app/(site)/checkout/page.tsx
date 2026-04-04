@@ -433,7 +433,9 @@ export default function CheckoutPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h3>
 
                 <div className="space-y-4 mb-6">
-                  {cartItems.map((item: { name: string; quantity: number; price: number }, idx: number) => (
+                  {cartItems.map((item, idx) => {
+                    const unit = Number(item.price);
+                    return (
                     <div key={idx} className="flex gap-4 items-start bg-white p-4 rounded-xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
                       <div className="w-16 h-16 bg-blue-50/50 rounded-lg flex items-center justify-center flex-shrink-0 text-blue-900">
                         <Package size={24} />
@@ -443,11 +445,12 @@ export default function CheckoutPage() {
                         <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-bold text-gray-900">₹{item.price * item.quantity}</p>
-                        {item.quantity > 1 && <p className="text-xs text-gray-500 mt-1">₹{item.price} each</p>}
+                        <p className="font-bold text-gray-900">₹{unit * item.quantity}</p>
+                        {item.quantity > 1 && <p className="text-xs text-gray-500 mt-1">₹{unit} each</p>}
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="border-t border-gray-200 pt-5 space-y-3 mb-6">

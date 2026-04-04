@@ -1,0 +1,20 @@
+[
+  {
+    "brand": "/images/brand.svg",
+    "brandWidth": 120,
+    "brandHeight": 36,
+    "text": "Reliable QR experience and a team that genuinely cares about privacy.",
+    "avatar": "/images/member-1.svg",
+    "name": "Priya K.",
+    "role": "Product lead"
+  },
+  {
+    "brand": "/images/brand.svg",
+    "brandWidth": 120,
+    "brandHeight": 36,
+    "text": "Setup took minutes and the dashboard is easy to use every day.",
+    "avatar": "/images/member-2.svg",
+    "name": "Alex M.",
+    "role": "Operations"
+  }
+]

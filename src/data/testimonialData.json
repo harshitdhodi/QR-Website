@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "rating": 5,
+    "quote": "A privacy-first QR system that just works for our team.",
+    "name": "Sam R.",
+    "title": "Founder",
+    "backgroundImage": "/images/banner-bg-9.svg"
+  },
+  {
+    "id": 2,
+    "rating": 5,
+    "quote": "Clear setup, great support, and solid analytics.",
+    "name": "Jamie L.",
+    "title": "CTO",
+    "backgroundImage": "/images/banner-6a.svg"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "light": "/images/brand.svg",
+    "dark": "/images/brand-w.svg",
+    "alt": "Partner",
+    "width": 120,
+    "height": 40,
+    "delay": 0
+  },
+  {
+    "id": 2,
+    "light": "/images/brand.svg",
+    "dark": "/images/brand-w.svg",
+    "alt": "Partner",
+    "width": 120,
+    "height": 40,
+    "delay": 100
+  },
+  {
+    "id": 3,
+    "light": "/images/brand.svg",
+    "dark": "/images/brand-w.svg",
+    "alt": "Partner",
+    "width": 120,
+    "height": 40,
+    "delay": 200
+  },
+  {
+    "id": 4,
+    "light": "/images/brand.svg",
+    "dark": "/images/brand-w.svg",
+    "alt": "Partner",
+    "width": 120,
+    "height": 40,
+    "delay": 300
+  }
+]

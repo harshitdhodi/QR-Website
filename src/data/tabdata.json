@@ -1,0 +1,20 @@
+[
+  {
+    "id": "tab-1",
+    "label": "Overview",
+    "icon": "Box",
+    "image": "/images/feature-1.svg",
+    "heading": "Everything in one place",
+    "description": "Manage QR assets, profiles, and notifications from a single dashboard.",
+    "points": ["Centralized controls", "Real-time updates", "Secure by design"]
+  },
+  {
+    "id": "tab-2",
+    "label": "Security",
+    "icon": "Layers",
+    "image": "/images/feature-2.svg",
+    "heading": "Privacy first",
+    "description": "Mask personal details while still letting people reach you when it matters.",
+    "points": ["Masked contact options", "Activity alerts", "Easy revoke"]
+  }
+]
