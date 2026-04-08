@@ -1,47 +1,40 @@
 import type { NextConfig } from "next";
+import { getAdminOrigin } from "./src/lib/adminOrigin";
+
+const adminOrigin = getAdminOrigin();
+
+console.log("ADMIN ORIGIN:", adminOrigin);
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        // Forward backend API calls, but do NOT interfere with NextAuth at `/api/auth/*`.
+        // We proxy the backend under `/api/backend/*` to avoid route collisions.
+        source: "/api/backend/:path*",
+        destination: `${adminOrigin}/api/:path*`,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'ik.imagekit.io',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'www.qradmin.rndtd.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "www.qradmin.rndtd.com",
+        pathname: "/**",
       },
     ],
-  },
-  async rewrites() {
-    return {
-      beforeFiles: [
-        {
-          source: '/api/auth/otp',
-          destination: 'https://www.qradmin.rndtd.com/api/auth/otp',
-        },
-        {
-          source: '/api/auth/register',
-          destination: 'https://www.qradmin.rndtd.com/api/auth/register',
-        },
-      ],
-      fallback: [
-        {
-          source: '/api/:path*',
-          destination: 'https://www.qradmin.rndtd.com/api/:path*',
-        },
-      ]
-    }
   },
 };
 

@@ -1,17 +1,35 @@
 import nodemailer from 'nodemailer';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: parseInt(process.env.EMAIL_PORT || '587'),
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+function getTransporter() {
+  const mode = (process.env.EMAIL_MODE || "").toLowerCase();
+  if (mode === "mock") return null;
+
+  const host = process.env.EMAIL_HOST;
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+  const port = parseInt(process.env.EMAIL_PORT || "587", 10);
+  const secure = String(process.env.EMAIL_SECURE || "").toLowerCase() === "true";
+
+  if (!host || !user || !pass) {
+    throw new Error("Missing email configuration (EMAIL_HOST/EMAIL_USER/EMAIL_PASS).");
+  }
+
+  return nodemailer.createTransport({
+    host,
+    port,
+    secure, // true for 465, false for other ports
+    auth: { user, pass },
+  });
+}
 
 export async function sendOTPEmail(email: string, otp: string) {
   try {
+    const mode = (process.env.EMAIL_MODE || "").toLowerCase();
+    if (mode === "mock") {
+      console.log(`[EMAIL:MOCK] OTP for ${email}: ${otp}`);
+      return { success: true, message: "OTP sent successfully (mock)" };
+    }
+
     const htmlTemplate = `
       <!DOCTYPE html>
       <html>
@@ -125,11 +143,17 @@ export async function sendOTPEmail(email: string, otp: string) {
       html: htmlTemplate,
     };
 
+    const transporter = getTransporter();
+    if (!transporter) {
+      console.log(`[EMAIL:MOCK] OTP for ${email}: ${otp}`);
+      return { success: true, message: "OTP sent successfully (mock)" };
+    }
+
     await transporter.sendMail(mailOptions);
     return { success: true, message: 'OTP sent successfully' };
   } catch (error) {
     console.error('Email sending failed:', error);
-    return { success: false, message: 'Failed to send OTP' };
+    return { success: false, message: 'Failed to send OTP email. Please check email settings.' };
   }
 }
 
@@ -168,6 +192,8 @@ export async function sendInquiryAdminEmail(data: { firstName: string, lastName:
       html: htmlTemplate,
     };
 
+    const transporter = getTransporter();
+    if (!transporter) return { success: true };
     await transporter.sendMail(mailOptions);
     return { success: true };
   } catch (error) {
@@ -209,6 +235,8 @@ export async function sendInquiryUserEmail(data: { firstName: string, email: str
       html: htmlTemplate,
     };
 
+    const transporter = getTransporter();
+    if (!transporter) return { success: true };
     await transporter.sendMail(mailOptions);
     return { success: true };
   } catch (error) {

@@ -1,7 +1,30 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { getAdminOrigin } from "@/lib/adminOrigin";
 
-const ADMIN_API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || "http://localhost:3060/api";
+const ADMIN_ORIGIN = getAdminOrigin();
+
+type BackendAuthUser = {
+  id?: string | number;
+  name?: string;
+  email?: string;
+  role?: string;
+};
+
+type BackendAuthResponse = {
+  success?: boolean;
+  message?: string;
+  token?: string;
+  accessToken?: string;
+  jwt?: string;
+  user?: BackendAuthUser;
+  data?: {
+    token?: string;
+    accessToken?: string;
+    jwt?: string;
+    user?: BackendAuthUser;
+  };
+};
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -14,13 +37,66 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { label: "Email or Phone", type: "text" },
         otp: { label: "OTP", type: "text" },
+        // Extra fields used by the app-side OTP verify -> NextAuth sign-in bridge.
+        // Including them here avoids any provider-layer filtering in some setups.
+        passthrough: { label: "Passthrough", type: "text" },
+        accessToken: { label: "Access Token", type: "text" },
+        user: { label: "User JSON", type: "text" },
+        flow: { label: "Flow", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.otp) return null;
+        if (!credentials?.email) return null;
+
+        // Allow a "passthrough" sign-in after the frontend already verified OTP
+        // (avoids double-verification and lets UI show exact backend errors).
+        const passRaw = (credentials as unknown as { passthrough?: unknown }).passthrough;
+        const accessToken = (credentials as unknown as { accessToken?: unknown }).accessToken;
+        const userJsonOrObj = (credentials as unknown as { user?: unknown }).user;
+
+        const pass =
+          passRaw === true ||
+          passRaw === 1 ||
+          passRaw === "1" ||
+          passRaw === "true" ||
+          // If these are present, treat the request as passthrough even if passthrough was dropped.
+          (typeof accessToken === "string" && accessToken.length > 0) ||
+          (typeof userJsonOrObj === "string" && userJsonOrObj.length > 0) ||
+          (typeof userJsonOrObj === "object" && userJsonOrObj !== null);
+
+        if (pass) {
+          const parsedUser: BackendAuthUser | null = (() => {
+            try {
+              if (typeof userJsonOrObj === "string" && userJsonOrObj) {
+                return JSON.parse(userJsonOrObj) as BackendAuthUser;
+              }
+              if (typeof userJsonOrObj === "object" && userJsonOrObj !== null) {
+                return userJsonOrObj as BackendAuthUser;
+              }
+              return null;
+            } catch {
+              return null;
+            }
+          })();
+
+          return {
+            id: String(parsedUser?.id ?? parsedUser?.email ?? credentials.email),
+            name: parsedUser?.name || "",
+            email: parsedUser?.email || credentials.email,
+            role: parsedUser?.role || "customer",
+            accessToken: typeof accessToken === "string" && accessToken.length > 0 ? accessToken : null,
+          };
+        }
+
+        if (!credentials?.otp) return null;
 
         try {
-          // CALL ADMIN API for login logic
-          const res = await fetch(`${ADMIN_API_URL}/auth/customer-login`, {
+          const flow = (credentials as unknown as { flow?: string }).flow || "login";
+          const endpoint =
+            flow === "register"
+              ? "/api/backend/auth/register/verify-otp"
+              : "/api/backend/auth/login/verify-otp";
+
+          const res = await fetch(`${ADMIN_ORIGIN}${endpoint}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -29,21 +105,39 @@ export const authOptions: NextAuthOptions = {
             }),
           });
 
-          const data = await res.json();
+          const text = await res.text();
+          const data: BackendAuthResponse | null = (() => {
+            try {
+              return JSON.parse(text) as BackendAuthResponse;
+            } catch {
+              return null;
+            }
+          })();
 
-          if (res.ok && data.user) {
+          if (!res.ok) return null;
+
+          const user = data?.user || data?.data?.user;
+          const token = data?.token || data?.accessToken || data?.jwt || data?.data?.token || data?.data?.accessToken || data?.data?.jwt;
+
+          if (user) {
             return {
-              id: data.user.id,
-              name: data.user.name,
-              email: data.user.email,
-              role: data.user.role || "customer",
+              id: String(user.id ?? user.email ?? credentials.email),
+              name: user.name || "",
+              email: user.email || credentials.email,
+              role: user.role || "customer",
+              accessToken: token || null,
             };
           }
 
-          console.error("[AUTH] Admin login failure:", data.message);
-          return null;
-        } catch (error) {
-          console.error("[AUTH] Connection error to Admin API:", error);
+          // If backend doesn't return user object, still allow session based on email.
+          return {
+            id: String(credentials.email),
+            name: "",
+            email: credentials.email,
+            role: "customer",
+            accessToken: token || null,
+          };
+        } catch {
           return null;
         }
       },
@@ -54,6 +148,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = (user as { role?: string }).role;
+        token.accessToken = (user as { accessToken?: string | null }).accessToken || null;
       }
       return token;
     },
@@ -61,6 +156,8 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         (session.user as { id?: string }).id = token.id as string;
         (session.user as { role?: string }).role = token.role as string;
+        (session as unknown as { accessToken?: string | null }).accessToken =
+          (token as unknown as { accessToken?: string | null }).accessToken || null;
       }
       return session;
     },

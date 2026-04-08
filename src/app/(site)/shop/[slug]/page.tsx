@@ -1,23 +1,24 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
+import { flushSync } from "react-dom";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Star, Truck, Package } from "lucide-react";
 import ProductGallery from "@/components/ui/ProductGallery";
 import { useCart } from "@/components/providers/CartProvider";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import PageTitle from "@/components/ui/PageTitle";
-import Link from "next/link";
 import QuantityDropdown from "@/components/ui/QuantityDropdown";
+import type { Product } from "@/const/productData";
 
 export default function SingleProductPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
+    const router = useRouter();
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
 
     // FETCH LOGIC
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [product, setProduct] = useState<any>(null);
+    const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -25,7 +26,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
             try {
                 const res = await fetch(`/api/products/${slug}`);
                 if (!res.ok) throw new Error("Product not found");
-                const data = await res.json();
+                const data = (await res.json()) as Product;
                 setProduct(data);
             } catch (err) {
                 console.error(err);
@@ -48,6 +49,13 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     const handleAddToCart = () => {
         addToCart(product, quantity);
         alert(`Added ${quantity} x ${product.title} to cart!`);
+    };
+
+    const handleBuyNow = () => {
+        flushSync(() => {
+            addToCart(product, quantity);
+        });
+        router.push("/checkout");
     };
 
     return (
@@ -185,14 +193,13 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
                                             >
                                                 Add to Cart
                                             </button>
-                                            <Link href="/checkout">
-                                                <button
-                                                    // onClick={handleAddToCart}
-                                                    className="flex-grow text-white bg-blue-900 hover:bg-blue-800 rounded-lg px-9 py-2 font-semibold text-base cursor-pointer transition-colors"
-                                                >
-                                                    Buy Now
-                                                </button>
-                                            </Link>
+                                            <button
+                                                type="button"
+                                                onClick={handleBuyNow}
+                                                className="flex-grow text-white bg-blue-900 hover:bg-blue-800 rounded-lg px-9 py-2 font-semibold text-base cursor-pointer transition-colors"
+                                            >
+                                                Buy Now
+                                            </button>
 
 
                                             {/* <button className="bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-600 rounded-lg px-4 py-3 flex items-center justify-center transition-colors">
