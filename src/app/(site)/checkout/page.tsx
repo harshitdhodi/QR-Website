@@ -10,10 +10,15 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Razorpay: any;
+    Razorpay?: unknown;
   }
 }
+
+type RazorpayPaymentSuccessResponse = {
+  razorpay_order_id?: string;
+  razorpay_payment_id?: string;
+  razorpay_signature?: string;
+};
 
 const STATE_MAP: Record<string, string> = {
   AN: 'Andaman & Nicobar Islands', AP: 'Andhra Pradesh', AR: 'Arunachal Pradesh',
@@ -259,7 +264,12 @@ export default function CheckoutPage() {
         const rawContact = normalizedAddress?.phone || addressData.phone || '';
         const contact = String(rawContact).replace(/\D/g, '');
 
-        const rzp = new window.Razorpay({
+        const RazorpayCtor = window.Razorpay as unknown as new (opts: unknown) => {
+          on?: (event: string, cb: (resp: unknown) => void) => void;
+          open: () => void;
+        };
+
+        const rzp = new RazorpayCtor({
           key: keyId || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
           amount,
           currency: currency || 'INR',
@@ -270,16 +280,16 @@ export default function CheckoutPage() {
           readonly: contact ? { contact: true } : undefined,
           notes: { customerId: String((session?.user as { id?: string })?.id || '') },
           theme: { color: '#1e3a8a' },
-          handler: async function (response: any) {
+          handler: async function (response: RazorpayPaymentSuccessResponse) {
             try {
               const verifyRes = await fetch('/api/backend/razorpay/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   localOrderId,
-                  razorpay_order_id: response?.razorpay_order_id,
-                  razorpay_payment_id: response?.razorpay_payment_id,
-                  razorpay_signature: response?.razorpay_signature,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
                 }),
               });
               const verifyText = await verifyRes.text();
@@ -316,7 +326,7 @@ export default function CheckoutPage() {
           },
         });
 
-        rzp.on('payment.failed', (resp: any) => {
+        rzp.on?.('payment.failed', (resp: unknown) => {
           console.error('Razorpay payment.failed', resp);
           setCheckoutError('Payment failed. Please try again.');
           setLoading(false);
@@ -754,7 +764,11 @@ export default function CheckoutPage() {
                   onClick={() => {
                     const form = document.getElementById('checkout-form') as HTMLFormElement;
                     if (form.checkValidity()) {
-                      form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                      if (typeof form.requestSubmit === 'function') {
+                        form.requestSubmit();
+                      } else {
+                        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                      }
                     } else {
                       form.reportValidity();
                     }
