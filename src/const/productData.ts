@@ -15,7 +15,7 @@ export interface Product {
     size: string[];
     availability: "In Stock" | "Out of Stock";
     colors: string[];
-    review?: number | string;
+    review?: number;
     shortDesc?: string;
     longDesc?: string;
     slug?: string;

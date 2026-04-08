@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, Facebook, Linkedin, Instagram, MapPin, Twitter } from "react-feather";
+import { safeImageSrc } from "@/lib/safeImageSrc";
 
 type FooterLayout = "default" | "classic" | "modern" | "light" | "elegant";
 
@@ -28,7 +29,7 @@ interface DynamicFooterData {
     twitter_url: string;
 }
 
-export default function Footer({ logo = "/images/logo/Combined Logo (2000x400)-white.png" }: FooterProps) {
+export default function Footer({ logo = "/images/logo/combined-logo-white.png" }: FooterProps) {
     const [footerData, setFooterData] = useState<DynamicFooterData | null>(null);
 
     useEffect(() => {
@@ -36,6 +37,8 @@ export default function Footer({ logo = "/images/logo/Combined Logo (2000x400)-w
             try {
                 // Using the proxied /api/footer which points to the remote backend
                 const res = await fetch('/api/footer');
+                console.log("Footer Response", res);
+
                 const result = await res.json();
                 if (result.success && result.data) {
                     setFooterData(result.data);
@@ -58,7 +61,8 @@ export default function Footer({ logo = "/images/logo/Combined Logo (2000x400)-w
         return src.replace(/\.(png|jpg|jpeg|svg)$/i, '-white.$1');
     };
 
-    const displayLogo = footerData?.logo_url || logo;
+    const displayLogo = logo;
+    const safeLogo = safeImageSrc(getDarkLogo(displayLogo));
     const description = footerData?.description || "We place great emphasis on designers, artists, and brands.";
     const phone = footerData?.phone || "+91-730 494 5821";
     const email = footerData?.email || "info@qr.com";
@@ -73,7 +77,7 @@ export default function Footer({ logo = "/images/logo/Combined Logo (2000x400)-w
                     <div className="lg:col-span-4 lg:pr-10">
                         <Link href="/" className="inline-block mb-6">
                             <Image
-                                src={getDarkLogo(displayLogo)}
+                                src={safeLogo}
                                 alt="logo"
                                 width={180}
                                 height={60}

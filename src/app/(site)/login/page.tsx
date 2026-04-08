@@ -1,8 +1,11 @@
 "use client";
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import { safeImageSrc } from '@/lib/safeImageSrc';
+import { CUSTOMER_LOGIN_REQUEST_OTP, CUSTOMER_LOGIN_VERIFY_OTP } from '@/lib/customerAuthPaths';
 
 /* ─────────────────────────────────────────────
    SVG Illustration  (mirrors register style)
@@ -66,9 +69,9 @@ function LoginIllustration() {
 function StepIndicator({ step }: { step: 1 | 2 }) {
     return (
         <div className="flex items-center gap-3 mb-8">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all duration-300 ${step >= 1 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40' : 'bg-gray-100 text-gray-400 dark:bg-white/10 dark:text-white/40'}`}>1</div>
-            <div className={`h-px flex-1 transition-all duration-500 ${step >= 2 ? 'bg-blue-500' : 'bg-gray-200 dark:bg-white/10'}`} />
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all duration-300 ${step >= 2 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/40' : 'bg-gray-100 text-gray-400 dark:bg-white/10 dark:text-white/40'}`}>2</div>
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all duration-300 ${step >= 1 ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/30' : 'bg-gray-100 text-gray-400 dark:bg-white/10 dark:text-white/40'}`}>1</div>
+            <div className={`h-px flex-1 transition-all duration-500 ${step >= 2 ? 'bg-brand-primary' : 'bg-gray-200 dark:bg-white/10'}`} />
+            <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold transition-all duration-300 ${step >= 2 ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/30' : 'bg-gray-100 text-gray-400 dark:bg-white/10 dark:text-white/40'}`}>2</div>
         </div>
     );
 }
@@ -88,16 +91,17 @@ function Spinner() {
    Logo Mark
 ───────────────────────────────────────────── */
 function LogoMark({ size = 'md' }: { size?: 'sm' | 'md' }) {
-    const box = size === 'sm' ? 'h-8 w-8 rounded-lg' : 'h-9 w-9 rounded-xl';
-    const icon = size === 'sm' ? 16 : 18;
+    const box = size === 'sm' ? 'h-9 w-9 rounded-xl' : 'h-10 w-10 rounded-2xl';
     return (
-        <div className={`${box} flex flex-shrink-0 items-center justify-center bg-blue-500/25 ring-1 ring-blue-400/35`}>
-            <svg width={icon} height={icon} viewBox="0 0 24 24" fill="none">
-                <path
-                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                    stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                />
-            </svg>
+        <div className={`${box} flex flex-shrink-0 items-center justify-center bg-white/10 ring-1 ring-white/15 overflow-hidden`}>
+            <Image
+                src={safeImageSrc("/images/logo/icon-logo.png")}
+                alt="Brand mark"
+                width={48}
+                height={48}
+                className="h-full w-full object-contain p-2"
+                priority
+            />
         </div>
     );
 }
@@ -131,9 +135,13 @@ function LoginContent() {
     const { status } = useSession();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<null | 'send' | 'verify' | 'resend'>(null);
     const [showOtpInput, setShowOtpInput] = useState(false);
     const [formData, setFormData] = useState({ email: '', otp: '' });
+    const [error, setError] = useState<string>('');
+    const [info, setInfo] = useState<string>('');
+    const [resendIn, setResendIn] = useState<number>(0);
+    const otpRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
         if (status === 'authenticated') {
@@ -142,71 +150,128 @@ function LoginContent() {
         }
     }, [status, router, searchParams]);
 
+    useEffect(() => {
+        if (showOtpInput) {
+            // focus next tick so the element exists
+            setTimeout(() => otpRef.current?.focus(), 0);
+        }
+    }, [showOtpInput]);
+
+    useEffect(() => {
+        if (!resendIn) return;
+        const t = setInterval(() => {
+            setResendIn((s) => (s > 0 ? s - 1 : 0));
+        }, 1000);
+        return () => clearInterval(t);
+    }, [resendIn]);
+
     const handleSendOtp = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+        setError('');
+        setInfo('');
+        setLoading('send');
         try {
-            const adminApiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:3060/api';
-            const res = await fetch(`${adminApiUrl}/auth/otp`, {
+            const res = await fetch(CUSTOMER_LOGIN_REQUEST_OTP, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email, isCustomer: "true" }),
+                body: JSON.stringify({ email: formData.email }),
             });
-            const data = await res.json();
+            const text = await res.text();
+            const data = (() => { try { return JSON.parse(text); } catch { return null; } })();
             if (res.ok) {
                 setShowOtpInput(true);
-                alert('OTP "sent"! For demo/testing, use the default OTP: 123456');
+                setResendIn(60);
+                setInfo((data && data.message) || 'OTP sent successfully. Please check your email.');
             } else {
-                alert(data.error || 'Failed to send OTP');
+                setError((data && data.message) || text || 'Failed to send OTP');
             }
         } catch (error) {
             console.error('Send OTP error:', error);
-            alert('Failed to send OTP');
+            setError('Failed to send OTP');
         } finally {
-            setLoading(false);
+            setLoading(null);
         }
     };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+        setError('');
+        setInfo('');
+        setLoading('verify');
         try {
+            const otp = formData.otp.replace(/\D/g, '').slice(0, 6);
+            const verifyRes = await fetch(CUSTOMER_LOGIN_VERIFY_OTP, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: formData.email, otp }),
+            });
+            const verifyText = await verifyRes.text();
+            const verifyData = (() => { try { return JSON.parse(verifyText); } catch { return null; } })() as null | { message?: string; token?: string; accessToken?: string; jwt?: string; user?: unknown; data?: unknown };
+            if (!verifyRes.ok) {
+                setError((verifyData && (verifyData as { message?: string }).message) || verifyText || 'Invalid OTP. Please try again.');
+                return;
+            }
+
+            const token =
+                (verifyData && ((verifyData as { token?: string }).token || (verifyData as { accessToken?: string }).accessToken || (verifyData as { jwt?: string }).jwt)) ||
+                (verifyData && (verifyData as { data?: { token?: string; accessToken?: string; jwt?: string } }).data?.token) ||
+                (verifyData && (verifyData as { data?: { token?: string; accessToken?: string; jwt?: string } }).data?.accessToken) ||
+                (verifyData && (verifyData as { data?: { token?: string; accessToken?: string; jwt?: string } }).data?.jwt) ||
+                null;
+
+            const user =
+                (verifyData && (verifyData as { user?: unknown }).user) ||
+                (verifyData && (verifyData as { data?: { user?: unknown } }).data?.user) ||
+                null;
+
             const result = await signIn('credentials', {
                 redirect: false,
                 email: formData.email,
-                otp: formData.otp,
-                isCustomer: "true",
+                otp,
+                passthrough: "true",
+                accessToken: token || "",
+                user: user ? JSON.stringify(user) : "",
             });
             if (result?.error) {
-                alert('Invalid OTP. Please try again.');
+                setError(result.error === "CredentialsSignin" ? "Login failed. Please try again." : result.error);
+                return;
+            }
+            if (result?.ok) {
+                const callbackUrl = searchParams.get('callbackUrl') || '/';
+                router.push(callbackUrl);
             }
         } catch (error) {
             console.error('Login error:', error);
-            alert('Login failed');
+            setError('Login failed');
         } finally {
-            setLoading(false);
+            setLoading(null);
         }
     };
 
     const handleResendOtp = async () => {
-        setLoading(true);
+        if (resendIn > 0) return;
+        setError('');
+        setInfo('');
+        setLoading('resend');
         try {
-            const res = await fetch('/api/auth/otp', {
+            const res = await fetch(CUSTOMER_LOGIN_REQUEST_OTP, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email, isCustomer: "true" }),
+                body: JSON.stringify({ email: formData.email }),
             });
-            const data = await res.json();
+            const text = await res.text();
+            const data = (() => { try { return JSON.parse(text); } catch { return null; } })();
             if (res.ok) {
-                alert('OTP resent successfully');
+                setResendIn(60);
+                setInfo((data && data.message) || 'OTP resent successfully');
             } else {
-                alert(data.error || 'Failed to resend OTP');
+                setError((data && data.message) || text || 'Failed to resend OTP');
             }
         } catch (error) {
             console.error('Resend OTP error:', error);
-            alert('Failed to resend OTP');
+            setError('Failed to resend OTP');
         } finally {
-            setLoading(false);
+            setLoading(null);
         }
     };
 
@@ -220,15 +285,16 @@ function LoginContent() {
 
     return (
         /* ── Page wrapper ── */
-        <div className="flex min-h-[80%] items-center justify-center bg-gray-50 dark:bg-[#0a0a1a] px-4 py-20 mesh-bg">
+        <div className="relative flex min-h-[80%] items-center justify-center bg-home-one-gradient-banner px-4 pb-20 pt-28 lg:pt-32">
+            <div className="pointer-events-none absolute inset-0 bg-auth-image-one bg-cover bg-center opacity-[0.08]" />
 
             {/* ── Card ── */}
-            <div className="flex w-full max-w-5xl mt-10 flex-col overflow-hidden rounded-3xl shadow-[0_32px_80px_rgba(0,0,0,0.5)] glass-card lg:flex-row">
+            <div className="relative z-10 flex w-full max-w-5xl mt-6 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_22px_60px_rgba(15,23,42,0.10)] lg:flex-row">
 
                 {/* ════════════════════════════
                     LEFT PANEL
                 ════════════════════════════ */}
-                <div className="relative hidden flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#1e1b4b] p-12 lg:flex lg:w-[45%]">
+                <div className="relative hidden flex-col items-center justify-center overflow-hidden bg-gray-900 p-12 lg:flex lg:w-[45%]">
 
                     {/* Dot grid overlay */}
                     <div className="pointer-events-none absolute inset-0 opacity-70 [background-image:radial-gradient(circle,rgba(255,255,255,0.065)_1px,transparent_1px)] [background-size:28px_28px]" />
@@ -243,12 +309,17 @@ function LoginContent() {
                     <div className="relative z-10 flex w-full flex-col items-center gap-8">
 
                         {/* Logo */}
-                        <div className="flex items-center gap-3 self-start">
-                            <LogoMark size="md" />
-                            <span className="font-['Syne',sans-serif] text-lg font-bold tracking-tight text-white">
-                                YourBrand
-                            </span>
-                        </div>
+                        <Link href="/" className="flex items-center gap-3 self-start">
+                            {/* <LogoMark size="md" /> */}
+                            <Image
+                                src={safeImageSrc("/images/logo/combined-logo-white.png")}
+                                alt="odokho"
+                                width={160}
+                                height={40}
+                                className="h-7 w-auto object-contain"
+                                priority
+                            />
+                        </Link>
 
                         {/* Floating illustration */}
                         <div className="w-full animate-[float_5s_ease-in-out_infinite] [animation-name:float]">
@@ -258,7 +329,7 @@ function LoginContent() {
 
                         {/* Heading */}
                         <div className="space-y-3 text-center">
-                            <h2 className="font-['Syne',sans-serif] text-2xl font-bold leading-snug text-white">
+                            <h2 className="font-display text-2xl font-bold leading-snug text-white">
                                 Welcome back —<br />glad to see you!
                             </h2>
                             <p className="mx-auto max-w-[270px] text-sm leading-relaxed text-white/40">
@@ -294,17 +365,29 @@ function LoginContent() {
                 {/* ════════════════════════════
                     RIGHT PANEL
                 ════════════════════════════ */}
-                <div className="flex-1 flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 bg-white/50 dark:bg-transparent rounded-r-3xl">
+                <div className="flex-1 flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 bg-white rounded-r-3xl">
 
                     {/* Mobile logo */}
-                    <div className="flex items-center gap-2 mb-8 lg:hidden">
-                        <div className="w-8 h-8 rounded-lg bg-blue-500/10 dark:bg-blue-500/30 border border-blue-500/20 dark:border-blue-400/40 flex items-center justify-center">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="stroke-blue-600 dark:stroke-white">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
+                    <Link href="/" className="flex items-center gap-3 mb-8 lg:hidden">
+                        <div className="h-10 w-10 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+                            <Image
+                                src={safeImageSrc("/images/logo/icon-logo.png")}
+                                alt="odokho"
+                                width={48}
+                                height={48}
+                                className="h-full w-full object-contain p-2"
+                                priority
+                            />
                         </div>
-                        <span className="font-display text-gray-900 dark:text-white font-bold">YourBrand</span>
-                    </div>
+                        <Image
+                            src={safeImageSrc("/images/logo/combined-logo.png")}
+                            alt="odokho"
+                            width={160}
+                            height={40}
+                            className="h-7 w-auto object-contain"
+                            priority
+                        />
+                    </Link>
 
                     {/* Step indicator */}
                     <StepIndicator step={showOtpInput ? 2 : 1} />
@@ -321,6 +404,12 @@ function LoginContent() {
                         </p>
                     </div>
 
+                    {(error || info) && (
+                        <div className={`mb-5 rounded-2xl border p-4 text-sm ${error ? 'border-red-200 bg-red-50 text-red-800' : 'border-green-200 bg-green-50 text-green-800'}`}>
+                            {error || info}
+                        </div>
+                    )}
+
                     {/* ── EMAIL FORM ── */}
                     {!showOtpInput ? (
                         <form onSubmit={handleSendOtp} className="space-y-4">
@@ -331,10 +420,10 @@ function LoginContent() {
 
                             <button
                                 type="submit"
-                                disabled={loading}
-                                className="mt-1 w-full rounded-xl bg-blue-900 py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[0_4px_24px_rgba(99,102,241,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
+                                disabled={!!loading}
+                                className="mt-1 w-full rounded-xl bg-brand-primary py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[0_10px_26px_rgba(37,99,235,0.20)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(37,99,235,0.26)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                                {loading ? <Spinner /> : 'Send OTP →'}
+                                {loading === 'send' ? <Spinner /> : 'Send OTP →'}
                             </button>
                         </form>
                     ) : (
@@ -353,7 +442,7 @@ function LoginContent() {
                                     Check your inbox at <strong className="text-blue-700 dark:text-blue-200">{formData.email}</strong> for your one-time code.
                                     <br />
                                     <span className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-1 block">
-                                        💡 Default demo OTP: <strong>123456</strong>
+                                        Your code expires in 10 minutes.
                                     </span>
                                 </p>
                             </div>
@@ -362,17 +451,18 @@ function LoginContent() {
                                 <label htmlFor="otp" className="block text-xs font-semibold tracking-widest uppercase text-gray-500 dark:text-white/50">6-Digit Code</label>
                                 <input
                                     id="otp" type="text" placeholder="••••••"
+                                    ref={otpRef}
                                     value={formData.otp} maxLength={6} required
-                                    onChange={e => setFormData({ ...formData, otp: e.target.value })}
+                                    onChange={e => setFormData({ ...formData, otp: e.target.value.replace(/\D/g, '').slice(0, 6) })}
                                     className="w-full px-4 py-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/15
                                                focus:outline-none focus:border-blue-500 focus:bg-white dark:focus:bg-transparent focus:ring-1 focus:ring-blue-500/50 transition-all duration-200
                                                text-center text-xl font-mono tracking-[0.5em]"
                                 />
                             </div>
 
-                            <button type="submit" disabled={loading}
-                                className="mt-1 w-full rounded-xl bg-blue-900 py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[0_4px_24px_rgba(99,102,241,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(99,102,241,0.5)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50">
-                                {loading ? (
+                            <button type="submit" disabled={!!loading}
+                                className="mt-1 w-full rounded-xl bg-brand-primary py-3.5 text-sm font-bold uppercase tracking-widest text-white shadow-[0_10px_26px_rgba(37,99,235,0.20)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(37,99,235,0.26)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50">
+                                {loading === 'verify' ? (
                                     <span className="flex items-center justify-center gap-2">
                                         <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                         Verifying…
@@ -381,11 +471,11 @@ function LoginContent() {
                             </button>
 
                             <div className="flex items-center justify-between text-sm pt-1">
-                                <button type="button" onClick={handleResendOtp} disabled={loading}
+                                <button type="button" onClick={handleResendOtp} disabled={!!loading || resendIn > 0}
                                     className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-semibold transition disabled:opacity-50 text-xs">
-                                    Resend code
+                                    {resendIn > 0 ? `Resend in ${resendIn}s` : 'Resend code'}
                                 </button>
-                                <button type="button" onClick={() => setShowOtpInput(false)}
+                                <button type="button" onClick={() => { setShowOtpInput(false); setFormData({ ...formData, otp: '' }); setError(''); setInfo(''); }}
                                     className="text-gray-500 dark:text-white/30 hover:text-gray-800 dark:hover:text-white/60 font-medium transition text-xs">
                                     ← Back
                                 </button>

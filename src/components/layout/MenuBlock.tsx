@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, X, ArrowUpRight } from 'react-feather';
 import Image from 'next/image';
+import { safeImageSrc } from '@/lib/safeImageSrc';
 
 interface SubMenuItem {
     title: string;
@@ -89,6 +90,9 @@ const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileM
         if (src.endsWith('.svg')) return src.replace('.svg', '-white.svg');
         return src; // fallback
     };
+
+    const lightLogoSrc = safeImageSrc(logo);
+    const darkLogoSrc = safeImageSrc(getDarkLogo(logo));
 
     return (
         <>
@@ -188,7 +192,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileM
                             <div className="flex items-center justify-between border-b border-gray-200 p-4">
                                 <Link href="/" className="flex items-center" onClick={() => toggleMobileMenu?.()}>
                                     <Image
-                                        src={logo}
+                                        src={lightLogoSrc}
                                         alt="logo"
                                         width={125}
                                         height={40}
@@ -196,7 +200,7 @@ const MenuBlock: React.FC<MenuBlockProps> = ({ mobileOpen = false, toggleMobileM
                                         className="h-9 w-auto dark:hidden"
                                     />
                                     <Image
-                                        src={getDarkLogo(logo)}
+                                        src={darkLogoSrc}
                                         alt="logo dark"
                                         width={125}
                                         height={40}

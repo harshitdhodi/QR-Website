@@ -36,6 +36,8 @@ export default function CategorySection() {
         const fetchCategories = async () => {
             try {
                 const response = await fetch(`/api/categories`);
+                console.log(response);
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

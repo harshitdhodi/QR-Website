@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Button from '../ui/Button';
 import UserProfile from './UserProfile';
 import CartDropdown from './CartDropdown';
+import { safeImageSrc } from '@/lib/safeImageSrc';
 
 interface HeaderProps {
     btnColor?: string;
@@ -28,7 +29,7 @@ const Header = ({
     position = "absolute",
     btnlinkColor = "text-white",
     theme = "header-dark",
-    logo = "/images/logo/Combined Logo (2000x400).png"
+    logo = "/images/logo/combined-logo.png"
 }: HeaderProps) => {
     const { data: session } = useSession();
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -40,6 +41,9 @@ const Header = ({
         if (src.endsWith('.svg')) return src.replace('.svg', '-white.svg');
         return src; // fallback
     };
+
+    const lightLogoSrc = safeImageSrc(logo);
+    const darkLogoSrc = safeImageSrc(getDarkLogo(logo));
 
     // Toggle mobile menu
     const toggleMobileMenu = () => setMobileOpen(!mobileOpen);
@@ -68,7 +72,7 @@ const Header = ({
                             <Link href="/" className="flex min-w-0 max-w-[9.5rem] shrink items-center py-1 sm:max-w-[11rem] sm:shrink-0 lg:max-w-none lg:py-2">
                                 {/* Light Logo */}
                                 <Image
-                                    src={logo}
+                                    src={lightLogoSrc}
                                     alt="logo"
                                     width={150}
                                     height={150}
@@ -77,7 +81,7 @@ const Header = ({
                                 />
                                 {/* Dark Logo (auto-generated) */}
                                 <Image
-                                    src={getDarkLogo(logo)}
+                                    src={darkLogoSrc}
                                     alt="logo dark"
                                     width={150}
                                     height={150}
