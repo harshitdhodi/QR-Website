@@ -91,10 +91,11 @@ export const authOptions: NextAuthOptions = {
 
         try {
           const flow = (credentials as unknown as { flow?: string }).flow || "login";
+          // Server calls admin API directly (ADMIN_ORIGIN). Do not use /api/backend/* — that prefix is only for browser → Next.js proxy.
           const endpoint =
             flow === "register"
-              ? "/api/backend/auth/register/verify-otp"
-              : "/api/backend/auth/login/verify-otp";
+              ? "/api/auth/register/verify-otp"
+              : "/api/auth/login/verify-otp";
 
           const res = await fetch(`${ADMIN_ORIGIN}${endpoint}`, {
             method: "POST",
