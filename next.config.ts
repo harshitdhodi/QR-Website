@@ -3,8 +3,6 @@ import { getAdminOrigin } from "./src/lib/adminOrigin";
 
 const adminOrigin = getAdminOrigin();
 
-console.log("ADMIN ORIGIN:", adminOrigin);
-
 const nextConfig: NextConfig = {
   async rewrites() {
     return [
@@ -32,6 +30,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "www.qradmin.rndtd.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "qradmin.rndtd.com",
         pathname: "/**",
       },
     ],
