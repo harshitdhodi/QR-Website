@@ -1,28 +1,27 @@
-import { log } from "console";
-
 /**
  * Backend (admin API) origin for server rewrites and server-side fetches.
- * Set ADMIN_ORIGIN, NEXT_PUBLIC_ADMIN_ORIGIN, or NEXT_PUBLIC_ADMIN_API_URL in .env.
+ * In production, set ADMIN_ORIGIN or NEXT_PUBLIC_ADMIN_ORIGIN to your admin API (e.g. https://www.qradmin.rndtd.com).
  */
-export function getAdminOrigin() {
+const DEFAULT_PRODUCTION_ADMIN_ORIGIN = "https://www.qradmin.rndtd.com";
+const DEFAULT_DEV_ADMIN_ORIGIN = "http://localhost:3060";
+
+export function getAdminOrigin(): string {
   const explicit =
     process.env.ADMIN_ORIGIN?.replace(/\/$/, "") ||
     process.env.NEXT_PUBLIC_ADMIN_ORIGIN?.replace(/\/$/, "");
   if (explicit) return explicit;
 
   const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
-
-
   if (apiUrl) {
     try {
-      const fi = new URL(apiUrl).origin
-      console.log(fi, "fefe");
-
       return new URL(apiUrl).origin;
     } catch {
       /* ignore invalid URL */
     }
   }
 
-  // return "https://qradmin.rndtd.com";
+  if (process.env.NODE_ENV === "production") {
+    return DEFAULT_PRODUCTION_ADMIN_ORIGIN;
+  }
+  return DEFAULT_DEV_ADMIN_ORIGIN;
 }

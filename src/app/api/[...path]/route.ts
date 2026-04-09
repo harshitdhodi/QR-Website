@@ -1,14 +1,11 @@
 // src/app/api/[...path]/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import { getAdminOrigin } from "@/lib/adminOrigin";
 
-const ADMIN_ORIGIN = process.env.ADMIN_ORIGIN ||
-    process.env.NEXT_PUBLIC_ADMIN_ORIGIN ||
-    process.env.NEXT_PUBLIC_ADMIN_API_URL ||
-    "http://localhost:3060";
+const ADMIN_ORIGIN = getAdminOrigin();
 
 async function handler(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
     const { path } = await params;
-    console.log("🔴 ROUTE HANDLER HIT:", path);
     const url = `${ADMIN_ORIGIN}/api/${path.join("/")}${req.nextUrl.search}`;
 
     const res = await fetch(url, {
