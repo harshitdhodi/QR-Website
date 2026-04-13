@@ -45,7 +45,7 @@ export default function HomePage() {
             </div>
 
             <section id="contact" className="mt-10 md:mt-14">
-                <ContactPage />
+                <ContactPage embedded />
             </section>
 
             {/* dynamic blog section */}

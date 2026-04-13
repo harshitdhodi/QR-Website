@@ -3,14 +3,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminOrigin } from "@/lib/adminOrigin";
 
 const ADMIN_ORIGIN = getAdminOrigin();
+const GOOGLE_REVIEWS_PUBLIC_TOKEN = process.env.GOOGLE_REVIEWS_PUBLIC_TOKEN;
 
 async function handler(req: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
     const { path } = await params;
     const url = `${ADMIN_ORIGIN}/api/${path.join("/")}${req.nextUrl.search}`;
 
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    // Attach public token only for Google Reviews API calls
+    if (path[0] === "google-reviews" && GOOGLE_REVIEWS_PUBLIC_TOKEN) {
+        headers["x-public-token"] = GOOGLE_REVIEWS_PUBLIC_TOKEN;
+    }
+
     const res = await fetch(url, {
         method: req.method,
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: req.method !== "GET" && req.method !== "HEAD" ? await req.text() : undefined,
         redirect: "follow", // ← server follows redirect, browser never sees it
     });
