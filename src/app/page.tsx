@@ -3,7 +3,7 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import HeroOne from "@/components/layout/Heroone";
-import ContactPage from "./(site)/contact/page";
+import ContactSection from "./(site)/contact/ContactSection";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import WhyChooseUs2 from "@/components/WhyChooseUs2";
 import CategorySection from "@/components/layout/CategorySection";
@@ -45,7 +45,7 @@ export default function HomePage() {
             </div>
 
             <section id="contact" className="mt-10 md:mt-14">
-                <ContactPage embedded />
+                <ContactSection embedded />
             </section>
 
             {/* dynamic blog section */}

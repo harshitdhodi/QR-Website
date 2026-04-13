@@ -15,7 +15,7 @@ import { Car, PawPrint, Package } from "lucide-react";
 import { Zap } from "react-feather";
 import FeatureCard from "@/components/ui/FeatureCard4";
 import PageTitle2 from "@/components/ui/PageTitle2";
-import ContactPage from "../(site)/contact/page";
+import ContactSection from "../(site)/contact/ContactSection";
 import img from "../../../public/images/home-bg-3.webp";
 import img2 from "../../../public/images/about-5.webp";
 import img3 from "../../../public/images/about-6.webp";
@@ -358,7 +358,7 @@ export default function HomePage() {
 
             {/* cta wrap */}
             <section id="contact">
-                <ContactPage embedded />
+                <ContactSection embedded />
             </section>
             {/* <CtaSection /> */}
             {/* footer */}
