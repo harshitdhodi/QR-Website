@@ -358,7 +358,7 @@ export default function HomePage() {
 
             {/* cta wrap */}
             <section id="contact">
-                <ContactPage />
+                <ContactPage embedded />
             </section>
             {/* <CtaSection /> */}
             {/* footer */}

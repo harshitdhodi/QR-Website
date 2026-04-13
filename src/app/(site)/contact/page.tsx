@@ -1,8 +1,8 @@
 "use client";
 
-
 import { FormEvent, useState, useEffect } from "react";
-import { ArrowUpRight, Zap } from 'react-feather';
+import { ArrowUpRight } from "react-feather";
+import { cn } from "@/lib/cn";
 
 interface SectionData {
     tag_line?: string;
@@ -11,7 +11,7 @@ interface SectionData {
     [key: string]: unknown;
 }
 
-export default function ContactPage() {
+export default function ContactPage({ embedded = false }: { embedded?: boolean }) {
     const [submitted, setSubmitted] = useState(false);
     const [sectionData, setSectionData] = useState<SectionData | null>(null);
 
@@ -57,13 +57,19 @@ export default function ContactPage() {
     };
 
     return (
-        <>
-            <div className="absolute top-0  left-0 w-full h-96 font-dm bg-light-blue-banner "></div>
-            <div className="contact-wrap font-dm  z-10 z-20 relative">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 lg:py-20 py-16">
-                    <div className="grid lg:grid-cols-2 grid-cols-1 lg:gap-6 space-y-5 lg:space-y-0">
+        <div className="contact-wrap relative isolate font-dm">
+            <section
+                className={cn(
+                    "bg-light-blue-banner border-b border-slate-200/60 pb-10 sm:pb-12 lg:pb-16",
+                    embedded
+                        ? "pt-4 sm:pt-6 md:pt-8"
+                        : "pt-24 sm:pt-28 lg:pt-32"
+                )}
+            >
+                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
+                    <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12 lg:items-start">
                         {/* Left Side */}
-                        <div className="w-full lg:pr-16">
+                        <div className="w-full lg:pr-8 xl:pr-12">
                             {/* <div className="flex">
                                 <div className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-900 bg-white flex items-center gap-2">
                                     <Zap size={18} className="text-blue-900" />
@@ -77,13 +83,13 @@ export default function ContactPage() {
                                 const lastWord = words.length > 1 ? words.pop() : "";
                                 const firstPart = words.join(" ");
                                 return (
-                                    <h2 className="xl:text-[80px] lg:text-5xl text-4xl lg:leading-[1] tracking-tight text-gray-900 font-semibold mb-4 mt-3">
+                                    <h2 className="text-4xl font-semibold tracking-tight text-gray-900 lg:text-5xl xl:text-6xl xl:leading-[1.05] lg:leading-[1.08] mb-5 mt-0">
                                         {firstPart} <span className="text-blue-900">{lastWord}</span>
                                     </h2>
                                 );
                             })()}
 
-                            <p className="text-gray-700 font-medium text-base lg:pr-16">
+                            <p className="text-base font-medium leading-relaxed text-gray-600 lg:pr-8 xl:pr-12 max-w-xl">
                                 {sectionData?.parent_subtitle || "Use the contact form to get in touch or email us at info@uitheme.net. We will get back to you asap. Want to know more about our platform?"}
                             </p>
 
@@ -116,18 +122,16 @@ export default function ContactPage() {
                         </div>
 
                         {/* Right Side (Form) */}
-                        <div className="w-full">
-                            <div className="bg-white shadow-md border border-gray-200 shadow-lg
-    shadow-blue-900 rounded-2xl p-6 lg:p-8 min-h-[80vh] flex flex-col justify-between">
-                                <h4 className="text-gray-900 font-semibold lg:text-4xl text-3xl">
+                        <div className={cn("w-full", !embedded && "lg:sticky lg:top-28")}>
+                            <div className="flex flex-col rounded-2xl border border-slate-200/90 bg-white p-6 shadow-lg shadow-slate-900/5 ring-1 ring-slate-900/[0.03] sm:p-8 lg:p-9">
+                                <h4 className="text-2xl font-semibold text-gray-900 sm:text-3xl">
                                     Connect with us
                                 </h4>
-                                <p className="text-gray-600 font-medium text-[17px] lg:pr-5 mt-2">
-                                    Streamline HR processes and empower your team with our products.
-                                    Facilitate manage employee data.
+                                <p className="mt-2 text-[15px] font-medium leading-relaxed text-gray-600 sm:text-base">
+                                    Tell us what you need—we usually reply within one business day.
                                 </p>
 
-                                <div className="mt-2 pt-2">
+                                <div className="mt-6">
                                     <form onSubmit={handleSubmit} id="contactForm">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                             <div>
@@ -143,7 +147,7 @@ export default function ContactPage() {
                                                     name="firstName"
                                                     placeholder="Sophia etc."
                                                     required
-                                                    className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
                                                 />
                                             </div>
                                             <div>
@@ -159,7 +163,7 @@ export default function ContactPage() {
                                                     name="lastName"
                                                     placeholder="Carter etc."
                                                     required
-                                                    className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                    className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
                                                 />
                                             </div>
                                         </div>
@@ -177,7 +181,7 @@ export default function ContactPage() {
                                                 name="email"
                                                 placeholder="support@gmail.com"
                                                 required
-                                                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
                                             />
                                         </div>
 
@@ -193,7 +197,7 @@ export default function ContactPage() {
                                                 id="phone"
                                                 name="phone"
                                                 placeholder="+91 0000 12345"
-                                                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
                                             />
                                         </div>
 
@@ -210,14 +214,14 @@ export default function ContactPage() {
                                                 rows={3}
                                                 placeholder="Provide any details regarding your query …"
                                                 required
-                                                className="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                                                className="w-full resize-none rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-900/20"
                                             ></textarea>
                                         </div>
 
                                         <div>
                                             <button
                                                 type="submit"
-                                                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-white text-base font-medium bg-blue-900 hover:bg-blue-900 rounded-lg transition duration-300"
+                                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-900 px-6 py-3 text-base font-medium text-white transition hover:bg-blue-950 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-900 focus-visible:ring-offset-2"
                                             >
                                                 <span>Send message</span>
                                                 <ArrowUpRight size={20} />
@@ -234,7 +238,7 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
+            </section>
+        </div>
     );
 }
