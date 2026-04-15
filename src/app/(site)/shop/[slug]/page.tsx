@@ -167,7 +167,6 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
         flushSync(() => {
             addToCart(product, quantity);
         });
-        router.push("/checkout");
     };
 
     return (
