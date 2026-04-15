@@ -237,7 +237,7 @@ function LoginContent() {
                 return;
             }
             if (result?.ok) {
-                const callbackUrl = searchParams.get('callbackUrl') || '/';
+                const callbackUrl = '/';
                 router.push(callbackUrl);
             }
         } catch (error) {
