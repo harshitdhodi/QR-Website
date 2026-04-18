@@ -225,7 +225,7 @@ export default function OrdersPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch("/api/orders?limit=200&page=1", { cache: "no-store" });
+        const res = await fetch("/api/custom-orders", { cache: "no-store" });
         const json = (await res.json()) as OrdersApiResponse;
         if (!res.ok || !json?.success) {
           throw new Error(json?.message || "Failed to load orders");

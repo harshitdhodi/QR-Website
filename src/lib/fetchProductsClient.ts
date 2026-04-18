@@ -12,11 +12,13 @@ export async function fetchProductsEnriched(): Promise<Product[]> {
     const data: Product[] = await prodRes.json();
     let categoryMap: Record<string, string> = {};
     if (catRes.ok) {
-        const cats: { id: string; title: string }[] = await catRes.json();
-        categoryMap = Object.fromEntries(cats.map((c) => [c.id, c.title]));
+        const cats = (await catRes.json()) as Array<{ id: string; title: string; is_active?: boolean }>;
+        const activeCats = cats.filter((c) => c && c.is_active !== false);
+        categoryMap = Object.fromEntries(activeCats.map((c) => [c.id, c.title]));
     }
     return data.map((p) => ({
         ...p,
-        categoryNames: (p.categories || []).map((id) => categoryMap[id] || id),
+        // Only expose active category titles. Inactive categories are intentionally omitted.
+        categoryNames: (p.categories || []).map((id) => categoryMap[id]).filter(Boolean) as string[],
     }));
 }
