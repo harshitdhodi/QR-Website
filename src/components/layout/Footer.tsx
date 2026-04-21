@@ -32,6 +32,30 @@ interface DynamicFooterData {
 export default function Footer({ logo = "/images/logo/combined-logo-white.png" }: FooterProps) {
     const [footerData, setFooterData] = useState<DynamicFooterData | null>(null);
 
+    const getAdminOriginFromEnv = () => {
+        const direct = process.env.NEXT_PUBLIC_ADMIN_ORIGIN?.replace(/\/$/, "");
+        if (direct) return direct;
+        const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
+        if (apiUrl) {
+            try {
+                return new URL(apiUrl).origin.replace(/\/$/, "");
+            } catch {
+                // ignore invalid URL
+            }
+        }
+        return "";
+    };
+
+    const toAbsoluteBackendUrl = (src: string) => {
+        if (!src) return src;
+        if (src.startsWith("http://") || src.startsWith("https://")) return src;
+        if (!src.startsWith("/")) return src;
+        // Only prefix backend-served URLs. Keep local `/public/*` assets (e.g. `/images/...`) relative.
+        if (!src.startsWith("/api/")) return src;
+        const origin = getAdminOriginFromEnv();
+        return origin ? `${origin}${src}` : src;
+    };
+
     useEffect(() => {
         const fetchFooter = async () => {
             try {
@@ -52,7 +76,7 @@ export default function Footer({ logo = "/images/logo/combined-logo-white.png" }
 
     const getDarkLogo = (src: string) => {
         if (!src) return logo;
-        // If it's a dynamic URL from API, we return it as is
+        // If it's a dynamic URL from API, return it as-is (no "-white" mutation).
         if (src.includes('/api/image/download')) return src;
 
         if (/-white\.(png|jpg|jpeg|svg)$/i.test(src)) {
@@ -61,8 +85,8 @@ export default function Footer({ logo = "/images/logo/combined-logo-white.png" }
         return src.replace(/\.(png|jpg|jpeg|svg)$/i, '-white.$1');
     };
 
-    const displayLogo = logo;
-    const safeLogo = safeImageSrc(getDarkLogo(displayLogo));
+    const displayLogo = footerData?.logo_url || logo;
+    const safeLogo = safeImageSrc(toAbsoluteBackendUrl(getDarkLogo(displayLogo)));
     const description = footerData?.description || "We place great emphasis on designers, artists, and brands.";
     const phone = footerData?.phone || "+91-730 494 5821";
     const email = footerData?.email || "info@qr.com";
