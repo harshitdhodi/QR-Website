@@ -35,15 +35,42 @@ const Header = ({
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
+    const getAdminOriginFromEnv = () => {
+        const direct = process.env.NEXT_PUBLIC_ADMIN_ORIGIN?.replace(/\/$/, "");
+        if (direct) return direct;
+        const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
+        if (apiUrl) {
+            try {
+                return new URL(apiUrl).origin.replace(/\/$/, "");
+            } catch {
+                // ignore invalid URL
+            }
+        }
+        return "";
+    };
+
+    const toAbsoluteBackendUrl = (src: string) => {
+        if (!src) return src;
+        if (src.startsWith("http://") || src.startsWith("https://")) return src;
+        if (!src.startsWith("/")) return src;
+        // Only prefix backend-served URLs. Keep local `/public/*` assets (e.g. `/images/...`) relative.
+        if (!src.startsWith("/api/")) return src;
+        const origin = getAdminOriginFromEnv();
+        return origin ? `${origin}${src}` : src;
+    };
+
     const getDarkLogo = (src: string) => {
+        if (!src) return src;
+        // Don't mutate backend image paths (they won't have a "-white" variant).
+        if (src.includes('/api/image/download')) return src;
         if (src.endsWith('.png')) return src.replace('.png', '-white.png');
         if (src.endsWith('.jpg')) return src.replace('.jpg', '-white.jpg');
         if (src.endsWith('.svg')) return src.replace('.svg', '-white.svg');
         return src; // fallback
     };
 
-    const lightLogoSrc = safeImageSrc(logo);
-    const darkLogoSrc = safeImageSrc(getDarkLogo(logo));
+    const lightLogoSrc = safeImageSrc(toAbsoluteBackendUrl(logo));
+    const darkLogoSrc = safeImageSrc(toAbsoluteBackendUrl(getDarkLogo(logo)));
 
     // Toggle mobile menu
     const toggleMobileMenu = () => setMobileOpen(!mobileOpen);

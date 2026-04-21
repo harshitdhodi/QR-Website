@@ -18,6 +18,18 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3060",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "3060",
+        pathname: "/**",
+      },
+      {
         protocol: "https",
         hostname: "ik.imagekit.io",
         pathname: "/**",

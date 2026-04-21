@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AuthorBio from "@/components/ui/AuthorBio";
 import TrendingPosts from "@/components/ui/TrendingPosts";
+import { safeImageSrc } from "@/lib/safeImageSrc";
 
 import { ArrowUpRight, ChevronDown } from "react-feather";
 import PageTitle from "@/components/ui/PageTitle";
@@ -42,6 +43,32 @@ export default function BlogPage() {
         };
         fetchData();
     }, []);
+
+    const getAdminOriginFromEnv = () => {
+        const direct = process.env.NEXT_PUBLIC_ADMIN_ORIGIN?.replace(/\/$/, "");
+        if (direct) return direct;
+        const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
+        if (apiUrl) {
+            try {
+                return new URL(apiUrl).origin.replace(/\/$/, "");
+            } catch {
+                // ignore invalid URL
+            }
+        }
+        return "";
+    };
+
+    const toAbsoluteBackendUrl = (src: string) => {
+        if (!src) return src;
+        if (src.startsWith("http://") || src.startsWith("https://")) return src;
+        if (!src.startsWith("/")) return src;
+        // Only prefix backend-served URLs. Keep local `/public/*` assets (e.g. `/images/...`) relative.
+        if (!src.startsWith("/api/")) return src;
+        const origin = getAdminOriginFromEnv();
+        return origin ? `${origin}${src}` : src;
+    };
+
+    const img = (src: string) => safeImageSrc(toAbsoluteBackendUrl(src));
 
     const featuredPost = blogPosts.length > 0 ? blogPosts[0] : null; // first blog is featured here
     const sidePosts = blogPosts.length > 1 ? blogPosts.slice(1, 4) : [];
@@ -109,7 +136,7 @@ export default function BlogPage() {
                                 >
                                     <div className="overflow-hidden">
                                         <Image
-                                            src={featuredPost.image}
+                                            src={img(featuredPost.image)}
                                             alt={featuredPost.title}
                                             width={800}
                                             height={500}
@@ -131,7 +158,7 @@ export default function BlogPage() {
                                             </p>
                                             <div className="flex flex-row gap-3 mt-4 items-center">
                                                 <Image
-                                                    src={featuredPost.authorAvatar}
+                                                    src={img(featuredPost.authorAvatar)}
                                                     alt={featuredPost.author}
                                                     width={44}
                                                     height={44}
@@ -163,7 +190,7 @@ export default function BlogPage() {
                                         <div className="lg:w-1/3 w-full">
                                             <div className="overflow-hidden h-full">
                                                 <Image
-                                                    src={post.image}
+                                                    src={img(post.image)}
                                                     alt={post.title}
                                                     width={300}
                                                     height={200}
@@ -227,7 +254,7 @@ export default function BlogPage() {
                                             <div className="md:w-5/12 h-full">
                                                 <div className="overflow-hidden rounded-lg">
                                                     <Image
-                                                        src={post.image}
+                                                        src={img(post.image)}
                                                         alt={post.title}
                                                         width={500}
                                                         height={300}
@@ -248,7 +275,7 @@ export default function BlogPage() {
                                                     <p className="text-gray-600 font-medium text-[17px] mt-1 lg:pr-20 mb-2"> {post.excerpt} </p>
                                                     <div className="flex flex-row gap-3 mt-2 items-center">
                                                         <Image
-                                                            src={post.authorAvatar}
+                                                            src={img(post.authorAvatar)}
                                                             alt={post.author}
                                                             width={40}
                                                             height={40}
