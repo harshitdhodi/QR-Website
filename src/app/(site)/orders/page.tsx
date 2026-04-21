@@ -225,23 +225,43 @@ export default function OrdersPage() {
       setLoading(true);
       setError("");
       try {
-        const res = await fetch("/api/custom-orders", { cache: "no-store" });
-        const json = (await res.json()) as OrdersApiResponse;
-        if (!res.ok || !json?.success) {
-          throw new Error(json?.message || "Failed to load orders");
+        const accessToken = (session as unknown as { accessToken?: string | null })?.accessToken || null;
+        if (!accessToken) {
+          throw new Error("Missing access token. Please log in again.");
         }
 
-        const email = session?.user?.email?.toLowerCase().trim();
-        const mine = (json.data || []).filter((o) => {
-          if (!email) return false;
-          const ship = (o.shippingEmail || "").toLowerCase().trim();
-          const cust = (o.customerEmail || "").toLowerCase().trim();
-          return ship === email || cust === email;
+        const res = await fetch("/api/orders/my", {
+          method: "GET",
+          cache: "no-store",
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        mine.sort((a, b) => (new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()));
+        const text = await res.text();
+        const json = (() => {
+          try {
+            return JSON.parse(text) as unknown;
+          } catch {
+            return null;
+          }
+        })();
 
-        if (!cancelled) setOrders(mine);
+        if (!res.ok) {
+          const msg =
+            (json && typeof json === "object" && json !== null && "message" in json && typeof (json as { message?: unknown }).message === "string"
+              ? (json as { message: string }).message
+              : "") || text || "Failed to load orders";
+          throw new Error(msg);
+        }
+
+        const rows: OrderRow[] =
+          (json && typeof json === "object" && json !== null && "data" in json && Array.isArray((json as { data?: unknown }).data)
+            ? ((json as { data: OrderRow[] }).data || [])
+            : Array.isArray(json)
+              ? (json as OrderRow[])
+              : []) || [];
+
+        rows.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        if (!cancelled) setOrders(rows);
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : "Something went wrong");
       } finally {
@@ -252,7 +272,7 @@ export default function OrdersPage() {
     return () => {
       cancelled = true;
     };
-  }, [status, session?.user?.email]);
+  }, [status, session]);
 
   const totalSpent = useMemo(() => {
     return orders.reduce((sum, o) => {
