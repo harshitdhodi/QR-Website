@@ -66,6 +66,45 @@ const EMPTY_ADDRESS = {
   country: 'India',
 };
 
+const CHECKOUT_SESSION_STORAGE_KEY = 'checkoutSessionId';
+
+function newCheckoutSessionId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
+function ensureCheckoutSessionId(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    if (!sessionStorage.getItem(CHECKOUT_SESSION_STORAGE_KEY)) {
+      sessionStorage.setItem(CHECKOUT_SESSION_STORAGE_KEY, newCheckoutSessionId());
+    }
+  } catch {
+    // ignore (e.g. storage disabled)
+  }
+}
+
+function readCheckoutSessionIdForRequest(): string | undefined {
+  if (typeof window === 'undefined') return undefined;
+  try {
+    const id = sessionStorage.getItem(CHECKOUT_SESSION_STORAGE_KEY);
+    return id && id.length > 0 ? id : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function clearCheckoutSessionId(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(CHECKOUT_SESSION_STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -83,8 +122,14 @@ export default function CheckoutPage() {
   const [pincodeLoading, setPincodeLoading] = useState(false);
   const [pincodeError, setPincodeError] = useState('');
   const [pincodeFilled, setPincodeFilled] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
 
   const savedAddrDropdownRef = useRef<HTMLDivElement>(null);
+  const prevCartLengthRef = useRef<number | null>(null);
+
+  const PHONE_ERROR = 'Please enter a valid phone number (8-15 digits).';
+
+  const isValidPhoneDigits = (digits: string) => digits.length >= 8 && digits.length <= 15;
 
   const cartItems = useMemo(() => cart.map(item => ({
     name: item.product.title,
@@ -103,6 +148,24 @@ export default function CheckoutPage() {
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  // Stable checkout session id: set once per visit when user reaches checkout (authenticated).
+  useEffect(() => {
+    if (status !== 'authenticated') return;
+    ensureCheckoutSessionId();
+  }, [status]);
+
+  // New checkout without completing payment: cart went from non-empty → empty → drop session id so next checkout gets a new UUID.
+  useEffect(() => {
+    if (prevCartLengthRef.current === null) {
+      prevCartLengthRef.current = cart.length;
+      return;
+    }
+    if (prevCartLengthRef.current > 0 && cart.length === 0) {
+      clearCheckoutSessionId();
+    }
+    prevCartLengthRef.current = cart.length;
+  }, [cart.length]);
 
   // Auth / session
   useEffect(() => {
@@ -147,16 +210,18 @@ export default function CheckoutPage() {
 
   const applyAddress = (addr: SavedAddress) => {
     setSelectedAddressId(addr.id);
+    const phoneDigits = (addr.phone || '').replace(/\D/g, '').slice(0, 15);
     setAddressData(prev => ({
       ...prev,
       street: addr.street || '',
       city: normalizeCity(addr.city || ''),
       state: normalizeState(addr.state || ''),
       pincode: addr.pincode || '',
-      phone: addr.phone || prev.phone,
+      phone: phoneDigits || prev.phone,
     }));
     setPincodeError('');
     setPincodeFilled(false);
+    setPhoneError('');
   };
 
   // Pincode → India Post API → auto-fill city & state
@@ -189,6 +254,21 @@ export default function CheckoutPage() {
     else setPincodeError('');
   };
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value.replace(/\D/g, '').slice(0, 15);
+    setAddressData(prev => ({ ...prev, phone: v }));
+    if (phoneError && isValidPhoneDigits(v)) setPhoneError('');
+  };
+
+  const handlePhoneBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const digits = e.target.value.replace(/\D/g, '');
+    if (digits.length === 0) {
+      setPhoneError('');
+      return;
+    }
+    if (!isValidPhoneDigits(digits)) setPhoneError(PHONE_ERROR);
+  };
+
   // Razorpay
   const loadRazorpayScript = () =>
     new Promise<boolean>((resolve) => {
@@ -204,11 +284,20 @@ export default function CheckoutPage() {
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) { alert('Cart is empty'); return; }
+
+    const phoneDigits = (addressData.phone || '').replace(/\D/g, '').slice(0, 15);
+    if (!isValidPhoneDigits(phoneDigits)) {
+      setPhoneError(PHONE_ERROR);
+      return;
+    }
+    setPhoneError('');
+
     setLoading(true);
     setCheckoutError('');
 
     const normalizedAddress: ShippingAddress = {
       ...addressData,
+      phone: phoneDigits,
       city: normalizeCity(addressData.city),
       state: normalizeState(addressData.state),
       pincode: addressData.pincode.trim(),
@@ -224,15 +313,18 @@ export default function CheckoutPage() {
       }
 
       try {
+        ensureCheckoutSessionId();
+        const checkoutSessionId = readCheckoutSessionIdForRequest();
         const payload = {
           customerId: (session?.user as { id?: string })?.id || null,
           items: cartItems,
-          phone: addressData.phone,
+          phone: normalizedAddress.phone,
           address: normalizedAddress,
           paymentMethod: 'ONLINE',
+          ...(checkoutSessionId ? { checkoutSessionId } : {}),
         };
 
-        const orderRes = await fetch('/api/backend/razorpay/order', {
+        const orderRes = await fetch('/api/razorpay/order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -261,7 +353,7 @@ export default function CheckoutPage() {
 
         const name = normalizedAddress?.name || 'Customer';
         const email = normalizedAddress?.email || '';
-        const rawContact = normalizedAddress?.phone || addressData.phone || '';
+        const rawContact = normalizedAddress.phone || '';
         const contact = String(rawContact).replace(/\D/g, '');
 
         const RazorpayCtor = window.Razorpay as unknown as new (opts: unknown) => {
@@ -282,7 +374,7 @@ export default function CheckoutPage() {
           theme: { color: '#1e3a8a' },
           handler: async function (response: RazorpayPaymentSuccessResponse) {
             try {
-              const verifyRes = await fetch('/api/backend/razorpay/verify', {
+              const verifyRes = await fetch('/api/razorpay/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -311,7 +403,19 @@ export default function CheckoutPage() {
                 return;
               }
 
-              await completeOrder(normalizedAddress, 'PREPAID');
+              // Prepaid flow:
+              // Only create Razorpay order -> pay -> verify. Do NOT also POST /api/orders.
+              clearCheckoutSessionId();
+              clearCart();
+              const paidOrderId =
+                verifyJson?.orderId ??
+                verifyJson?.data?.orderId ??
+                verifyJson?.id ??
+                localOrderId ??
+                "";
+              alert(`Payment successful!${paidOrderId ? ` Order ID: ${paidOrderId}` : ""}`);
+              router.push('/orders');
+              setLoading(false);
             } catch (err) {
               console.error(err);
               setCheckoutError('Payment verification failed. Please try again.');
@@ -364,6 +468,7 @@ export default function CheckoutPage() {
         }
       })();
       if (res.ok) {
+        clearCheckoutSessionId();
         clearCart();
         const orderId = data?.orderId ?? data?.data?.orderId ?? data?.id ?? '';
         alert(`Order placed! Order ID: ${orderId || '(received)'}`);
@@ -472,14 +577,28 @@ export default function CheckoutPage() {
                         />
                       </div>
                       <div className="space-y-1.5 md:col-span-2">
-                        <label className="text-sm font-medium text-gray-700">Phone Number</label>
+                        <label className="text-sm font-medium text-gray-700" htmlFor="checkout-phone">
+                          Phone Number
+                        </label>
                         <input
-                          className="w-full border border-gray-200 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 outline-none transition-all bg-gray-50/50 hover:bg-white"
-                          placeholder="+91 98765 43210"
+                          id="checkout-phone"
+                          type="tel"
+                          inputMode="numeric"
+                          autoComplete="tel"
+                          maxLength={15}
+                          className={`w-full border px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 outline-none transition-all bg-gray-50/50 hover:bg-white ${phoneError ? 'border-red-300' : 'border-gray-200'}`}
+                          placeholder="8-15 digits (numbers only)"
                           value={addressData.phone}
-                          onChange={e => setAddressData({ ...addressData, phone: e.target.value })}
-                          required
+                          onChange={handlePhoneChange}
+                          onBlur={handlePhoneBlur}
+                          aria-invalid={!!phoneError}
+                          aria-describedby={phoneError ? 'checkout-phone-error' : undefined}
                         />
+                        {phoneError ? (
+                          <p id="checkout-phone-error" className="text-sm text-red-600 mt-1" role="alert">
+                            {phoneError}
+                          </p>
+                        ) : null}
                       </div>
                     </div>
                   </div>
