@@ -42,7 +42,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             const customerId = (session.user as { id?: string }).id || session.user.email;
             if (!customerId) return;
 
-            fetch(`/api/carts?customerId=${customerId}`)
+            fetch(`/api/backend/carts?customerId=${customerId}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success && data.data?.items?.length > 0) {
@@ -85,7 +85,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 }))
             };
 
-            fetch('/api/carts', {
+            fetch('/api/backend/carts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
