@@ -22,7 +22,7 @@ export default function BlogPage() {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const blogRes = await fetch('/api/blog-posts');
+                const blogRes = await fetch('/api/backend/blog-posts');
                 const blogData = await blogRes.json();
                 if (Array.isArray(blogData)) {
                     setBlogPosts(blogData);
@@ -30,7 +30,7 @@ export default function BlogPage() {
                     setBlogPosts(blogData.data);
                 }
 
-                const ownerRes = await fetch('/api/owner');
+                const ownerRes = await fetch('/api/backend/owner');
                 const ownerData = await ownerRes.json();
                 if (ownerData.success && ownerData.data.length > 0) {
                     setOwner(ownerData.data[0]);

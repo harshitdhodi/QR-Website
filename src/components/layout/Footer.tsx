@@ -60,7 +60,7 @@ export default function Footer({ logo = "/images/logo/combined-logo-white.png" }
         const fetchFooter = async () => {
             try {
                 // Using the proxied /api/footer which points to the remote backend
-                const res = await fetch('/api/footer');
+                const res = await fetch('/api/backend/footer');
                 console.log("Footer Response", res);
 
                 const result = await res.json();

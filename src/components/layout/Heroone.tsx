@@ -48,7 +48,7 @@ export default function HeroOne() {
   useEffect(() => {
     const fetchHeroContent = async () => {
       try {
-        const response = await fetch(`/api/hero-content`);
+        const response = await fetch(`/api/backend/hero-content`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

@@ -36,7 +36,7 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await fetch(`/api/products/${slug}`);
+                const res = await fetch(`/api/backend/products/${slug}`);
                 if (!res.ok) throw new Error("Product not found");
                 const data = (await res.json()) as Product;
                 setProduct(data);

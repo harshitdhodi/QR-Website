@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
     useEffect(() => {
         const fetchPolicy = async () => {
             try {
-                const res = await fetch('/api/policies?slug=privacy-policy');
+                const res = await fetch('/api/backend/policies?slug=privacy-policy');
                 if (res.ok) {
                     const result = await res.json();
                     if (result.success && result.data) {

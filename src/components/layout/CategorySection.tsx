@@ -35,7 +35,7 @@ export default function CategorySection() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch(`/api/categories`);
+                const response = await fetch(`/api/backend/categories`);
                 console.log(response);
 
                 if (!response.ok) {

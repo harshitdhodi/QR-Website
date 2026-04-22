@@ -3,8 +3,8 @@ import type { Product } from "@/const/productData";
 /** Loads products from `/api/products` (proxied to admin API) and maps category UUIDs to display names using `/api/categories`. */
 export async function fetchProductsEnriched(): Promise<Product[]> {
     const [catRes, prodRes] = await Promise.all([
-        fetch("/api/categories"),
-        fetch("/api/products"),
+        fetch("/api/backend/categories"),
+        fetch("/api/backend/products"),
     ]);
     if (!prodRes.ok) {
         throw new Error("Failed to load products");

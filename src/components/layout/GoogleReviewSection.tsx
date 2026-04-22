@@ -48,7 +48,7 @@ export default function GoogleReviewSection() {
 
   const fetchGoogleReviews = async () => {
     try {
-      const response = await fetch("/api/google-reviews");
+      const response = await fetch("/api/backend/google-reviews");
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const data = await response.json();
@@ -88,7 +88,7 @@ export default function GoogleReviewSection() {
         return;
       }
 
-      const res = await fetch("/api/google-reviews/public", {
+      const res = await fetch("/api/backend/google-reviews/public", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
