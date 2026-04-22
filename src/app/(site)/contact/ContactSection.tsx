@@ -18,7 +18,7 @@ export default function ContactSection({ embedded = false }: { embedded?: boolea
     useEffect(() => {
         const fetchSectionData = async () => {
             try {
-                const sectionRes = await fetch("/api/feature-sections?section_name=contact_us");
+                const sectionRes = await fetch("/api/backend/feature-sections?section_name=contact_us");
                 if (sectionRes.ok) {
                     const data = await sectionRes.json();
                     setSectionData(data);
@@ -39,7 +39,7 @@ export default function ContactSection({ embedded = false }: { embedded?: boolea
         const data = Object.fromEntries(formData.entries());
 
         try {
-            const res = await fetch("/api/inquiries", {
+            const res = await fetch("/api/backend/inquiries", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),

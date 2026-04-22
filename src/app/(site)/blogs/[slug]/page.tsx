@@ -9,7 +9,7 @@ const SingleBlogPage = async ({ params }: { params: Promise<{ slug: string }> })
     const resolvedParams = await Promise.resolve(params);
     const slug = resolvedParams.slug;
 
-    const res = await fetch(`http://localhost:3059/api/blog-posts/slug/${slug}`, {
+    const res = await fetch(`http://localhost:3059/api/backend/blog-posts/slug/${slug}`, {
         cache: "no-store",
     });
 

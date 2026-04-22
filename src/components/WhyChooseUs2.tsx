@@ -134,13 +134,13 @@ export default function WhyChooseUs2() {
   useEffect(() => {
     const fetchHowItWorks = async () => {
       try {
-        const sectionRes = await fetch('/api/feature-sections?section_name=how_it_work');
+        const sectionRes = await fetch('/api/backend/feature-sections?section_name=how_it_work');
         if (sectionRes.ok) {
           const sData = await sectionRes.json();
           setSectionData(sData);
         }
 
-        const response = await fetch(`/api/how-it-works`);
+        const response = await fetch(`/api/backend/how-it-works`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

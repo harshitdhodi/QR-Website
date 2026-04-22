@@ -31,13 +31,13 @@ const FaqSection = () => {
         const fetchFaqs = async () => {
             try {
                 // Fetch section data
-                const sectionRes = await fetch('/api/feature-sections?section_name=faq');
+                const sectionRes = await fetch('/api/backend/feature-sections?section_name=faq');
                 if (sectionRes.ok) {
                     const sData = await sectionRes.json();
                     setSectionData(sData);
                 }
 
-                const response = await fetch('/api/faqs');
+                const response = await fetch('/api/backend/faqs');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

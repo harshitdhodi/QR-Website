@@ -37,13 +37,13 @@ export default function BlogSection() {
         const fetchBlogs = async () => {
             try {
                 // Fetch section data
-                const sectionRes = await fetch('/api/feature-sections?section_name=blogs');
+                const sectionRes = await fetch('/api/backend/feature-sections?section_name=blogs');
                 if (sectionRes.ok) {
                     const sData = await sectionRes.json();
                     setSectionData(sData);
                 }
 
-                const response = await fetch('/api/blog-posts');
+                const response = await fetch('/api/backend/blog-posts');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

@@ -139,13 +139,13 @@ export default function WhyChooseUs() {
   useEffect(() => {
     const fetchWhyChooseUs = async () => {
       try {
-        const sectionRes = await fetch('/api/feature-sections?section_name=why_choose_us');
+        const sectionRes = await fetch('/api/backend/feature-sections?section_name=why_choose_us');
         if (sectionRes.ok) {
           const sData = await sectionRes.json();
           setSectionData(sData);
         }
 
-        const response = await fetch(`/api/why-choose-us`);
+        const response = await fetch(`/api/backend/why-choose-us`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

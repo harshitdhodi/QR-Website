@@ -12,7 +12,7 @@ export default function RefundPolicyPage() {
     useEffect(() => {
         const fetchPolicy = async () => {
             try {
-                const res = await fetch('/api/policies?slug=refund-policy');
+                const res = await fetch('/api/backend/policies?slug=refund-policy');
                 if (res.ok) {
                     const result = await res.json();
                     if (result.success && result.data) {
