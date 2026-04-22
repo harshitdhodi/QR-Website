@@ -23,6 +23,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const { data: session, status } = useSession();
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isDbLoaded, setIsDbLoaded] = useState(false);
+    const accessToken = (session as unknown as { accessToken?: string | null })?.accessToken || null;
 
     // Initial load: Local storage
     useEffect(() => {
@@ -36,18 +37,29 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
+    // On logout, clear any persisted cart so the next user doesn't see it.
+    useEffect(() => {
+        if (status !== "unauthenticated") return;
+        setCart([]);
+        setIsDbLoaded(false);
+        try {
+            localStorage.removeItem("cart");
+        } catch {
+            // ignore
+        }
+    }, [status]);
+
     // Load from DB if user is logged in
     useEffect(() => {
         if (status === 'authenticated' && session?.user && !isDbLoaded) {
-            const customerId = (session.user as { id?: string }).id || session.user.email;
-            if (!customerId) return;
-
-            fetch(`/api/backend/carts?customerId=${customerId}`)
+            fetch(`/api/carts`, {
+                method: "GET",
+                headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+                cache: "no-store",
+            })
                 .then(res => res.json())
                 .then(data => {
-                    if (data.success && data.data?.items?.length > 0) {
-                        // Merge or replace cart from DB
-                        // Simple approach: map db items to CartItem structure
+                    if (data?.success && data?.data?.items?.length > 0) {
                         const dbCart = data.data.items.map((it: { productId: number; title: string; price: string | number; slug: string; imgOne: string; quantity: number }) => ({
                             product: {
                                 id: it.productId,
@@ -62,36 +74,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                     }
                     setIsDbLoaded(true);
                 })
-                .catch(err => console.error("Failed to fetch user cart", err));
+                .catch(err => {
+                    console.error("Failed to fetch user cart", err);
+                    setIsDbLoaded(true);
+                });
         }
-    }, [status, session, isDbLoaded]);
+    }, [status, session, isDbLoaded, accessToken]);
 
-    // Save to local storage & DB
+    // Save to local storage (always)
     useEffect(() => {
-        // ALWAYS update local storage as fallback
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        // If logged in, sync to DB
-        if (status === 'authenticated' && session?.user && isDbLoaded) {
-            const customerId = (session.user as { id?: string }).id || session.user.email;
-            if (!customerId) return;
-
-            const payload = {
-                customerId,
-                items: cart.map(item => ({
-                    productId: item.product.id,
-                    quantity: item.quantity,
-                    options: {}
-                }))
-            };
-
-            fetch('/api/backend/carts', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).catch(e => console.error("Failed to sync cart to DB", e));
-        }
-    }, [cart, status, session, isDbLoaded]);
+    }, [cart]);
 
     const addToCart = (product: Product, quantity: number = 1) => {
         setCart((prev) => {
@@ -105,10 +98,31 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             }
             return [...prev, { product, quantity }];
         });
+
+        // Sync to backend (best-effort) using jwt in body (as per backend contract).
+        if (status === "authenticated" && accessToken) {
+            fetch("/api/carts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+                body: JSON.stringify({
+                    jwt: accessToken,
+                    product: { id: product.id },
+                    productId: product.id,
+                    quantity,
+                }),
+            }).catch((e) => console.error("Failed to add to cart (backend)", e));
+        }
     };
 
     const removeFromCart = (productId: number) => {
         setCart((prev) => prev.filter((item) => item.product.id !== productId));
+
+        if (status === "authenticated" && accessToken) {
+            fetch(`/api/carts?productId=${encodeURIComponent(String(productId))}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${accessToken}` },
+            }).catch((e) => console.error("Failed to remove from cart (backend)", e));
+        }
     };
 
     const clearCart = () => setCart([]);
