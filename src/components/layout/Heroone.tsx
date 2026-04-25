@@ -5,6 +5,7 @@ import Button from "../ui/Button";
 import Image, { StaticImageData } from "next/image";
 import TopCarousel from "../ui/TopCarousel";
 import { Skeleton } from "../ui/Skeleton";
+import { resolveBackendImageSrc } from "@/lib/resolveBackendImageSrc";
 import img from "../../../public/images/right-banner-bg.webp";
 import a1 from "../../../public/images/avater-11.webp";
 import a2 from "../../../public/images/avater-12.webp";
@@ -33,28 +34,8 @@ interface HeroContent {
   sort_order?: number;
 }
 
-const getAdminOriginFromEnv = () => {
-  const direct = process.env.NEXT_PUBLIC_ADMIN_ORIGIN?.replace(/\/$/, "");
-  if (direct) return direct;
-  const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
-  if (apiUrl) {
-    try {
-      return new URL(apiUrl).origin.replace(/\/$/, "");
-    } catch {
-      // ignore invalid URL
-    }
-  }
-  // safe default for production
-  return "https://qradmin.rndtd.com";
-};
-
 export const resolveImageUrl = (url: string | null | undefined, fallback: string | StaticImageData) => {
-  if (!url) return fallback;
-  if (typeof url !== "string") return url;
-  if (url.startsWith("http://") || url.startsWith("https://")) return url;
-  // Backend returns paths like `/uploads/...` or `/api/image/download/...`
-  if (url.startsWith("/uploads/") || url.startsWith("/api/")) return `${getAdminOriginFromEnv()}${url}`;
-  return url;
+  return resolveBackendImageSrc(url, fallback);
 };
 
 
