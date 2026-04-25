@@ -15,10 +15,17 @@ function getAdminOriginFromEnv() {
   return "https://qradmin.rndtd.com";
 }
 
+function getUploadsOriginFromEnv() {
+  const direct = process.env.NEXT_PUBLIC_UPLOADS_ORIGIN?.replace(/\/$/, "");
+  return direct || "";
+}
+
 /**
  * Normalizes backend-provided image paths so `next/image` can load them.
  * - Keeps local `/public/*` assets (e.g. `/images/...`) relative
- * - Prefixes admin origin for backend paths like `/uploads/...` and `/api/...`
+ * - Prefixes admin origin for backend API paths like `/api/...`
+ * - For `/uploads/...`: defaults to the admin origin (uploads are served by dashboard),
+ *   but can be overridden by setting `NEXT_PUBLIC_UPLOADS_ORIGIN` (e.g. CDN).
  * - Encodes URL safely via `safeImageSrc`
  */
 export function resolveBackendImageSrc(
@@ -29,7 +36,11 @@ export function resolveBackendImageSrc(
   if (typeof src !== "string") return fallback;
 
   if (src.startsWith("http://") || src.startsWith("https://")) return safeImageSrc(src);
-  if (src.startsWith("/uploads/") || src.startsWith("/api/")) return safeImageSrc(`${getAdminOriginFromEnv()}${src}`);
+  if (src.startsWith("/api/")) return safeImageSrc(`${getAdminOriginFromEnv()}${src}`);
+  if (src.startsWith("/uploads/")) {
+    const uploadsOrigin = getUploadsOriginFromEnv() || getAdminOriginFromEnv();
+    return safeImageSrc(`${uploadsOrigin}${src}`);
+  }
   return safeImageSrc(src);
 }
 
