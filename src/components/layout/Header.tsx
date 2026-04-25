@@ -69,8 +69,12 @@ const Header = ({
         return src; // fallback
     };
 
-    const lightLogoSrc = safeImageSrc(toAbsoluteBackendUrl(logo));
-    const darkLogoSrc = safeImageSrc(toAbsoluteBackendUrl(getDarkLogo(logo)));
+    const DEFAULT_LIGHT_LOGO = "/images/logo/combined-logo.png";
+    const DEFAULT_DARK_LOGO = "/images/logo/combined-logo-white.png";
+
+    const isUsingDefaultLogo = !logo || logo === DEFAULT_LIGHT_LOGO;
+    const lightLogoSrc = isUsingDefaultLogo ? DEFAULT_LIGHT_LOGO : safeImageSrc(toAbsoluteBackendUrl(logo));
+    const darkLogoSrc = isUsingDefaultLogo ? DEFAULT_DARK_LOGO : safeImageSrc(toAbsoluteBackendUrl(getDarkLogo(logo)));
 
     // Toggle mobile menu
     const toggleMobileMenu = () => setMobileOpen(!mobileOpen);
@@ -104,7 +108,8 @@ const Header = ({
                                     width={150}
                                     height={150}
                                     priority
-                                    className="light-logo h-8 w-auto sm:h-9 lg:h-auto max-h-10 object-contain object-left"
+                                    unoptimized={isUsingDefaultLogo}
+                                    className="h-8 w-auto sm:h-9 lg:h-auto max-h-10 object-contain object-left block dark:hidden"
                                 />
                                 {/* Dark Logo (auto-generated) */}
                                 <Image
@@ -113,7 +118,8 @@ const Header = ({
                                     width={150}
                                     height={150}
                                     priority
-                                    className="dark-logo h-8 w-auto sm:h-9 lg:h-auto max-h-10 object-contain object-left"
+                                    unoptimized={isUsingDefaultLogo}
+                                    className="h-8 w-auto sm:h-9 lg:h-auto max-h-10 object-contain object-left hidden dark:block"
                                 />
                             </Link>
 

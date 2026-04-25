@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Search } from 'react-feather';
 import type { Product } from '@/const/productData';
 import { fetchProductsEnriched } from '@/lib/fetchProductsClient';
+import { resolveBackendImageSrc } from '@/lib/resolveBackendImageSrc';
 
 type ProductWithCategories = Product & { categoryNames?: string[] };
 
@@ -116,7 +117,7 @@ export default function NavbarProductSearch({ className = '' }: { className?: st
                     >
                       <div className="relative h-9 w-9 sm:h-10 sm:w-10 shrink-0 overflow-hidden rounded-md bg-gray-100">
                         <Image
-                          src={p.imgOne}
+                          src={resolveBackendImageSrc(p.imgOne, "/images/fallback-image.png")}
                           alt={p.title}
                           width={40}
                           height={40}

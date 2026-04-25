@@ -8,6 +8,7 @@ import Button from "./Button";
 import Image from "next/image";
 import { useCart } from "@/components/providers/CartProvider";
 import { useRouter } from "next/navigation";
+import { resolveBackendImageSrc } from "@/lib/resolveBackendImageSrc";
 
 function formatInr(value: number | string | undefined) {
     const n = Number(value);
@@ -57,7 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                     <div className="group block relative">
                         <div className="img-one max-h-80 text-center justify-center object-center">
                             <Image
-                                src={product.imgOne}
+                                src={resolveBackendImageSrc(product.imgOne, "/images/fallback-image.png")}
                                 alt={product.title}
                                 className="rounded-xl overflow-hidden object-contain transition-opacity duration-300 group-hover:opacity-0"
                                 width={290}
@@ -66,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                         </div>
                         <div className="img-two max-h-80 text-center object-center justify-center absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <Image
-                                src={product.imgTwo}
+                                src={resolveBackendImageSrc(product.imgTwo, resolveBackendImageSrc(product.imgOne, "/images/fallback-image.png") as string)}
                                 alt={product.title}
                                 className="rounded-xl overflow-hidden"
                                 width={290}
@@ -152,7 +153,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                 <div className="group block relative">
                     <div className="img-one">
                         <Image
-                            src={product.imgOne}
+                            src={resolveBackendImageSrc(product.imgOne, "/images/fallback-image.png")}
                             alt={product.title}
                             className="rounded-xl overflow-hidden transition-opacity duration-300 group-hover:opacity-0"
                             width={290}
@@ -161,7 +162,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, variant = "compact" 
                     </div>
                     <div className="img-two absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <Image
-                            src={product.imgTwo}
+                            src={resolveBackendImageSrc(product.imgTwo, resolveBackendImageSrc(product.imgOne, "/images/fallback-image.png") as string)}
                             alt={product.title}
                             className="rounded-xl overflow-hidden"
                             width={290}

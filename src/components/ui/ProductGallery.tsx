@@ -3,9 +3,11 @@
 import React, { useEffect } from "react";
 import "@splidejs/react-splide/css";
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
+import { resolveBackendImageSrc } from "@/lib/resolveBackendImageSrc";
 
 interface ProductGalleryProps {
-    images: string[];
+    images: Array<string | StaticImageData>;
     layout?: "vertical" | "horizontal"; // choose layout
 }
 
@@ -69,7 +71,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
                                         <li key={i} className="splide__slide bg-gray-100 rounded-lg mb-2 overflow-hidden">
                                             <div className="relative w-24 h-[141px]">
                                                 <Image
-                                                    src={src}
+                                                    src={resolveBackendImageSrc(typeof src === "string" ? src : null, src)}
                                                     alt={`thumb-${i}`}
                                                     fill
                                                     className="object-cover rounded-lg"
@@ -93,7 +95,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
                                         {images.map((src, i) => (
                                             <li key={i} className="splide__slide text-center bg-gray-100 rounded-lg overflow-hidden">
                                                 <Image
-                                                    src={src}
+                                                    src={resolveBackendImageSrc(typeof src === "string" ? src : null, src)}
                                                     alt={`product-${i}`}
                                                     className="w-full object-cover"
                                                     width={470}
@@ -122,7 +124,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
                                         >
                                             <div className="relative w-full h-[700px]"> {/* MUST have height */}
                                                 <Image
-                                                    src={src}
+                                                    src={resolveBackendImageSrc(typeof src === "string" ? src : null, src)}
                                                     alt={`product-${i}`}
                                                     fill
                                                     className="object-cover rounded-lg"
@@ -152,7 +154,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, layout = "verti
                                             className="splide__slide text-center bg-gray-100 p-0 rounded-lg mb-2 w-20"
                                         >
                                             <Image
-                                                src={src}
+                                                src={resolveBackendImageSrc(typeof src === "string" ? src : null, src)}
                                                 alt={`thumb-${i}`}
                                                 className="w-100 inline-block rounded-lg"
                                                 width={94}
