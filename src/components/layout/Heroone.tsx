@@ -12,6 +12,7 @@ import a3 from "../../../public/images/avater-13.webp";
 import shap from "../../../public/images/shap1.webp";
 
 interface HeroContent {
+  id?: string;
   badge?: string;
   title?: string;
   subtitle?: string;
@@ -28,15 +29,34 @@ interface HeroContent {
   main_image_url?: string;
   decorative_image_url?: string;
   floating_icon_type?: string;
+  is_active?: boolean;
+  sort_order?: number;
 }
 
-const resolveImageUrl = (url: string | null | undefined, fallback: string | StaticImageData) => {
+const getAdminOriginFromEnv = () => {
+  const direct = process.env.NEXT_PUBLIC_ADMIN_ORIGIN?.replace(/\/$/, "");
+  if (direct) return direct;
+  const apiUrl = process.env.NEXT_PUBLIC_ADMIN_API_URL;
+  if (apiUrl) {
+    try {
+      return new URL(apiUrl).origin.replace(/\/$/, "");
+    } catch {
+      // ignore invalid URL
+    }
+  }
+  // safe default for production
+  return "https://qradmin.rndtd.com";
+};
+
+export const resolveImageUrl = (url: string | null | undefined, fallback: string | StaticImageData) => {
   if (!url) return fallback;
-  if (typeof url !== 'string') return url;
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  if (url.startsWith('/uploads/')) return `https://www.qradmin.rndtd.com${url}`;
+  if (typeof url !== "string") return url;
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  // Backend returns paths like `/uploads/...` or `/api/image/download/...`
+  if (url.startsWith("/uploads/") || url.startsWith("/api/")) return `${getAdminOriginFromEnv()}${url}`;
   return url;
 };
+
 
 
 
@@ -54,9 +74,12 @@ export default function HeroOne() {
         }
         const data = await response.json();
 
-        // Data comes as an array, take the first item
+        // Data comes as an array; prefer active items and honor sort_order.
         if (Array.isArray(data) && data.length > 0) {
-          setHeroData(data[0]);
+          const list = data as HeroContent[];
+          const active = list.filter((x) => x && x.is_active === true);
+          const sorted = (active.length ? active : list).slice().sort((a, b) => (Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0)));
+          setHeroData(sorted[0] || null);
         }
       } catch (err) {
         console.error('Error fetching hero content:', err);
@@ -68,6 +91,9 @@ export default function HeroOne() {
 
     fetchHeroContent();
   }, []);
+
+
+  // console.log(resolveImageUrl(heroData?.main_image_url, img));
 
   // Fallback content when API fails or loading
   const fallbackContent = {

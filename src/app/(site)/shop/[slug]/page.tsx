@@ -12,6 +12,7 @@ import Accordion from "@/components/ui/Accordion";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/const/productData";
 import { PRODUCT_LONG_DESC_CSS } from "./productLongDescStyles";
+import { resolveBackendImageSrc } from "@/lib/resolveBackendImageSrc";
 
 function formatInr(value: number | string): string {
     const n = typeof value === "string" ? parseFloat(value) : value;
@@ -154,7 +155,10 @@ export default function SingleProductPage({ params }: { params: Promise<{ slug: 
     const rating = Math.min(5, Math.max(0, Number(product.review ?? 5) || 5));
     const filledStars = Math.round(rating);
 
-    const galleryImages = [product.imgOne, product.imgTwo].filter(Boolean);
+    const galleryImages = ([
+        resolveBackendImageSrc(product.imgOne, "/images/fallback-image.png"),
+        resolveBackendImageSrc(product.imgTwo, resolveBackendImageSrc(product.imgOne, "/images/fallback-image.png")),
+    ] as Array<string | import("next/image").StaticImageData>).filter(Boolean);
 
     const handleAddToCart = () => {
         if (!inStock) return;

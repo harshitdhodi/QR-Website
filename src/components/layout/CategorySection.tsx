@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import PageTitle3 from '@/components/ui/PageTitle3';
+import { resolveBackendImageSrc } from '@/lib/resolveBackendImageSrc';
 
 interface CategoryItem {
     id: string;
@@ -143,13 +144,13 @@ export default function CategorySection() {
                                 {/* <div className="absolute top-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" /> */}
 
                                 {/* Image */}
-                                <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 z-10">
+                                <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 z-10 rounded-full overflow-hidden">
                                     <div className="absolute inset-0 rounded-full bg-blue-50 dark:bg-blue-950/40 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors duration-300 scale-90" />
                                     <Image
-                                        src={category.image}
+                                        src={resolveBackendImageSrc(category.image, "/images/fallback-image.png")}
                                         alt={category.title}
                                         fill
-                                        className="object-contain p-3 transition-transform duration-300 group-hover:scale-110 relative z-10"
+                                        className="object-contain p-3 transition-transform duration-300 group-hover:scale-110 relative z-10 rounded-full"
                                         sizes="(max-width: 568px) 40vw, 160px"
                                     />
                                 </div>
