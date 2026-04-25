@@ -12,7 +12,8 @@ function getAdminOriginFromEnv() {
       // ignore invalid URL
     }
   }
-  return "https://qradmin.rndtd.com";
+  // Keep consistent with `src/lib/adminOrigin.ts` default production host.
+  return "https://www.qradmin.rndtd.com";
 }
 
 function getUploadsOriginFromEnv() {
