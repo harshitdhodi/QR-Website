@@ -10,6 +10,7 @@ import {
   Smartphone,
   Timer,
 } from 'lucide-react';
+import { resolveBackendImageSrc } from '@/lib/resolveBackendImageSrc';
 
 interface HowItWorksItem {
   id: string;
@@ -148,8 +149,8 @@ export default function WhyChooseUs2() {
 
         const activeItems = Array.isArray(data)
           ? data
-              .filter((item: HowItWorksItem) => item.is_active)
-              .sort((a: HowItWorksItem, b: HowItWorksItem) => a.sort_order - b.sort_order)
+            .filter((item: HowItWorksItem) => item.is_active)
+            .sort((a: HowItWorksItem, b: HowItWorksItem) => a.sort_order - b.sort_order)
           : [];
 
         setHowItWorksData(activeItems);
@@ -196,7 +197,7 @@ export default function WhyChooseUs2() {
     console.error('How it works error:', error);
   }
 
-  const title = sectionData?.parent_title || 'Why choose us';
+  const title = 'How it Works';
   const subtitle =
     sectionData?.parent_subtitle ||
     'Secure • Private • Instant — The smartest way to connect without exposing personal details.';
@@ -237,12 +238,22 @@ export default function WhyChooseUs2() {
                 data-aos-delay={Math.min(index * 80, 400)}
                 data-aos-duration="350"
               >
-                <div
-                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${boxClass}`}
-                  aria-hidden
-                >
-                  <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2} />
-                </div>
+                {step.image ? (
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 overflow-hidden">
+                    <img
+                      src={resolveBackendImageSrc(step.image, '') as string}
+                      alt={step.title || 'How it works'}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${boxClass}`}
+                    aria-hidden
+                  >
+                    <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2} />
+                  </div>
+                )}
                 <div className="min-w-0 flex-1">
                   <h3 className="text-sm font-semibold leading-snug text-gray-900 sm:text-base">
                     {step.title}
