@@ -6,6 +6,7 @@ import SessionProviderWrapper from '@/components/providers/SessionProviderWrappe
 
 import { CartProvider } from '@/components/providers/CartProvider';
 import ForceLightTheme from '@/components/layout/ForceLightTheme';
+import MaintenanceBanner from '@/components/layout/MaintenanceBanner';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable} ${sora.variable} overflow-x-hidden`}>
       <body className="overflow-x-hidden bg-white text-gray-900 font-sans antialiased selection:bg-brand-primary/15 selection:text-gray-900">
+        <MaintenanceBanner />
         <ForceLightTheme />
         <SessionProviderWrapper>
           <CartProvider>

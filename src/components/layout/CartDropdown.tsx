@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ShoppingCart, X } from "react-feather";
+import { resolveBackendImageSrc } from "@/lib/resolveBackendImageSrc";
 
 export default function CartDropdown() {
     const { cart, removeFromCart, cartTotal } = useCart();
@@ -106,7 +107,13 @@ export default function CartDropdown() {
                             <div className="max-h-72 overflow-y-auto px-4 py-3">
                                 {cart.map((item) => (
                                     <div key={item.product.id} className="flex gap-3 py-3 border-b border-gray-100 items-center last:border-b-0">
-                                        <Image src={item.product.imgOne} alt={item.product.title} width={44} height={44} className="rounded-lg border border-gray-100 object-cover" />
+                                        <Image
+                                            src={resolveBackendImageSrc(item.product.imgOne, "/images/fallback-image.png")}
+                                            alt={item.product.title}
+                                            width={44}
+                                            height={44}
+                                            className="rounded-lg border border-gray-100 object-cover"
+                                        />
                                         <div className="flex-1">
                                             <p className="text-sm font-semibold text-gray-900 line-clamp-1">{item.product.title}</p>
                                             <p className="text-xs text-gray-500 mt-0.5">{item.quantity} × ₹{item.product.price}</p>
