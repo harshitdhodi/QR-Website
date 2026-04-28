@@ -1,17 +1,48 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function MaintenanceBanner() {
     const [visible, setVisible] = useState(true);
+    const bannerRef = useRef<HTMLDivElement | null>(null);
 
     // Pause animation on hover for readability
     const [paused, setPaused] = useState(false);
+
+    useEffect(() => {
+        const root = document.documentElement;
+
+        if (!visible) {
+            root.style.setProperty("--maintenance-banner-offset", "0px");
+            return;
+        }
+
+        const updateOffset = () => {
+            const height = bannerRef.current?.offsetHeight ?? 0;
+            root.style.setProperty("--maintenance-banner-offset", `${height}px`);
+        };
+
+        updateOffset();
+
+        const observer = new ResizeObserver(updateOffset);
+        if (bannerRef.current) {
+            observer.observe(bannerRef.current);
+        }
+
+        window.addEventListener("resize", updateOffset);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener("resize", updateOffset);
+            root.style.setProperty("--maintenance-banner-offset", "0px");
+        };
+    }, [visible]);
 
     if (!visible) return null;
 
     return (
         <div
+            ref={bannerRef}
             className="maintenance-banner"
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
@@ -44,7 +75,10 @@ export default function MaintenanceBanner() {
             {/* Scoped styles */}
             <style jsx>{`
         .maintenance-banner {
-          position: relative;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
           width: 100%;
           overflow: hidden;
           background: linear-gradient(90deg, #f59e0b, #f97316, #ef4444, #f97316, #f59e0b);
@@ -54,7 +88,7 @@ export default function MaintenanceBanner() {
           font-size: 0.85rem;
           font-weight: 600;
           letter-spacing: 0.025em;
-          z-index: 9999;
+          z-index: 99999;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
