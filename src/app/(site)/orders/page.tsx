@@ -164,18 +164,18 @@ function buildInvoiceHtml(order: OrderRow) {
         </thead>
         <tbody>
           ${items
-            .map((it) => {
-              const qty = Number(it.quantity || 0);
-              const price = typeof it.price === "string" ? Number(it.price) : Number(it.price || 0);
-              const line = qty * (Number.isFinite(price) ? price : 0);
-              return `<tr>
+      .map((it) => {
+        const qty = Number(it.quantity || 0);
+        const price = typeof it.price === "string" ? Number(it.price) : Number(it.price || 0);
+        const line = qty * (Number.isFinite(price) ? price : 0);
+        return `<tr>
                 <td><strong>${safe(it.name)}</strong>${it.sku ? `<div style="color:var(--muted); font-size:12px; margin-top:4px;">SKU: ${safe(it.sku)}</div>` : ""}</td>
                 <td class="right qty">${safe(qty)}</td>
                 <td class="right">${safe(formatMoney(price))}</td>
                 <td class="right"><strong>${safe(formatMoney(line))}</strong></td>
               </tr>`;
-            })
-            .join("")}
+      })
+      .join("")}
         </tbody>
       </table>
 
@@ -230,7 +230,7 @@ export default function OrdersPage() {
           throw new Error("Missing access token. Please log in again.");
         }
 
-        const res = await fetch("/api/orders/my", {
+        const res = await fetch("/api/backend/orders/my", {
           method: "GET",
           cache: "no-store",
           headers: { Authorization: `Bearer ${accessToken}` },

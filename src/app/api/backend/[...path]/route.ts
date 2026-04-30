@@ -9,12 +9,19 @@ async function handler(
 ) {
   const { path } = await params;
   const url = `${ADMIN_ORIGIN}/api/${path.join("/")}${req.nextUrl.search}`;
+  const auth = req.headers.get("authorization") || "";
+  const cookie = req.headers.get("cookie") || "";
 
   const res = await fetch(url, {
     method: req.method,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(auth ? { authorization: auth } : {}),
+      ...(cookie ? { cookie } : {}),
+    },
     body: req.method !== "GET" && req.method !== "HEAD" ? await req.text() : undefined,
     redirect: "follow",
+    cache: "no-store",
   });
 
   const data = await res.text();
@@ -29,4 +36,3 @@ export const POST = handler;
 export const PUT = handler;
 export const PATCH = handler;
 export const DELETE = handler;
-
