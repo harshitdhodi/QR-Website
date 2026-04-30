@@ -12,7 +12,7 @@ export default function TermsAndConditionsPage() {
     useEffect(() => {
         const fetchPolicy = async () => {
             try {
-                const res = await fetch('/api/policies?slug=terms-and-conditions');
+                const res = await fetch('/api/backend/policies?slug=terms-and-conditions');
                 if (res.ok) {
                     const result = await res.json();
                     if (result.success && result.data) {
