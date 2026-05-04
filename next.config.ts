@@ -41,12 +41,12 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "www.qradmin.rndtd.com",
+        hostname: "admin.odokho.com",
         pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "qradmin.rndtd.com",
+        hostname: "admin.odokho.com",
         pathname: "/**",
       },
     ],
