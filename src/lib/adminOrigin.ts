@@ -1,8 +1,5 @@
-/**
- * Backend (admin API) origin for server rewrites and server-side fetches.
- * In production, set ADMIN_ORIGIN or NEXT_PUBLIC_ADMIN_ORIGIN to your admin API (e.g. https://www.qradmin.rndtd.com).
- */
-const DEFAULT_PRODUCTION_ADMIN_ORIGIN = "https://www.qradmin.rndtd.com";
+
+const DEFAULT_PRODUCTION_ADMIN_ORIGIN = "https://admin.odokho.com";
 const DEFAULT_DEV_ADMIN_ORIGIN = "http://localhost:3060";
 
 export function getAdminOrigin(): string {

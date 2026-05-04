@@ -12,8 +12,8 @@ function getAdminOriginFromEnv() {
       // ignore invalid URL
     }
   }
-  // Keep consistent with `src/lib/adminOrigin.ts` default production host.
-  return "https://www.qradmin.rndtd.com";
+  // Fallback: use NEXT_PUBLIC_ADMIN_API_URL origin, or default production host.
+  return "https://admin.odokho.com";
 }
 
 function getUploadsOriginFromEnv() {
