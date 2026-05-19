@@ -8,7 +8,6 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import WhyChooseUs2 from "@/components/WhyChooseUs2";
 import CategorySection from "@/components/layout/CategorySection";
 import FaqSection from "@/components/layout/FaqSection";
-import BlogSection from "@/components/layout/BlogSection";
 import GoogleReviewSection from "@/components/layout/GoogleReviewSection";
 import MarketplaceSection from "@/components/layout/MarketplaceSection";
 

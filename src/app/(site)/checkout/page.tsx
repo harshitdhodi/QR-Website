@@ -105,10 +105,42 @@ function clearCheckoutSessionId(): void {
   }
 }
 
+interface QuantityRule {
+  minQty: number;
+  type: 'percentage' | 'flat';
+  value: number;
+  maxDiscount?: number | string | null;
+}
+
+interface CouponRule {
+  code: string;
+  type: 'percentage' | 'flat';
+  value: number;
+}
+
+interface DiscountConfig {
+  quantityRules?: QuantityRule[];
+  coupon?: CouponRule;
+}
+
+interface EnrichedProduct {
+  id: number;
+  discountConfig?: DiscountConfig | null;
+}
+
+interface CheckoutProduct extends Omit<import("@/const/productData").Product, 'discountConfig'> {
+  discountConfig?: DiscountConfig | null;
+}
+
+interface CheckoutCartItem {
+  product: CheckoutProduct;
+  quantity: number;
+}
+
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { cart, cartTotal, clearCart } = useCart();
+  const { cart, clearCart } = useCart();
 
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("COD");
@@ -124,7 +156,6 @@ export default function CheckoutPage() {
   const [pincodeError, setPincodeError] = useState('');
   const [pincodeFilled, setPincodeFilled] = useState(false);
   const [phoneError, setPhoneError] = useState('');
-  const [addressesLoaded, setAddressesLoaded] = useState(false);
 
   // Address CRUD state
   const [isSavingAddress, setIsSavingAddress] = useState(false);
@@ -141,7 +172,7 @@ export default function CheckoutPage() {
 
   const isValidPhoneDigits = (digits: string) => digits.length >= 8 && digits.length <= 15;
 
-  const [enrichedProducts, setEnrichedProducts] = useState<any[]>([]);
+  const [enrichedProducts, setEnrichedProducts] = useState<EnrichedProduct[]>([]);
   const [couponInput, setCouponInput] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
@@ -162,15 +193,14 @@ export default function CheckoutPage() {
     fetchEnriched();
   }, []);
 
-  const getCartItemDiscountDetails = useCallback((item: any) => {
+  const getCartItemDiscountDetails = useCallback((item: CheckoutCartItem) => {
     const enriched = enrichedProducts.find(p => p.id === item.product.id);
     const discountConfig = enriched?.discountConfig || item.product.discountConfig || null;
     
-    let originalPrice = Number(item.product.price);
-    let qty = item.quantity;
-    let baseTotal = originalPrice * qty;
+    const originalPrice = Number(item.product.price);
+    const qty = item.quantity;
+    const baseTotal = originalPrice * qty;
     
-    let appliedDiscountType: 'coupon' | 'quantity' | null = null;
     let discountAmount = 0;
     let ruleDescription = '';
 
@@ -178,8 +208,8 @@ export default function CheckoutPage() {
     let quantityDiscount = 0;
     if (discountConfig?.quantityRules && Array.isArray(discountConfig.quantityRules)) {
       const rules = discountConfig.quantityRules
-        .filter((r: any) => qty >= r.minQty)
-        .sort((a: any, b: any) => b.minQty - a.minQty); // best matching rule
+        .filter((r: QuantityRule) => qty >= r.minQty)
+        .sort((a: QuantityRule, b: QuantityRule) => b.minQty - a.minQty); // best matching rule
 
       if (rules.length > 0) {
         const bestRule = rules[0];
@@ -190,7 +220,7 @@ export default function CheckoutPage() {
           computed = bestRule.value * qty;
         }
         
-        if (bestRule.maxDiscount !== undefined && bestRule.maxDiscount !== null && bestRule.maxDiscount !== '') {
+        if (bestRule.maxDiscount !== undefined && bestRule.maxDiscount !== null && String(bestRule.maxDiscount) !== '') {
           const cap = Number(bestRule.maxDiscount);
           computed = Math.min(computed, cap);
         }
@@ -239,7 +269,7 @@ export default function CheckoutPage() {
     let subtotal = 0;
     let totalDiscount = 0;
     const items = cart.map(item => {
-      const details = getCartItemDiscountDetails(item);
+      const details = getCartItemDiscountDetails(item as CheckoutCartItem);
       subtotal += details.baseTotal;
       totalDiscount += details.discountAmount;
       return {
@@ -415,8 +445,6 @@ export default function CheckoutPage() {
     } catch (error) {
       console.error('Failed to fetch addresses:', error);
       setSelectedAddressId('new');
-    } finally {
-      setAddressesLoaded(true);
     }
   };
 
@@ -1302,9 +1330,11 @@ export default function CheckoutPage() {
                             <button
                               type="button"
                               onClick={() => {
-                                const code = discountConfig.coupon.code;
-                                setCouponInput(code);
-                                setAppliedCoupon(code);
+                                const code = discountConfig.coupon?.code;
+                                if (code) {
+                                  setCouponInput(code);
+                                  setAppliedCoupon(code);
+                                }
                               }}
                               className="text-[11px] text-blue-700 hover:text-blue-950 font-bold underline mt-1.5 text-left block transition-colors"
                             >
@@ -1316,7 +1346,7 @@ export default function CheckoutPage() {
                             <div className="mt-2.5 p-2 rounded-lg bg-blue-50/30 border border-blue-100/50">
                               <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider mb-1">Bulk Buy Offers:</p>
                               <div className="space-y-0.5">
-                                {discountConfig.quantityRules.map((rule: any, idx2: number) => {
+                                {discountConfig.quantityRules.map((rule: QuantityRule, idx2: number) => {
                                   const isMet = item.quantity >= rule.minQty;
                                   return (
                                     <p key={idx2} className={`text-[10px] font-semibold flex items-center gap-1 ${isMet ? 'text-green-700' : 'text-gray-500'}`}>

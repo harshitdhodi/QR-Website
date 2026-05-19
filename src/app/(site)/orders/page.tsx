@@ -40,15 +40,6 @@ type OrderRow = {
   items: OrderItem[];
 };
 
-type OrdersApiResponse = {
-  success: boolean;
-  data: OrderRow[];
-  total?: number;
-  page?: number;
-  limit?: number;
-  totalPages?: number;
-  message?: string;
-};
 
 const formatMoney = (value: unknown) => {
   const n = typeof value === "string" ? Number(value) : typeof value === "number" ? value : 0;

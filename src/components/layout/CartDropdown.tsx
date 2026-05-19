@@ -60,7 +60,6 @@ export default function CartDropdown() {
         return () => {
             if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cart.length]);
 
     return (
