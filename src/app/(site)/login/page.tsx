@@ -145,7 +145,13 @@ function LoginContent() {
 
     useEffect(() => {
         if (status === 'authenticated') {
-            const callbackUrl = searchParams.get('callbackUrl') || '/';
+            let callbackUrl = searchParams.get('callbackUrl') || '/';
+            try {
+                const url = new URL(callbackUrl, window.location.origin);
+                callbackUrl = url.pathname + url.search + url.hash;
+            } catch (e) {
+                // Ignore parsing errors
+            }
             router.push(callbackUrl);
         }
     }, [status, router, searchParams]);
@@ -237,7 +243,13 @@ function LoginContent() {
                 return;
             }
             if (result?.ok) {
-                const callbackUrl = '/';
+                let callbackUrl = searchParams.get('callbackUrl') || '/';
+                try {
+                    const url = new URL(callbackUrl, window.location.origin);
+                    callbackUrl = url.pathname + url.search + url.hash;
+                } catch (e) {
+                    // Ignore parsing errors
+                }
                 router.push(callbackUrl);
             }
         } catch (error) {
