@@ -72,13 +72,18 @@ function QrLandingClient({ uniqueId: raw }: { uniqueId: string }) {
   });
 
   const isStaff = useMemo(() => {
-    const rawRole = (session?.user as { role?: unknown })?.role;
-    const roleName =
-      typeof rawRole === "string"
-        ? rawRole
-        : typeof rawRole?.name === "string"
-          ? rawRole.name
-          : "";
+    const rawRole = (session?.user as { role?: string | { name?: string } })?.role;
+    let roleName = "";
+    if (typeof rawRole === "string") {
+      roleName = rawRole;
+    } else if (
+      rawRole &&
+      typeof rawRole === "object" &&
+      "name" in rawRole &&
+      typeof (rawRole as any).name === "string"
+    ) {
+      roleName = (rawRole as any).name;
+    }
     return roleName === "admin" || roleName === "editor";
   }, [session]);
 
