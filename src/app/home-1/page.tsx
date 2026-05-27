@@ -55,8 +55,8 @@ export default function HomePage() {
                 <HeroOne />
             </section>
             {/* category cards */}
-            <div id="features" className="counter-wrap lg:pb-24 pb-12 font-dm bg-home-one-gradient-banner relative lg:py-24 py-20">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-4">
+            <div id="features" className="counter-wrap font-dm bg-home-one-gradient-banner relative py-12 sm:py-16 lg:py-24">
+                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-4">
                     {/* title */}
                     <PageTitle3
                         badgeText=""
@@ -64,10 +64,10 @@ export default function HomePage() {
                         subtitle="Select a category to find the perfect QR solution for your needs."
                         widthClass="xl:w-7/12 lg:w-2/3 mx-auto"
                         alignment="center"
-                        padding="pb-16"
+                        padding="pb-10 sm:pb-12 lg:pb-16"
                         textColor=""
                     />
-                    <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center gap-6">
+                    <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center gap-4 sm:gap-6">
                         <Link href="/cart" className="w-full block">
                             <FeatureCard
                                 icon={<Car fill="white" size={26} className="text-white" />}
@@ -102,9 +102,9 @@ export default function HomePage() {
                 </div>
             </div>
             {/* service wrap */}
-            <section id="services" className="service-wrap lg:py-24 py-12">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3 pb-0 lg:py-4 py-0">
-                    <div className="flex flex-wrap justify-between pb-16 gap-y-4">
+            <section id="services" className="service-wrap py-12 sm:py-16 lg:py-24">
+                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-3">
+                    <div className="flex flex-col gap-y-5 pb-10 sm:pb-12 lg:pb-16 lg:flex-row lg:flex-wrap lg:justify-between lg:gap-y-4">
                         <PageTitle3
                             badgeText=""
                             title="Expectations customers feeling truly delighted"
@@ -113,34 +113,34 @@ export default function HomePage() {
                             alignment="start"
                             padding="pb-0"
                         />
-                        <div className="lg:text-right mt-auto">
+                        <div className="lg:text-right lg:mt-auto">
                             <Button href="/about" label="Our service" bgColor="bg-blue-600" textColor="text-white" />
                         </div>
                     </div>
-                    <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 mb-6">
+                    <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 sm:gap-6 mb-4 sm:mb-6">
                         <div className="w-full lg:col-span-2 overflow-hidden relative rounded-xl" data-aos-duration="400" data-aos="fade-up">
                             {/* slider */}
                             <CounterCarousel slides={maincarsoul} />
                         </div>
                         <div className="w-full" data-aos-duration="400" data-aos="fade-up">
-                            <div className="overflow-hidden relative rounded-xl h-[350px]">
+                            <div className="overflow-hidden relative rounded-xl h-64 sm:h-80 lg:h-[350px]">
                                 <Image
                                     src={img}
                                     alt="about"
                                     width={416}
                                     height={350}
                                     loading="lazy"
-                                    className="mx-auto hover:scale-[1.1] transition-all duration-[1s]"
+                                    className="w-full h-full object-cover hover:scale-[1.05] transition-all duration-[1s]"
                                 />
 
                                 {/* Content Overlay */}
                                 <div className="absolute inset-0 z-10 pointer-events-none bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.5)_100%)]"></div>
 
-                                <div className="absolute bottom-0 left-0 w-full p-5 z-10">
-                                    <div className="flex flex-row justify-between px-2">
+                                <div className="absolute bottom-0 left-0 w-full p-4 sm:p-5 z-10">
+                                    <div className="flex flex-row justify-between px-1 sm:px-2">
                                         <div>
-                                            <h3 className="text-white text-6xl font-medium mb-1">98.2%</h3>
-                                            <p className="text-gray-200 font-medium text-lg leading-6 mb-0 xl:pr-12">The Truest feedback comes from those who know you best.</p>
+                                            <h3 className="text-white text-4xl sm:text-5xl lg:text-6xl font-medium mb-1">98.2%</h3>
+                                            <p className="text-gray-200 font-medium text-sm sm:text-base lg:text-lg leading-snug sm:leading-6 mb-0 xl:pr-12">The Truest feedback comes from those who know you best.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -148,9 +148,9 @@ export default function HomePage() {
                         </div>
                     </div>
 
-                    <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 mb-6">
+                    <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 sm:gap-6 mb-4 sm:mb-6">
                         <div className="w-full" data-aos-duration="400" data-aos="fade-up">
-                            <div className="relative overflow-hidden rounded-xl h-[350px]">
+                            <div className="relative overflow-hidden rounded-xl aspect-video sm:h-80 lg:h-[350px]">
                                 {singleVideoId ? (
                                     <iframe
                                         src={singleVideoEmbedUrl}
@@ -184,11 +184,11 @@ export default function HomePage() {
                     align="center"
                     widthClass="xl:w-7/12 lg:w-9/12"
                 />
-                <div className="about-wrap lg:pb-20 pb-16">
-                    <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-20 2xl:px-5">
-                        <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6 pb-16">
+                <div className="about-wrap pb-12 sm:pb-16 lg:pb-20">
+                    <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-14 lg:px-14 xl:px-20 2xl:px-5">
+                        <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-4 sm:gap-6 pb-10 sm:pb-12 lg:pb-16">
                             {/* left side */}
-                            <div className="relative w-full h-[615px] rounded-xl">
+                            <div className="relative w-full h-72 sm:h-96 md:h-[615px] rounded-xl">
                                 <Image
                                     src={img2}
                                     alt="banner"
@@ -199,8 +199,8 @@ export default function HomePage() {
                                 />
                             </div>
                             {/* right side */}
-                            <div className="space-y-6">
-                                <div className="relative w-full h-[319px] rounded-xl">
+                            <div className="space-y-4 sm:space-y-6">
+                                <div className="relative w-full h-56 sm:h-72 md:h-[319px] rounded-xl">
                                     <Image
                                         src={img3}
                                         alt="banner"
@@ -211,7 +211,7 @@ export default function HomePage() {
                                     />
                                 </div>
                                 <div className="w-full" data-aos="fade-up" data-aos-duration="400" data-aos-delay="0">
-                                    <div className="font-dm bg-cyan-gradient rounded-xl p-6 h-[275px] flex flex-col dark:bg-image-none dark:bg-gray-800">
+                                    <div className="font-dm bg-cyan-gradient rounded-xl p-5 sm:p-6 min-h-[220px] sm:min-h-[260px] md:h-[275px] flex flex-col dark:bg-image-none dark:bg-gray-800">
                                         {/* Avatar group  */}
                                         <div className="flex -space-x-4">
                                             <Image
@@ -219,7 +219,7 @@ export default function HomePage() {
                                                 width={48}
                                                 height={48}
                                                 alt="member-avatar"
-                                                className="w-11 h-11 rounded-full"
+                                                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full"
                                                 loading="lazy"
                                             />
                                             <Image
@@ -227,7 +227,7 @@ export default function HomePage() {
                                                 width={48}
                                                 height={48}
                                                 alt="member-avatar"
-                                                className="w-11 h-11 rounded-full"
+                                                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full"
                                                 loading="lazy"
                                             />
                                             <Image
@@ -235,7 +235,7 @@ export default function HomePage() {
                                                 width={48}
                                                 height={48}
                                                 alt="member-avatar"
-                                                className="w-11 h-11 rounded-full"
+                                                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full"
                                                 loading="lazy"
                                             />
                                             <Image
@@ -243,15 +243,15 @@ export default function HomePage() {
                                                 width={48}
                                                 height={48}
                                                 alt="member-avatar"
-                                                className="w-11 h-11 rounded-full"
+                                                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full"
                                                 loading="lazy"
                                             />
                                         </div>
 
                                         {/* Text block */}
                                         <div className="mt-auto">
-                                            <h3 className="text-gray-900 font-medium mb-1 text-[75px] leading-none">30x</h3>
-                                            <p className="text-gray-900 text-[22px] leading-7 font-normal italic lg:w-2/3 mb-0 pe-2">Secure & Instant Connections Made Simple.</p>
+                                            <h3 className="text-gray-900 font-medium mb-1 text-5xl sm:text-6xl md:text-[75px] leading-none">30x</h3>
+                                            <p className="text-gray-900 text-base sm:text-lg md:text-[22px] leading-snug sm:leading-7 font-normal italic md:w-2/3 mb-0 pe-2">Secure &amp; Instant Connections Made Simple.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -259,15 +259,15 @@ export default function HomePage() {
 
 
                         </div>
-                        <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6">
+                        <div className="grid md:grid-cols-2 grid-cols-1 justify-center gap-6 md:gap-8">
                             <div className="w-full">
-                                <h3 className="text-gray-900 font-semibold lg:text-[34px] leading-tight text-2xl lg:w-5/6 tracking-tight aos-init aos-animate">We built a smart QR-based safety platform so you can stay reachable without compromising your privacy</h3>
+                                <h3 className="text-gray-900 font-semibold text-xl sm:text-2xl lg:text-[34px] leading-tight lg:w-5/6 tracking-tight aos-init aos-animate">We built a smart QR-based safety platform so you can stay reachable without compromising your privacy</h3>
                             </div>
-                            <div className="w-full space-y-6">
-                                <p className="text-gray-600 text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
-                                    Our solution allows anyone who scans your QR code to contact you instantly while keeping your personal details completely protected.When a QR code attached to your car, dog collar, or valuable item is scanned, the finder is redirected to a secure contact page. From there, they can connect with you via masked calling, WhatsApp, or SMS without ever seeing your private phone number.
+                            <div className="w-full space-y-4 sm:space-y-6">
+                                <p className="text-gray-600 text-base sm:text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
+                                    Our solution allows anyone who scans your QR code to contact you instantly while keeping your personal details completely protected. When a QR code attached to your car, dog collar, or valuable item is scanned, the finder is redirected to a secure contact page. From there, they can connect with you via masked calling, WhatsApp, or SMS without ever seeing your private phone number.
                                 </p>
-                                <p className="text-gray-600 text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
+                                <p className="text-gray-600 text-base sm:text-[17px] font-medium max-w-xl lg:pr-8 px-0 aos-init aos-animate" data-aos="fade-up" data-aos-duration="300">
                                     Do not risk losing your vehicle, pet, or belongings due to a lack of communication. With our QR system, you stay connected in real time while maintaining full control over your personal information.
                                     Whether it’s a parking issue, a lost pet, or misplaced item, our platform ensures fast communication, quick resolution, and complete privacy protection.
                                 </p>
@@ -282,17 +282,17 @@ export default function HomePage() {
 
 
             {/* price wrap */}
-            <section id="pricing" className="lg:pt-24 pt-12 relative overflow-hidden">
-                <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-20 pb-0 lg:py-4 py-0">
+            <section id="pricing" className="pt-12 sm:pt-16 lg:pt-24 relative overflow-hidden">
+                <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-14 lg:px-14 xl:px-18 2xl:px-20">
                     <PageTitle3
                         badgeText=""
                         title="Built to scale with flexible pricing with your need"
                         subtitle="Join thousands who trust us for quality and lasting relationships"
                         widthClass="xl:w-7/12 lg:w-2/3 mx-auto w-full"
                         alignment="center"
-                        padding="pb-16"
+                        padding="pb-10 sm:pb-12 lg:pb-16"
                     />
-                    <div className="grid lg:grid-cols-3 gap-6 md:grid-cols-2 sm:grid-cols-1">
+                    <div className="grid lg:grid-cols-3 gap-5 sm:gap-6 md:grid-cols-2 sm:grid-cols-1">
                         {/* price 1st */}
                         <PriceCard
                             title="Startup"

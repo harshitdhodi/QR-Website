@@ -25,25 +25,24 @@ export default function FeatureCard({
     return (
       <div
         className={`
-          flex flex-col items-center gap-5 lg:p-3 p-3 bg-white 
+          flex flex-col items-center gap-4 sm:gap-5 p-5 sm:p-6 bg-white 
           hover:shadow-xl shadow-xl shadow-blue-500/30 rounded-2xl border border-gray-200 
           transition-all duration-300 hover:-translate-y-1
-          min-h-[360px] justify-between
+          min-h-[300px] sm:min-h-[340px] lg:min-h-[360px] justify-between
         `}
         data-aos="zoom-in"
         data-aos-delay={delay}
         data-aos-duration="500"
       >
         {/* Main Icon – using your image if provided, else fallback SVG */}
-        <div className="relative w-24 h-24 rounded-full shadow-md mx-auto mt-2 ">
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-md mx-auto mt-2">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={`${title} icon`}
               fill
-              className="object-contain "
+              className="object-contain"
               priority={false}
-              // sizes="(max-width: 768px) 120px, 128px"
             />
           ) : (
             <div
@@ -56,19 +55,19 @@ export default function FeatureCard({
 
         {/* Text */}
         <div className="flex flex-col items-center text-center">
-          <h3 className="text-gray-900 text-3xl font-bold mb-3">{title}</h3>
-          <p className="text-gray-700 text-lg leading-relaxed px-4 max-w-xs">
+          <h3 className="text-gray-900 text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">{title}</h3>
+          <p className="text-gray-700 text-base sm:text-lg leading-relaxed px-2 sm:px-4 max-w-xs">
             {description}
           </p>
         </div>
 
         {/* Buy Now Button */}
-        <div className=" w-fit pb-2">
+        <div className="w-fit pb-2">
           <button
             className={`
-              w-full   py-1 px-4 
+              w-full py-1.5 sm:py-1 px-4 
               hover:bg-white hover:border-2 hover:border-blue-900 text-gray-50 
-              font-semibold text-md bg-blue-900 text-white rounded-md shadow-md
+              font-semibold text-sm sm:text-md bg-blue-900 text-white rounded-md shadow-md
               transition-all duration-300 hover:shadow-lg cursor-pointer hover:text-blue-900 hover:bg-blue-800 active:scale-98
             `}
           >

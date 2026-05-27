@@ -59,7 +59,7 @@ export default function CounterCarousel({ slides }: CounterCarouselProps) {
                     return (
                         <SplideSlide key={idx}>
                             <div className="relative overflow-hidden rounded-xl">
-                                <div className="relative w-full h-[350px]">
+                                <div className="relative w-full aspect-video sm:h-80 lg:h-[350px]">
                                     {videoId ? (
                                         <iframe
                                             src={embedUrl}
@@ -76,15 +76,15 @@ export default function CounterCarousel({ slides }: CounterCarouselProps) {
                                         </div>
                                     )}
                                 </div>
-                                
+
                                 {/* Overlay */}
                                 <div className="absolute inset-0 z-10 pointer-events-none bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.5)_100%)]"></div>
                                 {/* Content */}
-                                <div className="absolute bottom-0 left-0 w-full p-5 z-20">
-                                    <h3 className="text-white md:text-3xl text-2xl font-medium mb-1">
+                                <div className="absolute bottom-0 left-0 w-full p-4 sm:p-5 z-20">
+                                    <h3 className="text-white text-xl sm:text-2xl md:text-3xl font-medium mb-1">
                                         {slide.title}
                                     </h3>
-                                    <p className="text-gray-200 text-base mb-0">{slide.subtitle}</p>
+                                    <p className="text-gray-200 text-sm sm:text-base mb-0">{slide.subtitle}</p>
                                 </div>
                             </div>
                         </SplideSlide>
