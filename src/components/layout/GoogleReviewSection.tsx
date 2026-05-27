@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Star } from "react-feather";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/react-splide/css";
 
 interface GoogleReviewItem {
   id?: string | number;
@@ -163,12 +165,11 @@ export default function GoogleReviewSection() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {(loading ? fallbackReviews : displayReviews).map((item, index) => (
-            <div
-              key={`${item.name}-${index}`}
-              className="rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800"
-            >
+        {(() => {
+          const items = loading ? fallbackReviews : displayReviews;
+
+          const Card = ({ item }: { item: { name: string; review: string; rating: number } }) => (
+            <div className="h-full rounded-xl border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
               <div className="flex items-center gap-1 text-brand-primary mb-3">
                 {Array.from({ length: item.rating }).map((_, starIndex) => (
                   <Star key={starIndex} size={16} fill="currentColor" />
@@ -177,8 +178,47 @@ export default function GoogleReviewSection() {
               <p className="text-gray-700 dark:text-gray-200 leading-7">{item.review}</p>
               <p className="mt-4 font-semibold text-gray-900 dark:text-white">{item.name}</p>
             </div>
-          ))}
-        </div>
+          );
+
+          return (
+            <>
+              {/* Mobile: horizontal slider */}
+              <div className="md:hidden">
+                <Splide
+                  aria-label="Google reviews"
+                  options={{
+                    type: items.length > 1 ? "loop" : "slide",
+                    perPage: 1,
+                    perMove: 1,
+                    gap: "1rem",
+                    arrows: false,
+                    pagination: true,
+                    autoplay: items.length > 1,
+                    interval: 4500,
+                    pauseOnHover: true,
+                    drag: true,
+                  }}
+                  className="google-reviews-slider"
+                >
+                  {items.map((item, index) => (
+                    <SplideSlide key={`m-${item.name}-${index}`}>
+                      <div className="h-full pb-8">
+                        <Card item={item} />
+                      </div>
+                    </SplideSlide>
+                  ))}
+                </Splide>
+              </div>
+
+              {/* Tablet & desktop: grid */}
+              <div className="hidden md:grid md:grid-cols-3 gap-6">
+                {items.map((item, index) => (
+                  <Card key={`d-${item.name}-${index}`} item={item} />
+                ))}
+              </div>
+            </>
+          );
+        })()}
 
         <div className="mt-12 flex justify-center">
           <button

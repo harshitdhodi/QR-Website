@@ -17,8 +17,8 @@ export default function PageTitle2({
     widthClass = "lg:w-7/12",
 }: PageTitle2Props) {
     return (
-        <div className="page-title bg-light-blue-banner lg:pt-20 pt-16 font-dm">
-            <div className="max-w-screen-xl mx-auto px-3 sm:px-6 md:px-14 lg:px-14 xl:px-20 2xl:px-24 lg:py-24 py-16">
+        <div className="page-title bg-light-blue-banner pt-12 sm:pt-16 lg:pt-20 font-dm">
+            <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-14 lg:px-14 xl:px-20 2xl:px-24 py-12 sm:py-16 lg:py-24">
                 {/* title wrapper */}
                 <div className="flex justify-center">
                     <div
@@ -27,7 +27,7 @@ export default function PageTitle2({
                     >
                         {/* label */}
                         {(Icon || label) && (
-                        <div className="flex flex-row justify-center mx-auto">
+                        <div className={`flex flex-row mx-auto ${align === "center" ? "justify-center" : "justify-start"}`}>
                             <div
                                 className="px-3 py-1 border border-gray-200 shadow-sm rounded-lg text-[13px] font-semibold uppercase text-blue-600 bg-white flex items-center gap-2 w-auto"
                                 data-aos="zoom-in"
@@ -41,7 +41,7 @@ export default function PageTitle2({
                         )}
                         {/* title */}
                         <h2
-                            className="lg:text-[80px] md:text-5xl text-5xl lg:leading-[1] tracking-tight text-gray-900 font-bold mb-4 mt-3"
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[80px] leading-tight lg:leading-[1] tracking-tight text-gray-900 font-bold mb-3 sm:mb-4 mt-3 break-words [overflow-wrap:anywhere]"
                             data-aos="fade-up"
                             data-aos-duration="200"
                         >
@@ -51,7 +51,7 @@ export default function PageTitle2({
                         {/* subtitle */}
                         {(subtitle) && (
                         <p
-                            className="text-gray-600 font-medium text-[17px] lg:pr-5 mt-2"
+                            className="text-gray-600 font-medium text-base sm:text-[17px] lg:pr-5 mt-2"
                             data-aos="fade-up"
                             data-aos-duration="400"
                             data-delay="300"
