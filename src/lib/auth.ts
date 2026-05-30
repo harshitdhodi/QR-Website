@@ -2,6 +2,11 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getAdminOrigin } from "@/lib/adminOrigin";
 import { resolveRoleForAuth, roleFromAccessToken } from "@/lib/resolveUserRole";
+import {
+  getAuthCookieDomain,
+  useSecureAuthCookies,
+  websiteSessionCookieName,
+} from "@/lib/session-cookies";
 
 const ADMIN_ORIGIN = getAdminOrigin();
 
@@ -53,48 +58,19 @@ type BackendAuthResponse = {
   };
 };
 
-function getCookieDomain(): string | undefined {
-  if (process.env.COOKIE_DOMAIN) {
-    return process.env.COOKIE_DOMAIN;
-  }
-  
-  const nextAuthUrl = process.env.NEXTAUTH_URL;
-  if (nextAuthUrl) {
-    try {
-      const url = new URL(nextAuthUrl);
-      const host = url.hostname;
-      if (host === "localhost" || host === "127.0.0.1" || /^[0-9.]+$/.test(host)) {
-        return undefined;
-      }
-      const parts = host.split(".");
-      if (parts.length >= 2) {
-        return `.${parts.slice(-2).join(".")}`;
-      }
-    } catch {
-      // ignore
-    }
-  }
-  
-  if (process.env.NODE_ENV !== "production") {
-    return undefined;
-  }
-  
-  return ".odokho.com";
-}
-
-const useSecure = process.env.NODE_ENV === "production" || !!process.env.NEXTAUTH_URL?.startsWith("https://");
+const useSecure = useSecureAuthCookies();
 
 export const authOptions: NextAuthOptions = {
   useSecureCookies: useSecure,
   cookies: {
     sessionToken: {
-      name: useSecure ? `__Secure-next-auth.session-token` : `next-auth.session-token`,
+      name: websiteSessionCookieName(),
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
         secure: useSecure,
-        domain: getCookieDomain(),
+        domain: getAuthCookieDomain(),
       },
     },
   },

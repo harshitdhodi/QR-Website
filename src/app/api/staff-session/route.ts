@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { isStaffRole, normalizeRoleValue } from "@/lib/resolveUserRole";
+import { adminSessionCookieName, useSecureAuthCookies } from "@/lib/session-cookies";
 
 /**
- * Detect admin/editor staff by decoding the shared NextAuth session cookie
- * using the **admin app's** NEXTAUTH_SECRET.
- *
- * Admin (admin.odokho.com) and the customer website are separate NextAuth
- * apps. When staff log into the admin panel, the session cookie is set on
- * `.odokho.com`, but the website cannot decode it with its own secret.
- * This route uses ADMIN_NEXTAUTH_SECRET (must match admin NEXTAUTH_SECRET).
+ * Fallback staff detection when admin cookie is sent to the website host
+ * (e.g. COOKIE_DOMAIN=.odokho.com). Prefer client fetch to
+ * `${ADMIN_ORIGIN}/api/auth/staff-check` with credentials.
  */
 export async function GET(req: NextRequest) {
   const adminSecret =
@@ -21,16 +18,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ isStaff: false, role: null });
   }
 
-  const useSecure =
-    process.env.NODE_ENV === "production" ||
-    !!process.env.NEXTAUTH_URL?.startsWith("https://");
-
   const token = await getToken({
     req,
     secret: adminSecret,
-    cookieName: useSecure
-      ? "__Secure-next-auth.session-token"
-      : "next-auth.session-token",
+    cookieName: adminSessionCookieName(),
   });
 
   const role = normalizeRoleValue(token?.role);

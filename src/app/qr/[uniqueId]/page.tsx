@@ -79,25 +79,43 @@ function QrLandingClient({ uniqueId: raw }: { uniqueId: string }) {
   const isStaffFromWebsiteSession = useMemo(() => isStaffSession(session), [session]);
   const isStaff = adminStaff || !!data?.viewerIsStaff || isStaffFromWebsiteSession;
 
-  // Admin panel (admin.odokho.com) uses a separate NextAuth app. Decode its
-  // session cookie via /api/staff-session using ADMIN_NEXTAUTH_SECRET.
+  // Admin session lives on admin.odokho.com (separate cookie). Detect staff via
+  // cross-origin request so we never overwrite the admin cookie on the website.
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
-      try {
-        const res = await fetch("/api/staff-session", { cache: "no-store" });
-        if (!res.ok) return;
+      const checkStaff = async (url: string, init?: RequestInit) => {
+        const res = await fetch(url, { cache: "no-store", ...init });
+        if (!res.ok) return false;
         const json = (await res.json()) as { isStaff?: boolean };
-        if (!cancelled) setAdminStaff(!!json.isStaff);
+        return !!json.isStaff;
+      };
+
+      try {
+        const fromAdmin = await checkStaff(`${ADMIN_ORIGIN}/api/auth/staff-check`, {
+          credentials: "include",
+          mode: "cors",
+        });
+        if (!cancelled && fromAdmin) {
+          setAdminStaff(true);
+          return;
+        }
       } catch {
-        // ignore — fall back to API payload / website session
+        // CORS or network — try same-origin fallback
+      }
+
+      try {
+        const fromLocal = await checkStaff("/api/staff-session");
+        if (!cancelled) setAdminStaff(fromLocal);
+      } catch {
+        // fall back to viewerIsStaff from QR API payload
       }
     };
     run();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [ADMIN_ORIGIN]);
 
   const reload = async () => {
     setLoading(true);
