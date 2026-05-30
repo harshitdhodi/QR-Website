@@ -75,6 +75,7 @@ function QrLandingClient({ uniqueId: raw }: { uniqueId: string }) {
 
   const isStaff = useMemo(() => {
     const rawRole = (session?.user as { role?: string | { name?: string } })?.role;
+    console.log("rawRoleeeeee", rawRole);
     let roleName = "";
     if (typeof rawRole === "string") {
       roleName = rawRole;
@@ -150,11 +151,11 @@ function QrLandingClient({ uniqueId: raw }: { uniqueId: string }) {
   useEffect(() => {
     if (!data) return;
 
-    if (data.phase === "dispatch" && isStaff) {
-      const targetOrigin = process.env.NODE_ENV === "production" ? "https://admin.odokho.com" : "http://localhost:3060";
-      window.location.href = `${targetOrigin}/qr-dispatch/?qr=${uniqueId}`;
-      return;
-    }
+    // if (data.phase === "dispatch" && isStaff) {
+    //   const targetOrigin = process.env.NODE_ENV === "production" ? "https://admin.odokho.com" : "http://localhost:3060";
+    //   window.location.href = `${targetOrigin}/qr-dispatch/?qr=${uniqueId}`;
+    //   return;
+    // }
 
     if (data.status === "Expired") {
       router.replace(`/qr/${uniqueId}/expired`);
